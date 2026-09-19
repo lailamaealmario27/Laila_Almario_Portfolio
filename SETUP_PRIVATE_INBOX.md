@@ -9,3 +9,6 @@ The contact UI, digital card, and logo work immediately. The message form and ow
 5. Test: send a sample message via the public contact form, sign in to `/admin.html`, confirm it appears. Sign out and verify no messages appear. Check Supabase logs and rate limits if submissions fail.
 
 NOTE: `admin.html` URL is not secret; authentication + RLS protects the messages. This starter inbox displays the 200 most recent messages and does not send email notifications. Set up notifications separately if desired. The form shows a clear not-connected notice until configured. If you prefer not to set up a backend, visitors can use the direct email link instead.
+
+## Password reset
+In Supabase Authentication > URL Configuration, set Site URL to `https://laila-almario-portfolio.vercel.app` and add `https://laila-almario-portfolio.vercel.app/admin.html` to Redirect URLs. After deployment, open `/admin.html`, enter the owner email, and click Forgot password? Use the **newest** recovery email. It should open `/admin.html` with a new-password form. If the email link has expired, request a new one. Never share recovery URLs or tokens.
