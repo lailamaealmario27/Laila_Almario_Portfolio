@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="description" content="Laila Mae Almario — Social Media & E-commerce Specialist">
 <title>Laila Mae Almario | Portfolio</title>
+<link rel="icon" type="image/png" href="assets/images/la-favicon.png">
 <style>
 :root{--lav:#947EA7;--plum:#6E2B62;--deep:#1F162F;--black:#080707;--text:#eee8f3;--muted:#bdb3c5;--line:#947EA755}
 *{box-sizing:border-box}html{scroll-behavior:smooth}
@@ -315,13 +316,54 @@ body.light .exhibit-work-slide,body.light .exhibit-work-slide img{background:#f7
   }
 }
 </style>
-</head>
+<style id="mobile-responsive-final">
+.menu-toggle{display:none}
+@media(max-width:800px){
+ html,body{max-width:100%;overflow-x:clip}
+ .wrap{width:min(100% - 32px,560px)!important}
+ .top{z-index:1100!important}
+ .top .nav{position:relative;display:flex!important;flex-direction:row!important;align-items:center!important;justify-content:space-between!important;flex-wrap:nowrap!important;gap:10px!important;min-height:64px!important;padding:10px 0!important}
+ .top .logo{flex:0 1 auto;min-width:0;font-size:.78rem!important;letter-spacing:.05em!important;white-space:nowrap!important}
+ .top .utility{display:flex!important;flex:0 0 auto!important;width:auto!important;align-items:center!important;gap:8px!important;justify-content:flex-end!important}
+ .menu-toggle{display:flex!important;flex-direction:column;justify-content:center;align-items:center;gap:5px;width:42px;height:42px;flex:0 0 42px;border:1px solid var(--line);border-radius:12px;background:var(--surface,#17121b);color:var(--text);cursor:pointer;position:relative;z-index:1102}
+ .menu-toggle span{display:block;width:18px;height:2px;background:currentColor;border-radius:3px}
+ .top .links{display:none!important;position:absolute!important;left:0!important;right:0!important;top:calc(100% + 1px)!important;max-height:calc(100dvh - 80px)!important;overflow-y:auto!important;padding:12px!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:7px!important;background:var(--surface,#17121b)!important;border:1px solid var(--line)!important;border-radius:0 0 15px 15px!important;box-shadow:0 18px 30px #0008!important;z-index:1101!important}
+ .top .links.mobile-open{display:grid!important}
+ .top .links a{font-size:.86rem!important;padding:11px 9px!important;text-align:center!important;min-width:0!important;box-shadow:none!important}
+ section{padding:46px 0!important;scroll-margin-top:78px!important}
+ .hero{min-height:auto!important;padding:45px 0!important}
+ .heroGrid,.hero-grid,.personality-grid,.skills,.contact,.grid,.work-grid{grid-template-columns:minmax(0,1fr)!important}
+ .heroGrid{gap:25px!important}.hero h1{font-size:clamp(2.9rem,12vw,4.4rem)!important}
+ .hero .device img{min-height:0!important;height:auto!important;max-height:460px!important;object-fit:cover!important}
+ .head,.testimonial-head{display:block!important}.head h2{font-size:clamp(1.7rem,7vw,2.4rem)!important}
+ #work .work-grid{display:grid!important;gap:15px!important;align-items:stretch!important}
+ #work .work-grid>article.card.work{aspect-ratio:auto!important;height:auto!important;min-height:0!important;max-height:none!important;overflow:visible!important;display:flex!important;flex-direction:column!important;padding:17px!important}
+ #work .work-grid>article.card.work .swipe-carousel,#work .work-grid>article.card.work .pubmat-carousel,#work .work-grid>article.card.work .video-carousel,#work .work-grid>article.card.work .exhibit-work-carousel{overflow:visible!important;min-width:0!important;width:100%!important}
+ .card,.work,.real-carousel,.swipe-carousel,.pubmat-carousel,.exhibit-work-carousel{min-width:0!important;max-width:100%!important}
+ .swipe-track,.pubmat-track,.exhibit-work-track,.real-track{width:100%!important;max-width:100%!important;min-width:0!important;overflow-x:auto!important;overscroll-behavior-inline:contain}
+ .swipe-slide,.pubmat-slide,.exhibit-work-slide,.real-slide{flex:0 0 90%!important;min-width:0!important;max-width:90%!important}
+ .swipe-slide img,.pubmat-slide img,.exhibit-work-slide img{height:230px!important;width:100%!important;object-fit:contain!important}
+ .swipe-slide video{height:auto!important;aspect-ratio:9/16!important;max-height:460px!important;width:100%!important;object-fit:contain!important;background:#09080a!important}
+ .real-slide>img,.real-slide .print-item img{height:260px!important;object-fit:contain!important}
+ .chat-launch{right:12px!important;bottom:calc(12px + env(safe-area-inset-bottom))!important;padding:10px 13px!important;font-size:.78rem!important;max-width:145px!important;box-shadow:0 6px 20px #0005!important}
+ .chatbox{right:10px!important;bottom:calc(62px + env(safe-area-inset-bottom))!important;width:calc(100vw - 20px)!important;max-height:min(520px,70dvh)!important}
+ .chat-body{max-height:calc(70dvh - 70px)!important}
+ .testimonial-grid,.print-grid{grid-template-columns:minmax(0,1fr)!important}
+}
+@media(max-width:380px){.top .logo{font-size:.69rem!important}.top .utility{gap:5px!important}.theme-toggle,.menu-toggle{width:38px!important;height:38px!important;min-width:38px!important}}
+</style>
+<style id="contact-upgrade-styles">
+.top .logo{display:inline-flex;align-items:center;gap:9px;white-space:nowrap}.la-logo{width:49px;height:43px;object-fit:contain;object-position:center}.top .logo span{font:700 .67rem Arial,sans-serif;letter-spacing:.22em;color:var(--text)}
+.contact-upgrade{padding:88px 0 105px}.contact-shell{display:grid;grid-template-columns:1fr 1fr;gap:clamp(24px,5vw,72px);padding:clamp(22px,5vw,60px);border:1px solid var(--line);border-radius:22px;background:linear-gradient(130deg,#271a2a 0%,#151015 47%,#100d12 100%);box-shadow:0 25px 65px #0005}.contact-intro h2{font:normal clamp(2.2rem,4vw,4rem)/1.12 Georgia,serif;margin:20px 0}.contact-intro h2 em{font-weight:normal;color:#b99dce}.contact-intro>p{max-width:360px;color:#d0c5d6}.contact-lines{display:grid;gap:16px;margin:34px 0}.contact-lines a{overflow-wrap:anywhere}.contact-lines a:hover,.contact-actions a:hover{color:#c6a7dc}.contact-actions{display:flex;gap:18px;flex-wrap:wrap;font-size:.78rem}.card-open{margin-top:36px;border:1px solid #aa90b2;background:#aa90b21a;color:#f4eaf8;border-radius:50px;padding:13px 20px;cursor:pointer}.card-open span{margin-left:18px}.contact-form-side h3{font:normal 1.5rem Georgia,serif;margin:10px 0 24px}.contact-form-side form{display:grid;gap:15px}.contact-form-side label{display:grid;gap:7px;font-size:.77rem;color:#d5c9dc}.contact-form-side label span{color:#aaa0b2}.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}.contact-form-side input,.contact-form-side textarea{min-width:0;width:100%;background:#0d0b10;border:1px solid #6d586d;border-radius:10px;padding:13px 14px;color:#fff;font:inherit;resize:vertical}.contact-form-side input:focus,.contact-form-side textarea:focus{outline:2px solid #a98bbb;outline-offset:1px}.contact-form-side input::placeholder,.contact-form-side textarea::placeholder{color:#9c91a2}.contact-form-side .honeypot{position:absolute;left:-9999px;width:1px;height:1px}.send-button{background:#a58ab9;color:#130d17;border:0;border-radius:50px;padding:14px 23px;cursor:pointer;font-weight:800;justify-self:start}.send-button span{margin-left:22px}.send-button:disabled{opacity:.6;cursor:wait}.form-status{font-size:.76rem;color:#c5b9ca;margin:0}.card-modal[hidden]{display:none}.card-modal{position:fixed;inset:0;z-index:110;display:grid;place-items:center;padding:20px}.card-backdrop{position:absolute;inset:0;background:#000c;backdrop-filter:blur(7px)}.digital-card{position:relative;width:min(410px,100%);max-height:90dvh;overflow:auto;text-align:center;background:linear-gradient(160deg,#2a1d30,#100d13 65%);color:#f7f1f9;border:1px solid #a58ab977;border-radius:25px;padding:35px 26px;box-shadow:0 30px 90px #000a}.card-close{position:absolute;right:17px;top:12px;border:0;background:transparent;color:#fff;font-size:1.7rem;cursor:pointer}.card-kicker{font-size:.62rem;letter-spacing:.23em;color:#c6b0cf}.card-monogram{width:138px;height:115px;object-fit:contain;margin:20px auto 8px}.digital-card h2{font:normal 2.15rem/1.05 Georgia,serif;margin:8px 0 12px}.digital-card>p{color:#d0c4d4;font-size:.85rem}.card-divider{height:1px;background:#a58ab944;margin:25px 0}.card-button-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.card-button-grid>*{border:1px solid #a58ab977;background:#a58ab922;color:#fff;padding:13px 8px;border-radius:11px;font:inherit;font-size:.83rem;cursor:pointer}.card-button-grid>*:first-child{grid-column:1/-1;background:#a58ab9;color:#130d17;font-weight:800}.card-portfolio-link{display:inline-block;margin-top:27px;font-size:.82rem;text-decoration:underline;text-underline-offset:5px}
+body.light .contact-shell{background:linear-gradient(125deg,#f8f1fa,#fff);color:#24172b}body.light .contact-intro>p,body.light .contact-form-side label,body.light .contact-lines a{color:#46384c}body.light .contact-form-side input,body.light .contact-form-side textarea{background:#fff;color:#24172b;border-color:#b9a8c3}body.light .contact-form-side input::placeholder,body.light .contact-form-side textarea::placeholder{color:#706779}body.light .contact-intro h2 em{color:#85669a}body.light .card-open{color:#33203c}body.light .form-status{color:#5b4c61}
+@media(max-width:760px){.contact-upgrade{padding:48px 0}.contact-shell{grid-template-columns:minmax(0,1fr);padding:24px 18px}.form-row{grid-template-columns:minmax(0,1fr)}.top .logo span{font-size:.56rem}.la-logo{width:39px;height:34px}}
+</style></head>
 <body>
 <header class="top">
-<div class="wrap nav"><a class="logo" href="#home">LMA / PORTFOLIO</a>
-<nav class="links" aria-label="Main navigation">
+<div class="wrap nav"><a class="logo" href="#home" aria-label="Laila Almario — Home"><img src="assets/images/la-monogram.png" alt="LA" class="la-logo"><span>PORTFOLIO</span></a>
+<nav class="links" id="mobileNav" aria-label="Main navigation">
 <a href="#home" class="active">Home</a><a href="#about">About</a><a href="#experience">Experience</a><a href="#work">Work</a><a href="#print">Print</a><a href="#skills">Skills</a><a href="#testimonials">Testimonials</a><a href="#contact">Contact</a>
-</nav><div class="utility"><button class="theme-toggle" id="themeToggle" aria-label="Toggle dark/light mode" title="Dark / Light mode">☀</button></div></div></header>
+</nav><div class="utility"><button class="menu-toggle" id="menuToggle" aria-label="Open navigation menu" aria-expanded="false" aria-controls="mobileNav"><span></span><span></span><span></span></button><button class="theme-toggle" id="themeToggle" aria-label="Toggle dark/light mode" title="Dark / Light mode">☀</button></div></div></header>
 
 
 <main>
@@ -419,7 +461,14 @@ body.light .exhibit-work-slide,body.light .exhibit-work-slide img{background:#f7
     <div class="testimonial-note">Replace these placeholders with real feedback before publishing.</div>
   </div>
 </section>
-<section id="contact"><div class="wrap"><div class="card contact"><div><div class="eyebrow">06 / Contact</div><h2>Let's create something useful.</h2><p>Email: <a class="email-direct" href="https://mail.google.com/mail/?view=cm&fs=1&to=leilaalmario28@gmail.com" target="_blank" rel="noopener">leilaalmario28@gmail.com</a><br>Phone: +63 998 446 5939<br>LinkedIn: <a href="https://www.linkedin.com/in/lailaemaealmario" target="_blank" rel="noopener">linkedin.com/in/lailaemaealmario</a></p><div class="socials"><a href="https://www.instagram.com/" target="_blank" rel="noopener">Instagram</a><a href="https://www.facebook.com/leilamaealmario" target="_blank" rel="noopener">Facebook</a><a href="https://www.tiktok.com/@mauirye_" target="_blank" rel="noopener">TikTok</a></div></div><a class="btn primary" href="https://mail.google.com/mail/?view=cm&fs=1&to=leilaalmario28@gmail.com" target="_blank" rel="noopener">Open Gmail</a></div></div></section>
+<section id="contact" class="contact-upgrade"><div class="wrap"><div class="contact-shell">
+<div class="contact-intro"><div class="eyebrow">07 / CONTACT</div><h2>Let's make something<br><em>meaningful.</em></h2><p>Have a project, role, or collaboration in mind? Send me a note and I’ll get back to you.</p>
+<div class="contact-lines"><a href="mailto:leilaalmario28@gmail.com">✉ &nbsp; leilaalmario28@gmail.com</a><a href="tel:+639984465939">✆ &nbsp; +63 998 446 5939</a><a href="https://www.linkedin.com/in/lailaemaealmario" target="_blank" rel="noopener">↗ &nbsp; LinkedIn profile</a></div>
+<div class="contact-actions"><a href="https://www.facebook.com/leilamaealmario" target="_blank" rel="noopener">Facebook ↗</a><a href="https://www.tiktok.com/@mauirye_" target="_blank" rel="noopener">TikTok ↗</a></div>
+<button type="button" id="openCard" class="card-open">View my digital card <span>↗</span></button></div>
+<div class="contact-form-side"><div class="eyebrow">START A CONVERSATION</div><h3>Tell me about your idea.</h3><form id="contactForm"><div class="form-row"><label>Your name<input name="name" maxlength="120" autocomplete="name" required placeholder="Your name"></label><label>Email address<input name="email" type="email" maxlength="254" autocomplete="email" required placeholder="you@example.com"></label></div><label>Project / company <span>(optional)</span><input name="project" maxlength="250" placeholder="Company or project name"></label><label>How can I help?<textarea name="message" maxlength="5000" rows="5" required placeholder="Tell me a little about what you're looking for..."></textarea></label><input name="website" class="honeypot" tabindex="-1" autocomplete="off" aria-hidden="true"><button type="submit" class="send-button">Send message <span>↗</span></button><p id="formStatus" class="form-status" role="status">Messages are enabled after private inbox setup. You can email me directly in the meantime.</p></form></div>
+</div></div></section>
+<div class="card-modal" id="cardModal" hidden><div class="card-backdrop" data-close-card></div><div class="digital-card" role="dialog" aria-modal="true" aria-labelledby="cardTitle"><button class="card-close" type="button" data-close-card aria-label="Close digital card">×</button><div class="card-kicker">DIGITAL CONTACT CARD / LA</div><img class="card-monogram" src="assets/images/la-monogram.png" alt="LA monogram"><h2 id="cardTitle">Laila Mae<br>Almario</h2><p>Social Media &amp; E-commerce Specialist</p><div class="card-divider"></div><div class="card-button-grid"><button type="button" id="saveVcard">↓ Save contact</button><a href="mailto:leilaalmario28@gmail.com">✉ Email</a><a href="tel:+639984465939">✆ Call</a><button type="button" id="shareCard">↗ Share portfolio</button></div><a class="card-portfolio-link" href="#work" data-close-card>Explore selected work ↗</a></div></div>
 </main>
 
 <button class="chat-launch" id="chatLaunch">Portfolio FAQ</button>
@@ -481,4 +530,16 @@ document.querySelectorAll('[data-exhibit-work]').forEach(c=>{
  t.addEventListener('scroll',sync,{passive:true});sync();
 });
 </script>
-</body></html>
+<script id="mobile-menu-behavior">(function(){const b=document.getElementById('menuToggle'),n=document.getElementById('mobileNav');if(!b||!n)return;function close(){n.classList.remove('mobile-open');b.setAttribute('aria-expanded','false');b.setAttribute('aria-label','Open navigation menu')}b.addEventListener('click',function(){const open=n.classList.toggle('mobile-open');b.setAttribute('aria-expanded',String(open));b.setAttribute('aria-label',open?'Close navigation menu':'Open navigation menu')});n.querySelectorAll('a').forEach(a=>a.addEventListener('click',close));document.addEventListener('keydown',e=>{if(e.key==='Escape')close()});document.addEventListener('click',e=>{if(!n.contains(e.target)&&!b.contains(e.target))close()});window.addEventListener('resize',()=>{if(window.innerWidth>800)close()})})();</script>
+<script id="contact-upgrade-js" type="module">
+import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+import { SUPABASE_URL, SUPABASE_ANON_KEY } from './site-config.js';
+const ready=SUPABASE_URL.startsWith('https://') && SUPABASE_ANON_KEY.length>30;
+const supabase=ready?createClient(SUPABASE_URL,SUPABASE_ANON_KEY):null;
+const form=document.getElementById('contactForm'),status=document.getElementById('formStatus');
+if(ready)status.textContent='Your message will be sent securely to my private inbox.';
+form.addEventListener('submit',async e=>{e.preventDefault();if(!form.reportValidity())return;if(!ready){status.textContent='The private inbox is not connected yet. Please email me at leilaalmario28@gmail.com.';return}const data=new FormData(form);if(data.get('website'))return;const button=form.querySelector('[type=submit]');button.disabled=true;status.textContent='Sending your message…';try{const {error}=await supabase.from('portfolio_messages').insert({sender_name:String(data.get('name')).trim(),sender_email:String(data.get('email')).trim(),project:String(data.get('project')).trim(),message:String(data.get('message')).trim()});if(error)throw error;form.reset();status.textContent='Thank you! Your message has been sent.'}catch(err){status.textContent='Unable to send right now. Please use the email link instead.'}finally{button.disabled=false}});
+const modal=document.getElementById('cardModal');document.getElementById('openCard').onclick=()=>{modal.hidden=false;modal.querySelector('.card-close').focus()};modal.querySelectorAll('[data-close-card]').forEach(b=>b.addEventListener('click',()=>modal.hidden=true));document.addEventListener('keydown',e=>{if(e.key==='Escape')modal.hidden=true});
+document.getElementById('saveVcard').onclick=()=>{const v=['BEGIN:VCARD','VERSION:3.0','FN:Laila Mae Almario','N:Almario;Laila Mae;;;','TITLE:Social Media & E-commerce Specialist','EMAIL;TYPE=INTERNET:leilaalmario28@gmail.com','TEL;TYPE=CELL:+639984465939','URL:'+location.origin,'END:VCARD'].join('\r\n');const u=URL.createObjectURL(new Blob([v],{type:'text/vcard;charset=utf-8'}));const a=document.createElement('a');a.href=u;a.download='Laila_Mae_Almario.vcf';a.click();setTimeout(()=>URL.revokeObjectURL(u),2000)};
+document.getElementById('shareCard').onclick=async()=>{if(navigator.share){try{await navigator.share({title:'Laila Mae Almario | Portfolio',url:location.origin})}catch(e){}}else if(navigator.clipboard){await navigator.clipboard.writeText(location.origin);document.getElementById('shareCard').textContent='Link copied ✓'}};
+</script></body></html>
