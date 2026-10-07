@@ -34,8 +34,8 @@ section{padding:82px 0;scroll-margin-top:95px}.head{display:flex;justify-content
 .card{padding:22px;border:1px solid var(--line);border-radius:16px;background:linear-gradient(145deg,#18101d,#0b090d);box-shadow:10px 12px 22px #000,-5px -5px 12px rgba(255,255,255,.05),inset 1px 1px 3px rgba(255,255,255,.06);transition:.22s}.card:hover{transform:translateY(-4px);border-color:#947EA7aa}
 .tags,.skilllist{display:flex;flex-wrap:wrap;gap:8px}.tag,.skill{padding:5px 9px;border-radius:999px;border:1px solid #947EA744;background:#0d0a0f;color:#d8cedd;font-size:.76rem}
 .timeline{border-left:1px solid var(--line);padding-left:25px}.role{position:relative;padding:0 0 30px 20px}.role:before{content:"";position:absolute;left:-31px;top:6px;width:10px;height:10px;border-radius:50%;background:var(--lav);box-shadow:0 0 0 4px #947EA71f,0 0 16px #947EA777}.role h3{margin:0}.meta{color:var(--lav);font-size:.8rem;font-weight:900}.role li{margin:5px 0;color:#d1c8d5}
-.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}.work{min-height:235px}.work .num{color:var(--lav);font-weight:900;font-size:.72rem;letter-spacing:.18em}.work h3{font-size:1.45rem;margin:8px 0}.work p{color:var(--muted)}.placeholder{margin-top:18px;padding:12px;border:1px dashed #947EA766;border-radius:10px;color:#a99dad;font-size:.82rem}
-.skills{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}.skillbox h3{color:var(--lav);margin-top:0}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}.grid>*{min-width:0}.work{min-height:235px}.work .num{color:var(--lav);font-weight:900;font-size:.72rem;letter-spacing:.18em}.work h3{font-size:1.45rem;margin:8px 0}.work p{color:var(--muted)}.placeholder{margin-top:18px;padding:12px;border:1px dashed #947EA766;border-radius:10px;color:#a99dad;font-size:.82rem}
+.skills{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}.skillbox h3{color:var(--lav);margin-top:0}
 .contact{display:grid;grid-template-columns:1fr auto;gap:25px;align-items:center;padding:30px}.contact h2{margin:0 0 7px}.contact p{color:var(--muted)}footer{border-top:1px solid var(--line);padding:28px 0;color:#8f8592;font-size:.8rem}
 @media(max-width:800px){.heroGrid,.skills,.grid,.contact{grid-template-columns:1fr}.device{transform:none}.nav{align-items:flex-start;padding:12px 0}.links{justify-content:flex-start}}
 @media(max-width:540px){h1{font-size:3.5rem}.head{display:block}}
@@ -190,9 +190,9 @@ body.light .listing-shot:hover{box-shadow:0 12px 28px rgba(117,91,135,.12)}
 .real-carousel{margin-top:16px}.real-track{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;scroll-behavior:smooth;scrollbar-width:none;padding:2px 2px 10px}.real-track::-webkit-scrollbar{display:none}.real-slide{flex:0 0 88%;scroll-snap-align:center;border:1px solid var(--line);border-radius:14px;overflow:hidden;background:var(--surface)}.real-slide>img{width:100%;height:390px;object-fit:cover;display:block}.real-slide .print-item{border:0!important;margin:0!important;height:100%}.real-slide .print-item img{width:100%;height:390px!important;object-fit:contain!important;background:#fff}.real-slide .role{padding:24px!important;margin:0!important;border:0!important}.real-nav{display:flex;justify-content:flex-end;align-items:center;gap:8px;margin-top:8px}.real-nav button{width:36px;height:36px;border-radius:50%;border:1px solid var(--line);background:var(--surface);color:var(--text);cursor:pointer;font-size:1.1rem}.real-count{font-size:.65rem;color:var(--muted);min-width:42px;text-align:center}body.light .real-slide{background:#fff}@media(max-width:650px){.real-slide{flex-basis:94%}.real-slide>img,.real-slide .print-item img{height:280px!important}}
 </style><style>.pubmat-track{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;scroll-behavior:smooth;scrollbar-width:none;margin-top:16px}.pubmat-track::-webkit-scrollbar{display:none}.pubmat-slide{flex:0 0 72%;scroll-snap-align:center;border:1px solid var(--line);border-radius:14px;overflow:hidden}.pubmat-slide img{display:block;width:100%;height:420px;object-fit:contain;background:#09080a}.pubmat-cap{padding:9px 11px;font-size:.68rem;color:var(--muted)}.pubmat-nav{display:flex;justify-content:flex-end;align-items:center;gap:8px;margin-top:8px}.pubmat-nav button{width:36px;height:36px;border-radius:50%;border:1px solid var(--line);background:var(--surface);color:var(--text);cursor:pointer}.pubmat-count{font-size:.65rem;color:var(--muted)}body.light .pubmat-slide img{background:#f7f3f8}@media(max-width:650px){.pubmat-slide{flex-basis:90%}.pubmat-slide img{height:340px}}</style>
 <style id="portfolio-sizing-testimonial-fix">
-/* Selected work: equal card heights */
-.work-grid{align-items:stretch!important}
-.work-grid>.card{height:100%!important}
+/* Odd card out spans the full row instead of leaving an empty cell */
+#work .grid>.card:last-child:nth-child(odd){grid-column:1/-1}
+@media(min-width:801px){#work .grid>.card:last-child:nth-child(odd) .listing-samples{grid-template-columns:repeat(4,minmax(0,1fr))}}
 
 /* Social + Graphic carousel screenshots/artwork: show full image, same visual height */
 .swipe-slide img,.pubmat-slide img{
@@ -223,7 +223,7 @@ body.light .real-carousel .real-slide>img{background:#f7f3f8!important}
 /* Testimonial section */
 .testimonials{padding:90px 0;border-top:1px solid var(--line)}
 .testimonial-head{display:grid;grid-template-columns:1.2fr .8fr;gap:30px;align-items:end;margin-bottom:28px}
-.testimonial-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.testimonial-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
 .testimonial-card{border:1px solid var(--line);border-radius:16px;padding:22px;background:var(--surface);min-height:190px}
 .testimonial-quote{font-family:Georgia,serif;font-size:1.02rem;line-height:1.55;margin:0 0 20px}
 .testimonial-person{font-size:.72rem;font-weight:900}
@@ -270,52 +270,6 @@ body.light .exhibit-work-slide,body.light .exhibit-work-slide img{background:#f7
 }
 </style>
 
-<style id="outer-work-card-square-fix">
-/* ONLY the OUTER Selected Work cards are standardized.
-   Inner carousels/images keep their existing proportions. */
-#work .work-grid{
-  align-items:stretch!important;
-}
-#work .work-grid > article.card.work{
-  aspect-ratio:1 / 1!important;
-  height:auto!important;
-  min-height:0!important;
-  box-sizing:border-box!important;
-  overflow:hidden!important;
-  display:flex!important;
-  flex-direction:column!important;
-}
-
-/* Keep carousel/content inside the square outer card */
-#work .work-grid > article.card.work .swipe-carousel,
-#work .work-grid > article.card.work .pubmat-carousel,
-#work .work-grid > article.card.work .video-carousel,
-#work .work-grid > article.card.work .exhibit-work-carousel{
-  min-height:0!important;
-  overflow:hidden!important;
-}
-
-/* Let long carousel areas use the remaining card space cleanly */
-#work .work-grid > article.card.work .swipe-track,
-#work .work-grid > article.card.work .pubmat-track,
-#work .work-grid > article.card.work .exhibit-work-track{
-  min-height:0!important;
-}
-
-/* Product listing card: keep content compact inside the same square frame */
-#work .work-grid > article.card.work .listing-grid{
-  overflow:auto!important;
-  min-height:0!important;
-}
-
-/* AI card is intentionally left as its existing wide horizontal card */
-@media(max-width:760px){
-  #work .work-grid > article.card.work{
-    aspect-ratio:auto!important;
-    min-height:520px!important;
-  }
-}
-</style>
 <style id="mobile-responsive-final">
 .menu-toggle{display:none}
 @media(max-width:800px){
@@ -332,13 +286,10 @@ body.light .exhibit-work-slide,body.light .exhibit-work-slide img{background:#f7
  .top .links a{font-size:.86rem!important;padding:11px 9px!important;text-align:center!important;min-width:0!important;box-shadow:none!important}
  section{padding:46px 0!important;scroll-margin-top:78px!important}
  .hero{min-height:auto!important;padding:45px 0!important}
- .heroGrid,.hero-grid,.personality-grid,.skills,.contact,.grid,.work-grid{grid-template-columns:minmax(0,1fr)!important}
+ .heroGrid,.hero-grid,.personality-grid,.skills,.contact,.grid{grid-template-columns:minmax(0,1fr)!important}
  .heroGrid{gap:25px!important}.hero h1{font-size:clamp(2.9rem,12vw,4.4rem)!important}
  .hero .device img{min-height:0!important;height:auto!important;max-height:460px!important;object-fit:cover!important}
  .head,.testimonial-head{display:block!important}.head h2{font-size:clamp(1.7rem,7vw,2.4rem)!important}
- #work .work-grid{display:grid!important;gap:15px!important;align-items:stretch!important}
- #work .work-grid>article.card.work{aspect-ratio:auto!important;height:auto!important;min-height:0!important;max-height:none!important;overflow:visible!important;display:flex!important;flex-direction:column!important;padding:17px!important}
- #work .work-grid>article.card.work .swipe-carousel,#work .work-grid>article.card.work .pubmat-carousel,#work .work-grid>article.card.work .video-carousel,#work .work-grid>article.card.work .exhibit-work-carousel{overflow:visible!important;min-width:0!important;width:100%!important}
  .card,.work,.real-carousel,.swipe-carousel,.pubmat-carousel,.exhibit-work-carousel{min-width:0!important;max-width:100%!important}
  .swipe-track,.pubmat-track,.exhibit-work-track,.real-track{width:100%!important;max-width:100%!important;min-width:0!important;overflow-x:auto!important;overscroll-behavior-inline:contain}
  .swipe-slide,.pubmat-slide,.exhibit-work-slide,.real-slide{flex:0 0 90%!important;min-width:0!important;max-width:90%!important}
@@ -357,6 +308,80 @@ body.light .exhibit-work-slide,body.light .exhibit-work-slide img{background:#f7
 .contact-upgrade{padding:88px 0 105px}.contact-shell{display:grid;grid-template-columns:1fr 1fr;gap:clamp(24px,5vw,72px);padding:clamp(22px,5vw,60px);border:1px solid var(--line);border-radius:22px;background:linear-gradient(130deg,#271a2a 0%,#151015 47%,#100d12 100%);box-shadow:0 25px 65px #0005}.contact-intro h2{font:normal clamp(2.2rem,4vw,4rem)/1.12 Georgia,serif;margin:20px 0}.contact-intro h2 em{font-weight:normal;color:#b99dce}.contact-intro>p{max-width:360px;color:#d0c5d6}.contact-lines{display:grid;gap:16px;margin:34px 0}.contact-lines a{overflow-wrap:anywhere}.contact-lines a:hover,.contact-actions a:hover{color:#c6a7dc}.contact-actions{display:flex;gap:18px;flex-wrap:wrap;font-size:.78rem}.card-open{margin-top:36px;border:1px solid #aa90b2;background:#aa90b21a;color:#f4eaf8;border-radius:50px;padding:13px 20px;cursor:pointer}.card-open span{margin-left:18px}.contact-form-side h3{font:normal 1.5rem Georgia,serif;margin:10px 0 24px}.contact-form-side form{display:grid;gap:15px}.contact-form-side label{display:grid;gap:7px;font-size:.77rem;color:#d5c9dc}.contact-form-side label span{color:#aaa0b2}.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}.contact-form-side input,.contact-form-side textarea{min-width:0;width:100%;background:#0d0b10;border:1px solid #6d586d;border-radius:10px;padding:13px 14px;color:#fff;font:inherit;resize:vertical}.contact-form-side input:focus,.contact-form-side textarea:focus{outline:2px solid #a98bbb;outline-offset:1px}.contact-form-side input::placeholder,.contact-form-side textarea::placeholder{color:#9c91a2}.contact-form-side .honeypot{position:absolute;left:-9999px;width:1px;height:1px}.send-button{background:#a58ab9;color:#130d17;border:0;border-radius:50px;padding:14px 23px;cursor:pointer;font-weight:800;justify-self:start}.send-button span{margin-left:22px}.send-button:disabled{opacity:.6;cursor:wait}.form-status{font-size:.76rem;color:#c5b9ca;margin:0}.card-modal[hidden]{display:none}.card-modal{position:fixed;inset:0;z-index:110;display:grid;place-items:center;padding:20px}.card-backdrop{position:absolute;inset:0;background:#000c;backdrop-filter:blur(7px)}.digital-card{position:relative;width:min(410px,100%);max-height:90dvh;overflow:auto;text-align:center;background:linear-gradient(160deg,#2a1d30,#100d13 65%);color:#f7f1f9;border:1px solid #a58ab977;border-radius:25px;padding:35px 26px;box-shadow:0 30px 90px #000a}.card-close{position:absolute;right:17px;top:12px;border:0;background:transparent;color:#fff;font-size:1.7rem;cursor:pointer}.card-kicker{font-size:.62rem;letter-spacing:.23em;color:#c6b0cf}.card-monogram{width:105px;height:105px;object-fit:contain;margin:20px auto 8px}.digital-card h2{font:normal 2.15rem/1.05 Georgia,serif;margin:8px 0 12px}.digital-card>p{color:#d0c4d4;font-size:.85rem}.card-divider{height:1px;background:#a58ab944;margin:25px 0}.card-button-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.card-button-grid>*{border:1px solid #a58ab977;background:#a58ab922;color:#fff;padding:13px 8px;border-radius:11px;font:inherit;font-size:.83rem;cursor:pointer}.card-button-grid>*:first-child{grid-column:1/-1;background:#a58ab9;color:#130d17;font-weight:800}.card-portfolio-link{display:inline-block;margin-top:27px;font-size:.82rem;text-decoration:underline;text-underline-offset:5px}
 body.light .contact-shell{background:linear-gradient(125deg,#f8f1fa,#fff);color:#24172b}body.light .contact-intro>p,body.light .contact-form-side label,body.light .contact-lines a{color:#46384c}body.light .contact-form-side input,body.light .contact-form-side textarea{background:#fff;color:#24172b;border-color:#b9a8c3}body.light .contact-form-side input::placeholder,body.light .contact-form-side textarea::placeholder{color:#706779}body.light .contact-intro h2 em{color:#85669a}body.light .card-open{color:#33203c}body.light .form-status{color:#5b4c61}
 @media(max-width:760px){.contact-upgrade{padding:48px 0}.contact-shell{grid-template-columns:minmax(0,1fr);padding:24px 18px}.form-row{grid-template-columns:minmax(0,1fr)}.top .logo span{font-size:.56rem}.la-logo{width:34px;height:34px}}
+</style>
+<style id="art-effects">
+/* ---- Scroll reveal (JS adds .reveal only when motion is allowed) ---- */
+.reveal{opacity:0;translate:0 32px;transition:opacity .8s cubic-bezier(.2,.7,.2,1) var(--d,0ms),translate .8s cubic-bezier(.2,.7,.2,1) var(--d,0ms),transform .25s,border-color .25s,box-shadow .25s}
+.reveal.in{opacity:1;translate:0 0}
+
+/* ---- Carousel focus: the centred slide is lit, neighbours recede ---- */
+.focus-track>*{transition:opacity .45s ease,scale .45s ease}
+.focus-track>:not(.is-current){opacity:.45;scale:.96}
+
+/* ---- Zoom-in-frame hover. clip-path counters the scale so the image grows inside its own box
+        and never spills over the caption below (inset 2.83% = (1 - 1/1.06) / 2) ---- */
+.swipe-slide,.pubmat-slide,.exhibit-work-slide,.real-slide .print-item,.portrait-card{position:relative}
+.zoomable{cursor:zoom-in;clip-path:inset(0);transition:transform .7s cubic-bezier(.2,.7,.2,1),clip-path .7s cubic-bezier(.2,.7,.2,1)}
+.zoomable:focus-visible{outline:2px solid #b99dce;outline-offset:-4px}
+.has-zoom::after{content:"\2922  VIEW";position:absolute;top:10px;right:10px;z-index:2;padding:5px 10px;border-radius:999px;font:800 .6rem/1 Arial,sans-serif;letter-spacing:.14em;color:#fff;background:#0b090dcc;border:1px solid #947EA788;backdrop-filter:blur(6px);opacity:0;translate:0 -6px;transition:opacity .3s,translate .3s;pointer-events:none}
+@media(hover:hover){
+ .has-zoom:hover .zoomable{transform:scale(1.06);clip-path:inset(2.83%)}
+ .has-zoom:hover::after{opacity:1;translate:0 0}
+}
+@media(hover:none){.has-zoom::after{opacity:.8;translate:0 0}}
+
+/* ---- Cursor spotlight on work cards: border lights up where the pointer is ---- */
+.spot{position:relative}
+.spot::before{content:"";position:absolute;inset:-1px;z-index:3;border-radius:inherit;padding:1px;background:radial-gradient(260px circle at var(--mx,50%) var(--my,50%),#d6b9ee,transparent 70%);-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;opacity:0;transition:opacity .35s;pointer-events:none}
+.spot::after{content:"";position:absolute;inset:0;border-radius:inherit;background:radial-gradient(420px circle at var(--mx,50%) var(--my,50%),#947EA71c,transparent 60%);opacity:0;transition:opacity .35s;pointer-events:none}
+.spot:hover::before,.spot:hover::after{opacity:1}
+
+/* ---- 3D tilt + glare (hero portrait, About photo stack) ---- */
+.tilt{transform:perspective(1100px) rotate(var(--rot,0deg)) rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg));transition:transform .25s ease-out,opacity .8s cubic-bezier(.2,.7,.2,1) var(--d,0ms),translate .8s cubic-bezier(.2,.7,.2,1) var(--d,0ms);will-change:transform}
+.device.tilt{--rot:2deg;position:relative}
+.device.tilt::after{content:"";position:absolute;inset:0;border-radius:inherit;background:radial-gradient(520px circle at var(--gx,50%) var(--gy,50%),#ffffff40,transparent 45%);mix-blend-mode:soft-light;opacity:0;transition:opacity .3s;pointer-events:none}
+.device.tilt:hover::after{opacity:1}
+@media(max-width:800px){.device.tilt{--rot:0deg}}
+
+/* ---- About: stacked photo deck that fans out on hover ---- */
+.photo-stack{position:relative;display:grid;isolation:isolate}
+.photo-stack>.portrait-card{z-index:2}
+.stack-card{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:16px;border:1px solid var(--line);box-shadow:0 18px 40px #0009;filter:brightness(.5) saturate(.75);transition:transform .7s cubic-bezier(.2,.8,.2,1),filter .7s}
+.stack-card.s1{z-index:1;transform:rotate(-4deg) translate(-6px,8px)}
+.stack-card.s2{z-index:0;transform:rotate(3.5deg) translate(8px,4px)}
+.photo-stack:hover .stack-card{filter:brightness(.9) saturate(1)}
+.photo-stack:hover .stack-card.s1{transform:rotate(-10deg) translate(-40px,18px)}
+.photo-stack:hover .stack-card.s2{transform:rotate(7deg) translate(16px,-14px)}
+body.light .stack-card{filter:brightness(.92) saturate(.6)}
+
+/* ---- Lightbox ---- */
+.lightbox{position:fixed;inset:0;z-index:3000;display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:14px;padding:clamp(14px,3vw,40px);background:#07050ae8;backdrop-filter:blur(10px);animation:lbFade .3s ease}
+.lightbox[hidden]{display:none}
+.lightbox figure{margin:0;display:grid;justify-items:center;gap:14px;min-width:0}
+.lightbox figure img{max-width:100%;max-height:80vh;object-fit:contain;border-radius:12px;box-shadow:0 30px 80px #000c}
+.lightbox figure img.lb-in{animation:lbIn .45s cubic-bezier(.2,.8,.2,1)}
+.lightbox figcaption{display:flex;justify-content:space-between;gap:18px;width:min(100%,760px);font-size:.8rem;line-height:1.5;color:#ddd2e4}
+.lb-count{color:#b99dce;font-weight:800;letter-spacing:.14em;white-space:nowrap}
+.lb-nav,.lb-close{width:48px;height:48px;border-radius:50%;border:1px solid #947EA788;background:#17121bcc;color:#fff;font-size:1.6rem;line-height:1;cursor:pointer;transition:background .2s,color .2s,transform .2s}
+.lb-nav:hover,.lb-close:hover{background:#947EA7;color:#130d17;transform:scale(1.07)}
+.lb-close{position:absolute;top:16px;right:16px;z-index:1}
+.lightbox.single .lb-nav{visibility:hidden}
+html.lb-lock{overflow:hidden}
+@keyframes lbFade{from{opacity:0}}
+@keyframes lbIn{from{opacity:0;transform:scale(.94)}}
+@media(max-width:650px){
+ .lightbox{grid-template-columns:minmax(0,1fr)}
+ .lightbox figcaption{padding:0 4px 64px}
+ .lb-nav{position:absolute;bottom:18px}.lb-prev{left:18px}.lb-next{right:18px}
+}
+
+@media(prefers-reduced-motion:reduce){
+ .reveal{opacity:1;translate:none}
+ .tilt{transform:none}
+ .zoomable,.stack-card,.focus-track>*{transition:none}
+ .has-zoom:hover .zoomable{transform:none;clip-path:inset(0)}
+ .lightbox,.lightbox figure img.lb-in{animation:none}
+}
 </style></head>
 <body>
 <header class="top">
@@ -376,29 +401,45 @@ body.light .contact-shell{background:linear-gradient(125deg,#f8f1fa,#fff);color:
 
 
 <section id="about"><div class="wrap"><div class="head"><div><div class="eyebrow">01 / About</div><h2>Professional profile</h2></div><p>Hands-on experience across social media, e-commerce, sales, customer service, and content creation.</p></div>
-<div class="personality-grid"><div class="card portrait-card"><img src="assets/images/image-02-8c0a97fe03.jpg" alt="Laila at an industry exhibit"></div><div class="card personality-copy"><div class="eyebrow">Beyond the screen</div><h3>Creative, curious & hands-on.</h3><p>I enjoy turning ideas into content, exploring AI and automation, working with people at events, and finding practical ways to make digital work more organized and engaging.</p><p>My experience goes beyond the screen—from social media and e-commerce operations to exhibits, conventions, live selling, and on-site customer engagement.</p><div class="tags"><span class="tag">Creative Thinker</span><span class="tag">AI Curious</span><span class="tag">Organized</span><span class="tag">Team Player</span><span class="tag">Always Learning</span></div></div></div></div></section>
+<div class="personality-grid"><div class="photo-stack"><img class="stack-card s2" src="assets/images/image-18-543b04bdf5.webp" alt="" aria-hidden="true" loading="lazy"><img class="stack-card s1" src="assets/images/image-14-0a804db065.webp" alt="" aria-hidden="true" loading="lazy"><div class="card portrait-card"><img src="assets/images/image-02-8c0a97fe03.jpg" alt="Laila at an industry exhibit"></div></div><div class="card personality-copy"><div class="eyebrow">Beyond the screen</div><h3>Creative, curious & hands-on.</h3><p>I enjoy turning ideas into content, exploring AI and automation, working with people at events, and finding practical ways to make digital work more organized and engaging.</p><p>My experience goes beyond the screen—from social media and e-commerce operations to exhibits, conventions, live selling, and on-site customer engagement.</p><div class="tags"><span class="tag">Creative Thinker</span><span class="tag">AI Curious</span><span class="tag">Organized</span><span class="tag">Team Player</span><span class="tag">Always Learning</span></div></div></div></div></section>
 
 <section id="experience"><div class="wrap"><div class="head"><div><div class="eyebrow">02 / Experience</div><h2>Career history</h2></div><p>Experience presented around skills relevant to social media, digital marketing, and e-commerce.</p></div>
 <div class="real-carousel" data-real-carousel><div class="real-track"><div class="real-slide"><article class="role"><div class="meta">May 2026 — Present</div><h3>Social Media Manager · KPICK Trading Corp.</h3><ul><li>Manage Facebook, TikTok, and Instagram platforms and maintain a consistent social media presence.</li><li>Develop monthly content calendars and create promotional graphics, pubmats, and short-form videos.</li><li>Plan and conduct video shoots and edit short-form content using CapCut.</li><li>Schedule and publish posts across social media platforms to support brand visibility and engagement.</li><li>Create product thumbnails, A+ Content descriptions, and product variation images for e-commerce listings.</li><li>Manage print-production projects end to end, including design, 3D mockups, supplier sourcing, quotation coordination, production monitoring, quality checking, and delivery.</li><li>Prepare physical marketing materials such as booth carts, X-stand banners, calling cards, event signage, and branded giveaways.</li></ul></article></div><div class="real-slide"><article class="role"><div class="meta">January 2024 — May 2026</div><h3>E-commerce Specialist · Sinocare Healthcare Philippines Inc.</h3><ul><li>Managed end-to-end e-commerce operations, including customer service, order processing, and fulfillment for retail and wholesale channels.</li><li>Handled online orders and customer inquiries through Facebook and Viber.</li><li>Conducted TikTok live selling to promote products, drive sales, and engage customers.</li><li>Created videos, reels, and promotional materials to support marketing campaigns.</li><li>Served as social media representative for online campaigns and marketing content.</li><li>Assisted customers with product information, payment concerns, and order follow-ups.</li><li>Supported company events including exhibits, conventions, and free product-testing activities, assisting with customer engagement and on-site brand representation.</li></ul></article></div><div class="real-slide"><article class="role"><div class="meta">May 2023 — January 2024</div><h3>Sales Representative · Six in One Corporation</h3><ul><li>Processed customer orders and managed sales transactions accurately and efficiently.</li><li>Coordinated deliveries and liaised with logistics teams to ensure timely fulfillment.</li><li>Prepared sales and inventory reports to support forecasting and stock management.</li><li>Provided product guidance and customer service to support purchasing decisions and upselling opportunities.</li></ul></article></div></div><div class="real-nav"><button class="real-prev">‹</button><span class="real-count"></span><button class="real-next">›</button></div></div></div></div></section>
 
 <section id="work"><div class="wrap"><div class="head"><div><div class="eyebrow">03 / Selected work</div><h2>Selected work & reels</h2></div><p>A mix of social content, e-commerce creative work, short-form video, and AI-assisted workflows.</p></div>
 <div class="grid">
-<article class="card work"><div class="num">01 / SOCIAL</div><h3>Social Media Management</h3><p>Facebook, TikTok, and Instagram content planning, scheduling, publishing, brand presence, and task monitoring.</p><div class="tags" style="margin-top:14px"><span class="tag">Content Planning</span><span class="tag">Content Calendar</span><span class="tag">Task Monitoring</span><span class="tag">Campaign Scheduling</span></div><div class="swipe-carousel" data-carousel><div class="swipe-track"><div class="swipe-slide"><img src="assets/images/image-03-e67638eeab.png" alt="Marketing Dashboard"><div class="slide-caption"><strong>Marketing Dashboard</strong> — Centralized view for products needing action, daily content, open tasks, attendance, upcoming posts, and task progress.</div></div><div class="swipe-slide"><img src="assets/images/image-04-370a4cf269.png" alt="Medical Content Calendar"><div class="slide-caption"><strong>Medical Content Calendar</strong> — Monthly content planning and scheduling for medical product communication.</div></div><div class="swipe-slide"><img src="assets/images/image-05-8e715002d3.png" alt="E-commerce Content Calendar"><div class="slide-caption"><strong>E-commerce Content Calendar</strong> — Campaign, payday, promotional, seasonal, and product-led content planning.</div></div><div class="swipe-slide"><img src="assets/images/image-06-6ce89ebc27.png" alt="Content Studio"><div class="slide-caption"><strong>Content Studio</strong> — Workspace for caption generation, idea polishing, community posts, and upcoming content monitoring.</div></div></div><div class="carousel-controls"><button class="carousel-btn prev">‹</button><button class="carousel-btn next">›</button></div><div class="carousel-dots"></div></div></article>
-<article class="card work"><div class="num">02 / DESIGN</div><h3>Graphic & Pubmat Design</h3><p>Promotional graphics, campaign materials, product-focused visuals, and Canva designs.</p><div class="pubmat-carousel" data-pubmat><div class="pubmat-track"><div class="pubmat-slide"><img src="assets/images/image-07-e0e49d68f8.png" alt="BER Months Campaign"><div class="pubmat-cap">BER Months Campaign</div></div><div class="pubmat-slide"><img src="assets/images/image-08-143cc1d97a.png" alt="Earth Day Awareness"><div class="pubmat-cap">Earth Day Awareness</div></div><div class="pubmat-slide"><img src="assets/images/image-09-20f63d2084.png" alt="Birthday Sale Campaign"><div class="pubmat-cap">Birthday Sale Campaign</div></div><div class="pubmat-slide"><img src="assets/images/image-10-907560fd02.png" alt="Diabetes Workshop Promotion"><div class="pubmat-cap">Diabetes Workshop Promotion</div></div><div class="pubmat-slide"><img src="assets/images/image-11-65bb25cd77.png" alt="Christmas Brand Content"><div class="pubmat-cap">Christmas Brand Content</div></div><div class="pubmat-slide"><img src="assets/images/image-12-373a4b2005.png" alt="Proof of Transactions"><div class="pubmat-cap">Proof of Transactions</div></div><div class="pubmat-slide"><img src="assets/images/image-13-892b4a35a1.png" alt="World Diabetes Day"><div class="pubmat-cap">World Diabetes Day</div></div></div><div class="pubmat-nav"><button class="prev">‹</button><span class="pubmat-count">1 / 7</span><button class="next">›</button></div></div></article>
+<article class="card work"><div class="num">01 / SOCIAL</div><h3>Social Media Management</h3><p>Facebook, TikTok, and Instagram content planning, scheduling, publishing, brand presence, and task monitoring.</p><div class="tags" style="margin-top:14px"><span class="tag">Content Planning</span><span class="tag">Content Calendar</span><span class="tag">Task Monitoring</span><span class="tag">Campaign Scheduling</span></div><div class="swipe-carousel" data-carousel><div class="swipe-track"><div class="swipe-slide"><img src="assets/images/image-03-e67638eeab.webp" alt="Marketing Dashboard"><div class="slide-caption"><strong>Marketing Dashboard</strong> — Centralized view for products needing action, daily content, open tasks, attendance, upcoming posts, and task progress.</div></div><div class="swipe-slide"><img src="assets/images/image-04-370a4cf269.webp" alt="Medical Content Calendar"><div class="slide-caption"><strong>Medical Content Calendar</strong> — Monthly content planning and scheduling for medical product communication.</div></div><div class="swipe-slide"><img src="assets/images/image-05-8e715002d3.webp" alt="E-commerce Content Calendar"><div class="slide-caption"><strong>E-commerce Content Calendar</strong> — Campaign, payday, promotional, seasonal, and product-led content planning.</div></div><div class="swipe-slide"><img src="assets/images/image-06-6ce89ebc27.webp" alt="Content Studio"><div class="slide-caption"><strong>Content Studio</strong> — Workspace for caption generation, idea polishing, community posts, and upcoming content monitoring.</div></div></div><div class="carousel-controls"><button class="carousel-btn prev">‹</button><button class="carousel-btn next">›</button></div><div class="carousel-dots"></div></div></article>
+<article class="card work"><div class="num">02 / DESIGN</div><h3>Graphic & Pubmat Design</h3><p>Promotional graphics, campaign materials, product-focused visuals, and Canva designs.</p><div class="pubmat-carousel" data-pubmat><div class="pubmat-track"><div class="pubmat-slide"><img src="assets/images/image-07-e0e49d68f8.webp" alt="BER Months Campaign"><div class="pubmat-cap">BER Months Campaign</div></div><div class="pubmat-slide"><img src="assets/images/image-08-143cc1d97a.webp" alt="Earth Day Awareness"><div class="pubmat-cap">Earth Day Awareness</div></div><div class="pubmat-slide"><img src="assets/images/image-09-20f63d2084.webp" alt="Birthday Sale Campaign"><div class="pubmat-cap">Birthday Sale Campaign</div></div><div class="pubmat-slide"><img src="assets/images/image-10-907560fd02.webp" alt="Diabetes Workshop Promotion"><div class="pubmat-cap">Diabetes Workshop Promotion</div></div><div class="pubmat-slide"><img src="assets/images/image-11-65bb25cd77.webp" alt="Christmas Brand Content"><div class="pubmat-cap">Christmas Brand Content</div></div><div class="pubmat-slide"><img src="assets/images/image-12-373a4b2005.webp" alt="Proof of Transactions"><div class="pubmat-cap">Proof of Transactions</div></div><div class="pubmat-slide"><img src="assets/images/image-13-892b4a35a1.webp" alt="World Diabetes Day"><div class="pubmat-cap">World Diabetes Day</div></div></div><div class="pubmat-nav"><button class="prev">‹</button><span class="pubmat-count">1 / 7</span><button class="next">›</button></div></div></article>
 <article class="card work"><div class="num">03 / VIDEO</div><h3>Short-form Video</h3><p>Video shooting, editing, captions, text overlays, and social-ready content using CapCut.</p><div class="tags" style="margin-top:18px"><span class="tag">Live Invites</span><span class="tag">Product Promotions</span><span class="tag">Reels</span></div><div class="swipe-carousel" data-carousel><div class="swipe-track"><div class="swipe-slide"><video controls playsinline preload="metadata"><source src="assets/videos/video-01-257bc88e88.mp4" type="video/mp4"></video><div class="slide-caption"><strong>Live Invite</strong> — short-form promotional social content.</div></div><div class="swipe-slide"><video controls playsinline preload="metadata"><source src="assets/videos/video-02-9623e82219.mp4" type="video/mp4"></video><div class="slide-caption"><strong>Product Promotion</strong> — vertical product-focused social video.</div></div></div><div class="carousel-controls"><button class="carousel-btn prev">‹</button><button class="carousel-btn next">›</button></div><div class="carousel-dots"></div></div></article>
 
 <article class="card work exhibit-work-card">
   <div class="num">04 / EXHIBITS</div>
   <h3>Exhibits &amp; Conventions</h3>
   <p>On-ground brand representation, product presentation, customer engagement, event content, and lead support.</p>
-  <div class="tags">
-    <span>Convention Support</span><span>Customer Engagement</span><span>Product Presentation</span><span>Event Content</span>
+  <div class="tags" style="margin-top:14px">
+    <span class="tag">Convention Support</span><span class="tag">Customer Engagement</span><span class="tag">Product Presentation</span><span class="tag">Event Content</span>
   </div>
   <div class="exhibit-work-carousel" data-exhibit-work>
-    <div class="exhibit-work-track"><div class="exhibit-work-slide"><img src="assets/images/image-14-0a804db065.png" alt="Exhibit and convention portfolio photo" loading="lazy"><div class="exhibit-work-caption">Exhibit & Convention Support</div></div><div class="exhibit-work-slide"><img src="assets/images/image-15-133ef44b5e.png" alt="Exhibit and convention portfolio photo" loading="lazy"><div class="exhibit-work-caption">Exhibit & Convention Support</div></div><div class="exhibit-work-slide"><img src="assets/images/image-16-b6c36c37aa.png" alt="Exhibit and convention portfolio photo" loading="lazy"><div class="exhibit-work-caption">Exhibit & Convention Support</div></div><div class="exhibit-work-slide"><img src="assets/images/image-17-780407f442.png" alt="Exhibit and convention portfolio photo" loading="lazy"><div class="exhibit-work-caption">Exhibit & Convention Support</div></div><div class="exhibit-work-slide"><img src="assets/images/image-18-543b04bdf5.png" alt="Exhibit and convention portfolio photo" loading="lazy"><div class="exhibit-work-caption">Exhibit & Convention Support</div></div><div class="exhibit-work-slide"><img src="assets/images/image-19-f706e252d4.png" alt="Exhibit and convention portfolio photo" loading="lazy"><div class="exhibit-work-caption">Exhibit & Convention Support</div></div><div class="exhibit-work-slide"><img src="assets/images/image-20-bfefc18bf1.png" alt="Exhibit and convention portfolio photo" loading="lazy"><div class="exhibit-work-caption">Exhibit & Convention Support</div></div><div class="exhibit-work-slide"><img src="assets/images/image-21-68587b0974.png" alt="Exhibit and convention portfolio photo" loading="lazy"><div class="exhibit-work-caption">Exhibit & Convention Support</div></div><div class="exhibit-work-slide"><img src="assets/images/image-22-e803726246.png" alt="Exhibit and convention portfolio photo" loading="lazy"><div class="exhibit-work-caption">Exhibit & Convention Support</div></div></div>
+    <div class="exhibit-work-track"><div class="exhibit-work-slide"><img src="assets/images/image-14-0a804db065.webp" alt="Exhibit and convention portfolio photo" loading="lazy"><div class="exhibit-work-caption">Exhibit & Convention Support</div></div><div class="exhibit-work-slide"><img src="assets/images/image-15-133ef44b5e.webp" alt="Exhibit and convention portfolio photo" loading="lazy"><div class="exhibit-work-caption">Exhibit & Convention Support</div></div><div class="exhibit-work-slide"><img src="assets/images/image-16-b6c36c37aa.webp" alt="Exhibit and convention portfolio photo" loading="lazy"><div class="exhibit-work-caption">Exhibit & Convention Support</div></div><div class="exhibit-work-slide"><img src="assets/images/image-17-780407f442.webp" alt="Exhibit and convention portfolio photo" loading="lazy"><div class="exhibit-work-caption">Exhibit & Convention Support</div></div><div class="exhibit-work-slide"><img src="assets/images/image-18-543b04bdf5.webp" alt="Exhibit and convention portfolio photo" loading="lazy"><div class="exhibit-work-caption">Exhibit & Convention Support</div></div><div class="exhibit-work-slide"><img src="assets/images/image-19-f706e252d4.webp" alt="Exhibit and convention portfolio photo" loading="lazy"><div class="exhibit-work-caption">Exhibit & Convention Support</div></div><div class="exhibit-work-slide"><img src="assets/images/image-20-bfefc18bf1.webp" alt="Exhibit and convention portfolio photo" loading="lazy"><div class="exhibit-work-caption">Exhibit & Convention Support</div></div><div class="exhibit-work-slide"><img src="assets/images/image-21-68587b0974.webp" alt="Exhibit and convention portfolio photo" loading="lazy"><div class="exhibit-work-caption">Exhibit & Convention Support</div></div><div class="exhibit-work-slide"><img src="assets/images/image-22-e803726246.webp" alt="Exhibit and convention portfolio photo" loading="lazy"><div class="exhibit-work-caption">Exhibit & Convention Support</div></div></div>
     <div class="exhibit-work-nav">
       <button class="exhibit-prev" aria-label="Previous exhibit photo">‹</button>
       <span class="exhibit-work-count">1 / 9</span>
+      <button class="exhibit-next" aria-label="Next exhibit photo">›</button>
+    </div>
+  </div>
+</article>
+<article class="card work exhibit-work-card reveal spot in" style="--d: 270ms; --mx: 516px; --my: -0.707763671875px;">
+  <div class="num">04 / EXHIBITS</div>
+  <h3>Exhibits &amp; Conventions</h3>
+  <p>On-ground brand representation, product presentation, customer engagement, event content, and lead support.</p>
+  <div class="tags" style="margin-top:14px">
+    <span class="tag">Convention Support</span><span class="tag">Customer Engagement</span><span class="tag">Product Presentation</span><span class="tag">Event Content</span>
+  </div>
+  <div class="exhibit-work-carousel" data-exhibit-work="">
+    <div class="exhibit-work-track focus-track"><div class="exhibit-work-slide has-zoom"><img src="assets/images/image-14-0a804db065.webp" alt="Exhibit and convention portfolio photo" loading="lazy" class="zoomable" tabindex="0" role="button" aria-label="View larger: Exhibit and convention portfolio photo"><div class="exhibit-work-caption">Exhibit &amp; Convention Support</div></div><div class="exhibit-work-slide has-zoom"><img src="assets/images/image-15-133ef44b5e.webp" alt="Exhibit and convention portfolio photo" loading="lazy" class="zoomable" tabindex="0" role="button" aria-label="View larger: Exhibit and convention portfolio photo"><div class="exhibit-work-caption">Exhibit &amp; Convention Support</div></div><div class="exhibit-work-slide has-zoom"><img src="assets/images/image-16-b6c36c37aa.webp" alt="Exhibit and convention portfolio photo" loading="lazy" class="zoomable" tabindex="0" role="button" aria-label="View larger: Exhibit and convention portfolio photo"><div class="exhibit-work-caption">Exhibit &amp; Convention Support</div></div><div class="exhibit-work-slide has-zoom"><img src="assets/images/image-17-780407f442.webp" alt="Exhibit and convention portfolio photo" loading="lazy" class="zoomable" tabindex="0" role="button" aria-label="View larger: Exhibit and convention portfolio photo"><div class="exhibit-work-caption">Exhibit &amp; Convention Support</div></div><div class="exhibit-work-slide has-zoom"><img src="assets/images/image-18-543b04bdf5.webp" alt="Exhibit and convention portfolio photo" loading="lazy" class="zoomable" tabindex="0" role="button" aria-label="View larger: Exhibit and convention portfolio photo"><div class="exhibit-work-caption">Exhibit &amp; Convention Support</div></div><div class="exhibit-work-slide has-zoom"><img src="assets/images/image-19-f706e252d4.webp" alt="Exhibit and convention portfolio photo" loading="lazy" class="zoomable" tabindex="0" role="button" aria-label="View larger: Exhibit and convention portfolio photo"><div class="exhibit-work-caption">Exhibit &amp; Convention Support</div></div><div class="exhibit-work-slide has-zoom"><img src="assets/images/image-20-bfefc18bf1.webp" alt="Exhibit and convention portfolio photo" loading="lazy" class="zoomable" tabindex="0" role="button" aria-label="View larger: Exhibit and convention portfolio photo"><div class="exhibit-work-caption">Exhibit &amp; Convention Support</div></div><div class="exhibit-work-slide has-zoom"><img src="assets/images/image-21-68587b0974.webp" alt="Exhibit and convention portfolio photo" loading="lazy" class="zoomable" tabindex="0" role="button" aria-label="View larger: Exhibit and convention portfolio photo"><div class="exhibit-work-caption">Exhibit &amp; Convention Support</div></div><div class="exhibit-work-slide has-zoom is-current"><img src="assets/images/image-22-e803726246.webp" alt="Exhibit and convention portfolio photo" loading="lazy" class="zoomable" tabindex="0" role="button" aria-label="View larger: Exhibit and convention portfolio photo"><div class="exhibit-work-caption">Exhibit &amp; Convention Support</div></div></div>
+    <div class="exhibit-work-nav">
+      <button class="exhibit-prev" aria-label="Previous exhibit photo">‹</button>
+      <span class="exhibit-work-count">9 / 9</span>
       <button class="exhibit-next" aria-label="Next exhibit photo">›</button>
     </div>
   </div>
@@ -422,7 +463,7 @@ body.light .contact-shell{background:linear-gradient(125deg,#f8f1fa,#fff);color:
 <div class="print-intro card"><p>I handle the <b>whole print-production process</b>: concept and design, 3D mockup or presentation, print-ready artwork, supplier sourcing, quotation and material checking, production follow-up, quality control, and final delivery.</p>
 <div class="tags"><span class="tag">Booth Cart</span><span class="tag">X-Stand Banner</span><span class="tag">Calling Cards</span><span class="tag">Event Signage</span><span class="tag">Branded Giveaways</span><span class="tag">Corporate Materials</span></div></div>
 <div class="production-flow"><span>01 Concept & Design</span><span>02 3D Mockup</span><span>03 Supplier Sourcing</span><span>04 Quotation & Coordination</span><span>05 Production Monitoring</span><span>06 Quality Check</span><span>07 Delivery</span></div>
-<div class="real-carousel" data-real-carousel><div class="real-track"><div class="real-slide"><article class="print-item"><img src="assets/images/image-23-c9f86e0580.png" alt="Branded Tote Bag 3D mockup" loading="lazy"><div class="print-copy"><h3>Branded Tote Bag</h3><p>Corporate giveaway and event merchandise mockup.</p></div></article></div><div class="real-slide"><article class="print-item"><img src="assets/images/image-24-178ef540cb.png" alt="Notebook & Pen 3D mockup" loading="lazy"><div class="print-copy"><h3>Notebook & Pen</h3><p>Branded stationery prepared for corporate and event use.</p></div></article></div><div class="real-slide"><article class="print-item"><img src="assets/images/image-25-ba1aa1d861.png" alt="Branded Spray Bottle 3D mockup" loading="lazy"><div class="print-copy"><h3>Branded Spray Bottle</h3><p>Promotional giveaway mockup with coordinated brand application.</p></div></article></div><div class="real-slide"><article class="print-item"><img src="assets/images/image-26-3c72d7409f.png" alt="Booth Cart 3D mockup" loading="lazy"><div class="print-copy"><h3>Booth Cart</h3><p>Health-monitoring booth cart concept and production mockup.</p></div></article></div><div class="real-slide"><article class="print-item"><img src="assets/images/image-27-c3fd8f5793.png" alt="X-Stand / Roll-Up Banner"><div class="print-copy"><h3>X-Stand / Roll-Up Banner</h3><p>Large-format product and event display material.</p></div></article></div><div class="real-slide"><article class="print-item"><img src="assets/images/image-28-c52ef6ff59.png" alt="Corporate Calling Card"><div class="print-copy"><h3>Corporate Calling Card</h3><p>Business card and corporate print collateral.</p></div></article></div></div><div class="real-nav"><button class="real-prev">‹</button><span class="real-count"></span><button class="real-next">›</button></div></div></section>
+<div class="real-carousel" data-real-carousel><div class="real-track"><div class="real-slide"><article class="print-item"><img src="assets/images/image-23-c9f86e0580.webp" alt="Branded Tote Bag 3D mockup" loading="lazy"><div class="print-copy"><h3>Branded Tote Bag</h3><p>Corporate giveaway and event merchandise mockup.</p></div></article></div><div class="real-slide"><article class="print-item"><img src="assets/images/image-24-178ef540cb.webp" alt="Notebook & Pen 3D mockup" loading="lazy"><div class="print-copy"><h3>Notebook & Pen</h3><p>Branded stationery prepared for corporate and event use.</p></div></article></div><div class="real-slide"><article class="print-item"><img src="assets/images/image-25-ba1aa1d861.webp" alt="Branded Spray Bottle 3D mockup" loading="lazy"><div class="print-copy"><h3>Branded Spray Bottle</h3><p>Promotional giveaway mockup with coordinated brand application.</p></div></article></div><div class="real-slide"><article class="print-item"><img src="assets/images/image-26-3c72d7409f.webp" alt="Booth Cart 3D mockup" loading="lazy"><div class="print-copy"><h3>Booth Cart</h3><p>Health-monitoring booth cart concept and production mockup.</p></div></article></div><div class="real-slide"><article class="print-item"><img src="assets/images/image-27-c3fd8f5793.webp" alt="X-Stand / Roll-Up Banner"><div class="print-copy"><h3>X-Stand / Roll-Up Banner</h3><p>Large-format product and event display material.</p></div></article></div><div class="real-slide"><article class="print-item"><img src="assets/images/image-28-c52ef6ff59.webp" alt="Corporate Calling Card"><div class="print-copy"><h3>Corporate Calling Card</h3><p>Business card and corporate print collateral.</p></div></article></div></div><div class="real-nav"><button class="real-prev">‹</button><span class="real-count"></span><button class="real-next">›</button></div></div></section>
 <section id="skills"><div class="wrap"><div class="head"><div><div class="eyebrow">05 / Skills</div><h2>Tools & strengths</h2></div><p>Digital tools, content skills, business skills, and transferable strengths.</p></div>
 <div class="skills">
 <div class="card skillbox"><h3>Digital & Content</h3><div class="skilllist"><span class="skill">Canva</span><span class="skill">CapCut</span><span class="skill">Notion</span><span class="skill">Google Workspace</span><span class="skill">Microsoft Office</span><span class="skill">Meta Business Suite</span><span class="skill">Facebook</span><span class="skill">Instagram</span><span class="skill">TikTok</span></div></div>
@@ -542,4 +583,69 @@ form.addEventListener('submit',async e=>{e.preventDefault();if(!form.reportValid
 const modal=document.getElementById('cardModal');document.getElementById('openCard').onclick=()=>{modal.hidden=false;modal.querySelector('.card-close').focus()};modal.querySelectorAll('[data-close-card]').forEach(b=>b.addEventListener('click',()=>modal.hidden=true));document.addEventListener('keydown',e=>{if(e.key==='Escape')modal.hidden=true});
 document.getElementById('saveVcard').onclick=()=>{const v=['BEGIN:VCARD','VERSION:3.0','FN:Laila Mae Almario','N:Almario;Laila Mae;;;','TITLE:Social Media & E-commerce Specialist','EMAIL;TYPE=INTERNET:leilaalmario28@gmail.com','TEL;TYPE=CELL:+639984465939','URL:'+location.origin,'END:VCARD'].join('\r\n');const u=URL.createObjectURL(new Blob([v],{type:'text/vcard;charset=utf-8'}));const a=document.createElement('a');a.href=u;a.download='Laila_Mae_Almario.vcf';a.click();setTimeout(()=>URL.revokeObjectURL(u),2000)};
 document.getElementById('shareCard').onclick=async()=>{if(navigator.share){try{await navigator.share({title:'Laila Mae Almario | Portfolio',url:location.origin})}catch(e){}}else if(navigator.clipboard){await navigator.clipboard.writeText(location.origin);document.getElementById('shareCard').textContent='Link copied ✓'}};
+</script>
+<script id="art-effects-js">
+(function(){
+ const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+ const fine=matchMedia('(hover:hover) and (pointer:fine)').matches;
+ const hasIO='IntersectionObserver' in window;
+
+ /* Scroll reveal, staggered within each group */
+ if(!reduce&&hasIO){
+  const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{rootMargin:'0px 0px -8% 0px',threshold:.08});
+  ['.personality-grid>*','#work .grid>.card','.ai-feature','.real-carousel','.print-intro','.production-flow','.skills>.card','.testimonial-card','.contact-shell'].forEach(sel=>
+   document.querySelectorAll(sel).forEach((el,i)=>{el.classList.add('reveal');el.style.setProperty('--d',(i%4)*90+'ms');io.observe(el)}));
+ }
+
+ /* Carousel focus: mark the slide that is mostly in view */
+ if(hasIO)document.querySelectorAll('.swipe-track,.pubmat-track,.exhibit-work-track,.real-track').forEach(t=>{
+  const slides=[...t.children];if(slides.length<2)return;
+  t.classList.add('focus-track');
+  const io=new IntersectionObserver(es=>es.forEach(e=>e.target.classList.toggle('is-current',e.intersectionRatio>=.6)),{root:t,threshold:[0,.6,1]});
+  slides.forEach(s=>io.observe(s));
+ });
+
+ /* Tilt + glare, and cursor spotlight — mouse/trackpad only */
+ if(fine&&!reduce){
+  document.querySelectorAll('.hero .device,.photo-stack').forEach(el=>{
+   el.classList.add('tilt');
+   el.addEventListener('pointermove',e=>{const r=el.getBoundingClientRect(),x=(e.clientX-r.left)/r.width,y=(e.clientY-r.top)/r.height;
+    el.style.setProperty('--ry',((x-.5)*10).toFixed(2)+'deg');el.style.setProperty('--rx',((.5-y)*8).toFixed(2)+'deg');
+    el.style.setProperty('--gx',(x*100).toFixed(1)+'%');el.style.setProperty('--gy',(y*100).toFixed(1)+'%')});
+   el.addEventListener('pointerleave',()=>{el.style.setProperty('--rx','0deg');el.style.setProperty('--ry','0deg')});
+  });
+  document.querySelectorAll('#work .grid>.card,.ai-feature').forEach(el=>{
+   el.classList.add('spot');
+   el.addEventListener('pointermove',e=>{const r=el.getBoundingClientRect();el.style.setProperty('--mx',(e.clientX-r.left)+'px');el.style.setProperty('--my',(e.clientY-r.top)+'px')});
+  });
+ }
+
+ /* Lightbox: click any portfolio image; arrows/swipe move within the same carousel */
+ const imgs=[...document.querySelectorAll('.swipe-slide img,.pubmat-slide img,.exhibit-work-slide img,.real-slide .print-item img,.portrait-card img')];
+ if(!imgs.length)return;
+ const lb=document.createElement('div');
+ lb.className='lightbox';lb.hidden=true;lb.setAttribute('role','dialog');lb.setAttribute('aria-modal','true');lb.setAttribute('aria-label','Image viewer');
+ lb.innerHTML='<button type="button" class="lb-close" aria-label="Close image viewer">×</button><button type="button" class="lb-nav lb-prev" aria-label="Previous image">‹</button><figure><img alt=""><figcaption><span class="lb-cap"></span><span class="lb-count"></span></figcaption></figure><button type="button" class="lb-nav lb-next" aria-label="Next image">›</button>';
+ document.body.appendChild(lb);
+ const big=lb.querySelector('figure img'),cap=lb.querySelector('.lb-cap'),cnt=lb.querySelector('.lb-count'),closeBtn=lb.querySelector('.lb-close');
+ let group=[],idx=0,opener=null;
+ function caption(im){const s=im.closest('.swipe-slide,.pubmat-slide,.exhibit-work-slide,.print-item');const c=s&&s.querySelector('.slide-caption,.pubmat-cap,.exhibit-work-caption,.print-copy');return c?c.textContent.replace(/\s+/g,' ').trim():im.alt}
+ function show(i){idx=(i+group.length)%group.length;const im=group[idx];big.classList.remove('lb-in');void big.offsetWidth;big.src=im.currentSrc||im.src;big.alt=im.alt;cap.textContent=caption(im);cnt.textContent=group.length>1?(idx+1)+' / '+group.length:'';big.classList.add('lb-in')}
+ function open(im){const box=im.closest('[data-carousel],[data-pubmat],[data-exhibit-work],[data-real-carousel]');group=box?[...box.querySelectorAll('img.zoomable')]:[im];opener=im;lb.classList.toggle('single',group.length<2);lb.hidden=false;document.documentElement.classList.add('lb-lock');show(group.indexOf(im));closeBtn.focus()}
+ function close(){lb.hidden=true;document.documentElement.classList.remove('lb-lock');if(opener)opener.focus({preventScroll:true})}
+ imgs.forEach(im=>{
+  im.classList.add('zoomable');im.parentElement.classList.add('has-zoom');
+  im.tabIndex=0;im.setAttribute('role','button');im.setAttribute('aria-label','View larger: '+(im.alt||'image'));
+  im.addEventListener('click',()=>open(im));
+  im.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();open(im)}});
+ });
+ closeBtn.onclick=close;lb.querySelector('.lb-prev').onclick=()=>show(idx-1);lb.querySelector('.lb-next').onclick=()=>show(idx+1);
+ lb.addEventListener('click',e=>{if(e.target===lb||e.target.tagName==='FIGURE')close()});
+ document.addEventListener('keydown',e=>{if(lb.hidden)return;
+  if(e.key==='Escape')close();else if(e.key==='ArrowLeft')show(idx-1);else if(e.key==='ArrowRight')show(idx+1);
+  else if(e.key==='Tab'){const f=[...lb.querySelectorAll('button')].filter(b=>getComputedStyle(b).visibility!=='hidden');const i=f.indexOf(document.activeElement);e.preventDefault();f[(i+(e.shiftKey?-1:1)+f.length)%f.length].focus()}});
+ let sx=null;
+ lb.addEventListener('touchstart',e=>{sx=e.touches[0].clientX},{passive:true});
+ lb.addEventListener('touchend',e=>{if(sx===null||group.length<2)return;const dx=e.changedTouches[0].clientX-sx;sx=null;if(Math.abs(dx)>50)show(idx+(dx<0?1:-1))});
+})();
 </script></body></html>
