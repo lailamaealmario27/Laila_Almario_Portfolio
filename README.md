@@ -11,4 +11,6 @@ Static portfolio prepared for GitHub + Vercel.
 6. Leave Output Directory blank.
 7. Click **Deploy**.
 
-`index.html` is the website entry point. Images and videos are stored in `assets/`.
+`index.html` is the website entry point. The visual system lives in `styles.css`, interactions live in `app.js`, and images/videos are stored in `assets/`.
+
+The previous single-file version is retained in `archive/index.legacy.html` for reference only and is not loaded by the production site.
