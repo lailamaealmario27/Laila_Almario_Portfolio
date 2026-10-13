@@ -1,0 +1,24 @@
+# OS noise
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Turnaround renders used to check the Blender models; regenerate with render_check.py
+blender/preview/
+
+# Blender incremental save backups
+*.blend1
+*.blend2
+
+# Python bytecode from the model/texture build scripts
+__pycache__/
+*.pyc
+
+# Vercel CLI local link (holds project + org ids)
+.vercel
+
+# Never commit environment files; site-config.js holds only the public anon key
+.env
+.env.*
+
+node_modules/

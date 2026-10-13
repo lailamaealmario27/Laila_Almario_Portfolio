@@ -1,0 +1,12 @@
+# Normalise text line endings in the repo; keep binaries byte-exact.
+* text=auto
+
+*.glb   binary
+*.blend binary
+*.mp4   binary
+*.png   binary
+*.jpg   binary
+*.jpeg  binary
+*.webp  binary
+*.gif   binary
+*.pdf   binary

@@ -1,0 +1,5 @@
+# Model sources. The site only serves assets/models/*.glb, so the Blender project,
+# its working textures and the archived single-file build do not need deploying.
+blender/
+archive/
+index.legacy.html
