@@ -359,8 +359,65 @@ img, video { max-width: 100%; }
 .project-intro { display: grid; grid-template-columns: minmax(0, 1fr) minmax(250px, 28rem); gap: 3rem; align-items: end; margin-bottom: 2.3rem; }
 .project-intro h3 { max-width: 14ch; margin: 0; font-family: var(--display); font-size: clamp(2.6rem, 5vw, 5rem); font-weight: 400; letter-spacing: -.055em; line-height: .93; }
 .project-intro p { margin: 0; color: #b8b0ba; }
-.media-rail { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(290px, 39vw); gap: 1rem; overflow-x: auto; overscroll-behavior-inline: contain; padding: .5rem 0 1.5rem; scroll-snap-type: x mandatory; scrollbar-color: var(--plum) rgba(255,255,255,.12); touch-action: pan-y; }
-.media-card { position: relative; min-height: 31rem; overflow: hidden; border-radius: var(--radius); background: #29252b; scroll-snap-align: start; }
+/* touch-action is deliberately left at its default: `pan-y` here used to tell the
+   browser that only vertical gestures belonged to this box, which disabled swiping the
+   rail sideways on every touch device. The browser disambiguates the two directions on
+   its own, so vertical page scrolling still works. */
+.media-rail { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(290px, 39vw); gap: 1rem; overflow-x: auto; overscroll-behavior-inline: contain; padding: .5rem 0 1.5rem; scroll-snap-type: x mandatory; scrollbar-color: var(--plum) rgba(255,255,255,.12); }
+.media-rail:focus-visible { outline: 2px solid var(--plum); outline-offset: 4px; }
+/* While a pointer drag is in progress the snap points fight the manual scrollLeft, and
+   a drag that ends over a card must not read as a click on it. */
+.media-rail.is-dragging { scroll-snap-type: none; cursor: grabbing; scroll-behavior: auto; }
+.media-rail.is-dragging .zoom-button { pointer-events: none; }
+
+/* Rail navigation: the same control vocabulary as the print carousel, recoloured for
+   the dark Selected work section. Added by work-rail.js and hidden when a rail has
+   nothing to scroll to. */
+/* Fixed height, so nothing sync() does can change the height of the section. */
+.rail-nav { display: flex; align-items: center; justify-content: center; gap: 1rem; min-height: 2.9rem; margin: -.25rem 0 .25rem; }
+/* Hidden without leaving the layout — see the note in work-rail.js: taking this row
+   out of flow makes the window scrollbar oscillate and the resize observer spin. */
+.rail-nav.is-idle { visibility: hidden; pointer-events: none; }
+.rail-arrow {
+  display: grid;
+  place-items: center;
+  width: 2.9rem;
+  height: 2.9rem;
+  padding: 0 0 .18rem;
+  border: 1px solid rgba(255,255,255,.28);
+  border-radius: 999px;
+  background: rgba(255,255,255,.08);
+  color: #fff;
+  cursor: pointer;
+  font-size: 1.5rem;
+  line-height: 1;
+  transition: transform 160ms var(--ease-out), background-color 180ms ease, color 180ms ease, opacity 180ms ease;
+}
+.rail-arrow:active { transform: scale(.94); }
+.rail-arrow:disabled { opacity: .3; cursor: default; }
+/* nowrap, and the active dot is marked with transform rather than width. Both matter:
+   sync() runs on every resize, and if marking the active dot can rewrap this row or
+   change its height, the page height changes, the window scrollbar toggles, the
+   viewport width changes and the resize handler re-enters itself. Transform is painted,
+   not laid out, so nothing here can feed back into layout. */
+.rail-dots { display: flex; flex-wrap: nowrap; align-items: center; justify-content: center; gap: .5rem; max-width: 100%; overflow: hidden; }
+.rail-dot {
+  flex: 0 0 auto;
+  width: .55rem;
+  height: .55rem;
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  background: rgba(255,255,255,.3);
+  cursor: pointer;
+  transition: transform 240ms var(--ease-out), background-color 240ms ease;
+}
+.rail-dot[aria-current="true"] { background: #caaad0; transform: scale(1.5); }
+.rail-live { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+/* margin: 0 is load-bearing. These cards are <figure> elements, and the UA default of
+   `margin: 1em 40px` was shrinking every card by 80px inside its grid column and
+   pushing the rail's first snap point 40px off its left edge. */
+.media-card { position: relative; margin: 0; min-height: 31rem; overflow: hidden; border-radius: var(--radius); background: #29252b; scroll-snap-align: start; }
 .media-card img, .media-card video { width: 100%; height: 100%; display: block; object-fit: cover; transition: transform 700ms var(--ease-out); }
 .media-card.portrait { aspect-ratio: 4 / 5; }
 .media-card.square { aspect-ratio: 1; }
@@ -560,6 +617,16 @@ img, video { max-width: 100%; }
   .contact-links a:hover { border-color: #fff; }
 }
 
+/* Portrait viewports taller than they are wide (every tablet held upright, Surface,
+   phones in portrait). `.hero` is a 100svh grid with `align-items: end`, which on a
+   short laptop reads as a deliberate low-slung composition but on a 1376px-tall iPad
+   strands the headline at the bottom under ~770px of dead paper. Centre the block and
+   let the portrait grow into the extra height instead of leaving it empty. */
+@media (min-width: 761px) and (max-aspect-ratio: 1/1) {
+  .hero { align-items: center; }
+  .hero-media { min-height: min(46rem, 42svh); }
+}
+
 /* Tablet-landscape and small-desktop: the paired columns still fit side by side, but
    the right-hand column's fixed 31rem/28rem floor starves the headline next to it. */
 @media (min-width: 1001px) and (max-width: 1240px) {
@@ -664,4 +731,5 @@ img, video { max-width: 100%; }
   .print-gallery.is-ready .print-track { transition: none; }
   .print-gallery.is-ready .print-card.is-active .product-stage { animation: none; }
   .print-gallery.is-ready .print-card:not(.is-active) .product-stage { transform: none; }
+  .rail-dot { transition: none; }
 }
