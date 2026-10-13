@@ -1,15 +1,50 @@
 # Laila Almario Portfolio
 
-Static portfolio prepared for GitHub + Vercel.
+Static portfolio deployed from GitHub to Vercel.
 
-## Deploy to Vercel
-1. Upload the contents of this folder to the root of a GitHub repository.
-2. In Vercel, choose **Add New > Project**.
-3. Import the GitHub repository.
-4. Framework Preset: **Other**.
-5. Leave Build Command blank.
-6. Leave Output Directory blank.
-7. Click **Deploy**.
+## Deployment pipeline
+
+Vercel's Git integration is the pipeline — there is no GitHub Actions workflow and no
+secrets to rotate. Once the repository is connected, Vercel subscribes to GitHub's push
+webhook and deploys on its own:
+
+| You do | Vercel does |
+| --- | --- |
+| `git push origin main` | Builds and promotes to the production domain |
+| Push any other branch, or open a PR | Builds a preview deployment and comments the URL on the PR |
+| Click **Rollback** on an older deployment | Repoints production at it; no revert commit needed |
+
+Because the site is static there is no build step to fail — a deploy is an upload, so it
+is live within a minute or so of the push.
+
+### One-time setup
+
+1. Create an **empty** GitHub repository (no README, no `.gitignore` — this repo already
+   has both, and prefilled files force a merge on the first push).
+2. Point this repo at it and push:
+
+   ```sh
+   git remote add origin https://github.com/<you>/<repo>.git
+   git push -u origin main
+   ```
+
+3. In Vercel: **Add New → Project → Import** the repository.
+4. Framework Preset **Other**; leave Build Command and Output Directory blank. The site
+   is served straight from the repository root.
+5. **Deploy.** Every later push deploys automatically; this is the only manual step.
+
+### What reaches production
+
+`.vercelignore` keeps `blender/`, `archive/`, and `index.legacy.html` out of the
+deployment — the Blender sources stay in git as the models' source of truth, but the
+site only ever serves `assets/models/*.glb`. `vercel.json` sets `cleanUrls` (so the
+private inbox is `/admin`, not `/admin.html`) and the `X-Content-Type-Options` and
+`Referrer-Policy` headers.
+
+`site-config.js` is committed on purpose: it holds only the Supabase project URL and the
+publishable **anon** key, which is public by design and safe behind the RLS policies in
+`private_inbox_setup.sql`. A `service_role` key must never go in any file in this repo —
+see `SETUP_PRIVATE_INBOX.md`.
 
 `index.html` is the website entry point. The visual system lives in `styles.css`, interactions live in `app.js`, and images/videos are stored in `assets/`.
 
