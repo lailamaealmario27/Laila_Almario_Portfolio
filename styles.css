@@ -96,6 +96,7 @@ img, video { max-width: 100%; }
   min-height: 0;
   display: block;
   transform: translateX(-50%);
+  transition: opacity 200ms var(--ease-out);
 }
 
 .nav-inner {
@@ -417,14 +418,23 @@ img, video { max-width: 100%; }
 /* margin: 0 is load-bearing. These cards are <figure> elements, and the UA default of
    `margin: 1em 40px` was shrinking every card by 80px inside its grid column and
    pushing the rail's first snap point 40px off its left edge. */
-.media-card { position: relative; margin: 0; min-height: 31rem; overflow: hidden; border-radius: var(--radius); background: #29252b; scroll-snap-align: start; }
+/* min-width: 0 lets the card shrink to its grid track; without it the automatic
+   minimum size of a grid item keeps it at its own min-content width.
+   The shaped cards drop min-height because the two properties fight: min-height wins,
+   aspect-ratio then derives the *width* from it, and the card grows wider than the
+   track it sits in -- a square card came out 464px wide inside a 326px column. */
+.media-card { position: relative; margin: 0; min-width: 0; min-height: 31rem; overflow: hidden; border-radius: var(--radius); background: #29252b; scroll-snap-align: start; }
+.media-card.portrait, .media-card.square, .media-card.is-video { min-height: 0; }
 .media-card img, .media-card video { width: 100%; height: 100%; display: block; object-fit: cover; transition: transform 700ms var(--ease-out); }
 .media-card.portrait { aspect-ratio: 4 / 5; }
 .media-card.square { aspect-ratio: 1; }
 .media-card video { background: #080708; object-fit: contain; }
-.media-caption { position: absolute; inset: auto .8rem .8rem .8rem; display: flex; align-items: end; justify-content: space-between; gap: 1rem; padding: .9rem 1rem; border: 1px solid rgba(255,255,255,.22); border-radius: .9rem; background: rgba(18,15,20,.69); color: #fff; -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); }
+.media-caption { position: absolute; inset: auto .8rem .8rem .8rem; pointer-events: none; display: flex; align-items: end; justify-content: space-between; gap: 1rem; padding: .9rem 1rem; border: 1px solid rgba(255,255,255,.22); border-radius: .9rem; background: rgba(18,15,20,.69); color: #fff; -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); }
 .media-caption strong { font-size: .83rem; }
 .media-caption span { color: #d6ced8; font-size: .7rem; }
+/* A video card has no zoom-button -- the media itself is the control. Its caption moves
+   to the top so it clears the browser's own control bar along the bottom edge. */
+.media-card.is-video .media-caption { inset: .8rem .8rem auto .8rem; }
 .zoom-button { position: absolute; inset: 0; width: 100%; border: 0; background: transparent; cursor: zoom-in; }
 
 .listing-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1px; overflow: hidden; border: 1px solid rgba(255,255,255,.18); border-radius: var(--radius); background: rgba(255,255,255,.18); }
@@ -655,6 +665,18 @@ img, video { max-width: 100%; }
   .print-layout { grid-template-columns: 1fr; }
   .print-sticky { position: static; }
   .process { display: grid; grid-template-columns: 1fr 1fr; }
+  /* Below this width the rail track is narrower than the 31rem height floor, so an
+     unshaped card becomes a tall box holding a wide screenshot and `cover` crops away
+     most of its width -- at 766px it was showing a 29% vertical slice of a dashboard.
+     Deriving the height from the track keeps the whole frame in view. The .portrait,
+     .square and .is-video rules are more specific, so their own ratios still win. */
+  .media-card { min-height: 0; aspect-ratio: 16 / 10; }
+  /* A centred crop loses the top edge, which is where a dashboard puts its heading. */
+  .media-card img { object-position: center top; }
+  /* A fixed track rather than minmax(): minmax resolves to its 290px floor as soon as
+     the set has more items than fit, so the longer sets were stuck at the narrowest
+     card on a tablet and the caption wrapped onto two lines inside it. */
+  .media-rail { grid-auto-columns: 46vw; }
 }
 
 /* Tablet portrait: the hero's second column is too narrow to hold the portrait, so the
@@ -700,8 +722,13 @@ img, video { max-width: 100%; }
   .experience-date { grid-column: 1 / -1; }
   .experience-panel ul { margin-left: 0; columns: 1; }
   .project-intro { grid-template-columns: 1fr; gap: 1rem; }
+  /* One card per screen, with the next one peeking. Heights come from the ratios set
+     at the 1000px breakpoint, so the 29rem floor is gone. */
   .media-rail { grid-auto-columns: 84vw; }
-  .media-card { min-height: 29rem; }
+  /* Vertical video fills the card edge to edge rather than being letterboxed into a
+     4/5 frame, which on a phone wasted roughly a third of the card on black. */
+  .media-card.is-video { aspect-ratio: 9 / 16; }
+  .media-card.is-video video { object-fit: cover; }
   .listing-grid { grid-template-columns: 1fr; }
   .product-frame { min-height: 250px; }
   .contact-grid { grid-template-columns: 1fr; }
@@ -718,9 +745,44 @@ img, video { max-width: 100%; }
   .skill-group { min-height: auto; }
   .process { grid-template-columns: 1fr; padding: 0; }
   .footer-inner { flex-direction: column; gap: .5rem; }
+}
+
+/* Phone portrait: the two 3rem side columns cost more width than the arrows are worth,
+   so they drop into the bottom corners and the image takes the full width.
+   grid-template-columns is reset to a single track on purpose. Making the arrows
+   absolute takes them out of the grid, which left the figure as the only in-flow item
+   -- auto-placement then parked it in the 3rem *first* column and the image rendered
+   about 50px wide. The padding reserves the rows the close button and the arrows sit in.
+   min-height guards phone landscape, where bottom arrows would eat the whole viewer. */
+@media (max-width: 560px) and (min-height: 480px) {
+  .lightbox {
+    grid-template-columns: minmax(0, 1fr);
+    padding: calc(4.5rem + env(safe-area-inset-top)) .75rem calc(5rem + env(safe-area-inset-bottom));
+  }
+  /* The figure stays content-sized so the caption keeps hugging the image. That leaves
+     no definite row height for a percentage to resolve against, so the image is capped
+     in dvh instead: the viewport less the padding above, the arrow row below, and the
+     two caption lines. */
+  .lightbox figure { width: 100%; max-width: 100%; }
+  .lightbox img {
+    max-height: calc(100dvh - 13rem - env(safe-area-inset-top) - env(safe-area-inset-bottom));
+    align-self: center;
+  }
+  .lightbox figcaption { flex-direction: column; align-items: flex-start; gap: .15rem; }
   .lightbox-prev, .lightbox-next { position: absolute; bottom: max(1rem, env(safe-area-inset-bottom)); }
   .lightbox-prev { left: 1rem; }
   .lightbox-next { right: 1rem; }
+}
+
+/* On a phone the close button lands right on top of the floating nav pill, which shows
+   through the scrim. The viewer owns the screen while it is open. */
+body.dialog-open .nav { opacity: 0; pointer-events: none; }
+
+/* A near-full-width canvas that swallows vertical gestures traps the page scroll on a
+   touch device -- there is no way to swipe past the product. pan-y hands vertical
+   gestures back to the browser; horizontal drags still reach the orbit controls. */
+@media (pointer: coarse) {
+  .product-canvas { touch-action: pan-y; }
 }
 
 @media (prefers-reduced-motion: reduce) {
