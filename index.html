@@ -11,9 +11,37 @@
   <title>Laila Mae Almario | Portfolio</title>
   <link rel="icon" type="image/png" href="assets/images/la-monogram.png">
   <link rel="stylesheet" href="styles.css">
+  <script>
+    /* Armed before first paint so the portfolio never flashes behind the intro. A deep
+       link skips it entirely, and the timer hands the site back if intro.js never
+       arrives -- the overlay can never become a wall. */
+    (function () {
+      if (location.hash) return;
+      document.documentElement.classList.add('intro-armed');
+      window.__introSafety = setTimeout(function () {
+        document.documentElement.classList.remove('intro-armed');
+      }, 5000);
+    })();
+  </script>
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
+
+  <!-- Cinematic intro. Display is gated on html.intro-armed, so with JavaScript off it
+       is never shown at all and the portfolio below is the whole page. -->
+  <div class="intro" data-intro role="dialog" aria-modal="true" aria-label="Introduction">
+    <div class="intro-ambient" aria-hidden="true"><span></span><span></span><span></span></div>
+    <div class="intro-inner">
+      <p class="intro-eyebrow" data-intro-step><span>Laila Mae Almario</span></p>
+      <p class="intro-title">
+        <span class="intro-line" data-intro-step><span>Creativity</span></span>
+        <span class="intro-line" data-intro-step><span><em>in motion.</em></span></span>
+      </p>
+      <p class="intro-sub" data-intro-step><span>Multimedia Design • Visual Storytelling • Digital Experiences</span></p>
+      <p class="intro-actions" data-intro-step><button class="intro-cta" type="button" data-intro-enter>View my portfolio <span class="intro-arrow" aria-hidden="true">→</span></button></p>
+    </div>
+    <button class="intro-skip" type="button" data-intro-skip data-intro-step>Scroll, or press enter</button>
+  </div>
   <header class="nav" aria-label="Primary navigation"><div class="nav-inner">
     <a class="brand" href="#home" aria-label="Laila Mae Almario, home"><img src="assets/images/la-monogram.png" alt=""><span>Laila Mae Almario</span></a>
     <button class="menu-button" id="menuButton" type="button" aria-expanded="false" aria-controls="navLinks" aria-label="Toggle navigation"></button>
@@ -182,7 +210,8 @@
     </div></section>
   </main>
 
-  <footer class="footer"><div class="footer-inner shell"><span>© <span id="year">2026</span> Laila Mae Almario</span><span>Social Media & E-commerce Specialist</span></div></footer>
+  <footer class="footer"><div class="footer-inner shell"><span>© <span id="year">2026</span> Laila Mae Almario</span><span>Social Media & E-commerce Specialist</span><button class="footer-replay" type="button" data-intro-replay>Replay intro</button></div></footer>
+  <button class="to-top" type="button" data-to-top aria-label="Back to top" hidden><span aria-hidden="true">↑</span></button>
   <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-hidden="true" aria-label="Portfolio image viewer"><button class="lightbox-close" id="closeLightbox" type="button" aria-label="Close image viewer">×</button><button class="lightbox-prev" id="lightboxPrev" type="button" aria-label="Previous image">‹</button><figure><img id="lightboxImage" src="assets/images/image-03-e67638eeab.webp" alt=""><figcaption><span id="lightboxCaption"></span><span id="lightboxCount"></span></figcaption></figure><button class="lightbox-next" id="lightboxNext" type="button" aria-label="Next image">›</button></div>
   <script type="module" src="app.js"></script>
   <!-- Loaded after app.js and kept in its own module: the Print & Production showroom
@@ -192,5 +221,6 @@
   <script type="module" src="work-rail.js"></script>
   <script type="module" src="showroom.js"></script>
   <script type="module" src="kaia.js"></script>
+  <script type="module" src="intro.js"></script>
 </body>
 </html>

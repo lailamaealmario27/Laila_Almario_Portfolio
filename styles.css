@@ -611,6 +611,123 @@ img, video { max-width: 100%; }
 .reveal { opacity: 0; transform: translateY(1.2rem); }
 .reveal.visible { opacity: 1; transform: translateY(0); transition: opacity 700ms var(--ease-out), transform 700ms var(--ease-out); transition-delay: var(--delay, 0ms); }
 
+/* ============================================================== cinematic intro
+   The overlay only exists while <html> carries .intro-armed, which the inline script
+   in <head> adds before first paint and intro.js takes ownership of. With JavaScript
+   off the class is never added, the display rule below never matches, and the
+   portfolio is simply the whole page. */
+.intro { display: none; }
+
+html.intro-armed { overflow: hidden; }
+html.intro-armed body { overflow: hidden; }
+
+/* The portfolio waits just below and just behind, ready to be let in. Scoped to
+   .intro-armed so the safety timer removing that class restores the page instantly. */
+html.intro-armed .nav,
+html.intro-armed .footer { opacity: 0; }
+html.intro-armed #main {
+  opacity: 0;
+  /* transform-origin at the top keeps the headline from sliding as it scales. Every
+     position: fixed element on this page lives outside <main>, so a transform here
+     cannot capture one into a new containing block. */
+  transform: translateY(1.6rem) scale(.985);
+  transform-origin: 50% 0;
+}
+html.intro-revealing .nav,
+html.intro-revealing .footer { opacity: 1; transition: opacity 700ms var(--ease-out) 170ms; }
+html.intro-revealing #main {
+  opacity: 1;
+  transform: none;
+  transition: opacity 760ms var(--ease-out) 90ms, transform 900ms var(--ease-out) 90ms;
+}
+
+html.intro-armed .intro {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: grid;
+  grid-template-rows: 1fr auto;
+  overflow: hidden;
+  padding: max(5rem, 12vh) var(--pad) 2rem;
+  background:
+    radial-gradient(ellipse 70% 55% at 18% 12%, rgba(111, 63, 120, .55) 0%, transparent 62%),
+    radial-gradient(ellipse 60% 50% at 88% 86%, rgba(67, 33, 73, .6) 0%, transparent 64%),
+    linear-gradient(158deg, #17111d 0%, #0c090f 58%, #0a070d 100%);
+  color: #f6f1f7;
+  transition: opacity 620ms var(--ease-out), transform 820ms var(--ease-out);
+}
+.intro.is-leaving { opacity: 0; transform: scale(1.045); pointer-events: none; }
+
+/* Ambient drift. Three soft lights on long, offset cycles so the background never
+   settles into a loop you can count. Transform and opacity only. */
+.intro-ambient { position: absolute; inset: -20%; pointer-events: none; }
+.intro-ambient span {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(70px);
+  opacity: .5;
+  will-change: transform;
+}
+.intro-ambient span:nth-child(1) { top: 6%; left: 8%; width: 34vw; height: 34vw; background: radial-gradient(circle, rgba(140, 82, 152, .75) 0%, transparent 70%); animation: intro-drift-a 23s ease-in-out infinite; }
+.intro-ambient span:nth-child(2) { right: 4%; bottom: 10%; width: 40vw; height: 40vw; background: radial-gradient(circle, rgba(86, 44, 96, .7) 0%, transparent 70%); animation: intro-drift-b 31s ease-in-out infinite; }
+.intro-ambient span:nth-child(3) { top: 42%; left: 52%; width: 26vw; height: 26vw; background: radial-gradient(circle, rgba(196, 150, 205, .34) 0%, transparent 70%); animation: intro-drift-c 27s ease-in-out infinite; }
+@keyframes intro-drift-a { 50% { transform: translate3d(5vw, 4vh, 0) scale(1.14); } }
+@keyframes intro-drift-b { 50% { transform: translate3d(-6vw, -5vh, 0) scale(1.1); } }
+@keyframes intro-drift-c { 50% { transform: translate3d(-4vw, 6vh, 0) scale(1.2); } }
+
+.intro-inner { position: relative; align-self: center; width: min(1200px, 100%); margin-inline: auto; }
+
+/* Every line rides up out of its own clipped box. --step is written per element by
+   intro.js in document order, so the reveal reads top to bottom. */
+.intro-eyebrow,
+.intro-sub,
+.intro-actions,
+.intro-line { overflow: hidden; margin: 0; }
+.intro-eyebrow > span,
+.intro-sub > span,
+.intro-actions > button,
+.intro-line > span {
+  display: inline-block;
+  transform: translateY(115%);
+  opacity: 0;
+  transition: transform 980ms var(--ease-out), opacity 760ms var(--ease-out);
+  transition-delay: var(--step, 0ms);
+}
+.intro.is-live .intro-eyebrow > span,
+.intro.is-live .intro-sub > span,
+.intro.is-live .intro-actions > button,
+.intro.is-live .intro-line > span { transform: translateY(0); opacity: 1; }
+/* Leaving is quicker than arriving, and goes the way it came. */
+.intro.is-leaving .intro-eyebrow > span,
+.intro.is-leaving .intro-sub > span,
+.intro.is-leaving .intro-actions > button,
+.intro.is-leaving .intro-line > span {
+  transform: translateY(-70%);
+  opacity: 0;
+  transition-duration: 520ms, 380ms;
+  transition-delay: 0ms;
+}
+
+.intro-eyebrow { color: #c8a9d0; font-size: .7rem; font-weight: 750; letter-spacing: .34em; text-transform: uppercase; }
+.intro-title { margin: 1.1rem 0 1.6rem; font-family: var(--display); font-size: clamp(3.4rem, 12.5vw, 11rem); font-weight: 400; letter-spacing: -.045em; line-height: .84; text-transform: uppercase; }
+.intro-title em { font-style: italic; text-transform: none; color: #d9b8e1; }
+.intro-line { display: block; padding-bottom: .06em; }
+.intro-sub { max-width: 44ch; color: #b6a7bb; font-size: clamp(.78rem, 1.5vw, .92rem); font-weight: 650; letter-spacing: .13em; text-transform: uppercase; }
+.intro-actions { margin-top: 2.6rem; }
+
+.intro-cta { display: inline-flex; align-items: center; gap: .7rem; min-height: 3.5rem; padding: 1rem 2rem; border: 1px solid rgba(255,255,255,.34); border-radius: 999px; background: transparent; color: #fff; cursor: pointer; font: inherit; font-size: .78rem; font-weight: 750; letter-spacing: .14em; text-transform: uppercase; transition: background-color 320ms var(--ease-out), color 320ms var(--ease-out), border-color 320ms var(--ease-out); }
+.intro-cta:active { transform: scale(.98); }
+.intro-arrow { transition: transform 320ms var(--ease-out); }
+
+.intro-skip { position: relative; justify-self: center; padding: .6rem 1rem; border: 0; background: transparent; color: #8d8095; cursor: pointer; font: inherit; font-size: .64rem; font-weight: 700; letter-spacing: .2em; text-transform: uppercase; overflow: hidden; }
+
+/* ------------------------------------------------------------------ the way back */
+.to-top { position: fixed; right: var(--pad); bottom: max(1.1rem, env(safe-area-inset-bottom)); z-index: 40; width: 2.9rem; height: 2.9rem; display: grid; place-items: center; border: 1px solid var(--line); border-radius: 50%; background: rgba(242,239,232,.86); color: var(--ink); cursor: pointer; font-size: 1rem; -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); box-shadow: var(--shadow); }
+.to-top[hidden] { display: none; }
+.to-top:active { transform: scale(.94); }
+
+.footer-replay { padding: 0; border: 0; background: transparent; color: inherit; cursor: pointer; font: inherit; font-size: inherit; text-decoration: underline; text-underline-offset: .25em; }
+
 @media (hover: hover) and (pointer: fine) {
   .nav-links a:hover { background: rgba(22,19,26,.07); color: var(--ink); }
   .nav-cta:hover { background: var(--plum-dark) !important; }
@@ -619,6 +736,10 @@ img, video { max-width: 100%; }
   .work-tab:hover { color: #fff; border-color: rgba(255,255,255,.5); }
   .media-card:hover img { transform: scale(1.035); }
   .showroom-chip:hover, .showroom-pick:hover { border-color: var(--plum); }
+  .intro-cta:hover { background: #fff; border-color: #fff; color: var(--ink); }
+  .intro-cta:hover .intro-arrow { transform: translateX(.25rem); }
+  .intro-skip:hover { color: #cfc4d4; }
+  .to-top:hover { background: var(--ink); border-color: var(--ink); color: var(--white); }
   .kaia-button:hover { background: rgba(255,255,255,.1); color: #fff; }
   .brand-tab:hover[aria-selected="false"] { color: var(--ink); }
   .listing-card:hover { background: var(--plum-dark); }
@@ -736,6 +857,12 @@ img, video { max-width: 100%; }
   .media-card.is-video video { object-fit: cover; }
   .listing-grid { grid-template-columns: 1fr; }
   .showroom-canvas { aspect-ratio: 4 / 5; }
+  html.intro-armed .intro { padding-top: max(4rem, 9vh); }
+  .intro-title { margin: .9rem 0 1.3rem; }
+  .intro-actions { margin-top: 2rem; }
+  .intro-cta { width: 100%; justify-content: center; }
+  .intro-ambient span { filter: blur(48px); }
+  .footer-replay { text-align: left; }
   .showroom-head { gap: .6rem; }
   .brand-tab { padding: .45rem .9rem; }
   .showroom-detail { padding: .8rem; gap: .6rem; max-height: 48%; }
@@ -795,5 +922,11 @@ body.dialog-open .nav { opacity: 0; pointer-events: none; }
   *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; scroll-behavior: auto !important; }
   .reveal { opacity: 1; transform: none; }
   .media-card img, .hero-photo img { transform: none !important; }
+  .intro-ambient { display: none; }
+  .intro-eyebrow > span, .intro-sub > span, .intro-actions > button, .intro-line > span { transform: none !important; opacity: 1 !important; transition: opacity 120ms linear !important; }
+  .intro.is-leaving .intro-eyebrow > span, .intro.is-leaving .intro-sub > span, .intro.is-leaving .intro-actions > button, .intro.is-leaving .intro-line > span { opacity: 0 !important; }
+  html.intro-armed .intro { transition-duration: 160ms; }
+  .intro.is-leaving { transform: none; }
+  html.intro-revealing .nav, html.intro-revealing .footer, html.intro-revealing #main { transition-duration: 160ms; transition-delay: 0ms; }
   .rail-dot { transition: none; }
 }
