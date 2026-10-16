@@ -59,81 +59,52 @@
 
     <section class="section shell" id="print"><div class="print-layout">
       <div class="print-sticky reveal"><p class="section-label">Print production</p><h2>From concept to delivery.</h2><p>I manage the full production path: visual concept, mockup, print-ready files, supplier coordination, production follow-up, quality control, and delivery.</p><ol class="process"><li>Concept and design</li><li>3D mockup</li><li>Supplier sourcing</li><li>Quotation review</li><li>Production monitoring</li><li>Quality check</li><li>Delivery</li></ol></div>
-      <div class="print-gallery reveal" data-print-carousel role="group" aria-roledescription="carousel" aria-label="Print production products">
-        <div class="print-viewport"><div class="print-track">
-        <figure class="print-card">
-          <div class="product-stage" data-product="Branded tote bag"
-               data-model="assets/models/tote-kpick-a.glb"
-               data-variants="Option A|assets/models/tote-kpick-a.glb;Option B|assets/models/tote-kpick-b.glb"
-               data-photo="assets/images/image-23-c9f86e0580.webp"
-               data-photo-caption="Supplied mockup photo: K-PICK tote, Option A and Option B"
-               data-reconstructed="Back panel, side gussets and base"
-               data-recon-from="100" data-recon-to="260">
-            <img class="product-photo" src="assets/images/image-23-c9f86e0580.webp" alt="Branded tote bag concepts for K-PICK Trading Corp." loading="lazy">
+      <div class="showroom reveal" data-showroom data-state="idle" data-mode="showroom" data-brand="kpick">
+        <div class="showroom-head">
+          <div class="brand-switch" role="tablist" aria-label="Brand collections">
+            <button class="brand-tab" type="button" role="tab" aria-selected="true" data-brand="kpick">K-PICK</button>
+            <button class="brand-tab" type="button" role="tab" aria-selected="false" tabindex="-1" data-brand="sinocare">Sinocare</button>
           </div>
-          <figcaption><strong>Branded tote bag</strong><span>Giveaway and event merchandise</span></figcaption>
-        </figure>
-        <figure class="print-card">
-          <div class="product-stage" data-product="Notebook and pen"
-               data-model="assets/models/notebook-pen-kpick.glb"
-               data-photo="assets/images/image-24-178ef540cb.webp"
-               data-photo-caption="Supplied mockup photo: K-PICK notebook and pen"
-               data-reconstructed="Rear cover"
-               data-recon-from="100" data-recon-to="260">
-            <img class="product-photo" src="assets/images/image-24-178ef540cb.webp" alt="Branded notebook and pen" loading="lazy">
-          </div>
-          <figcaption><strong>Notebook and pen</strong><span>Corporate stationery</span></figcaption>
-        </figure>
-        <figure class="print-card">
-          <div class="product-stage" data-product="Spray bottle"
-               data-model="assets/models/spray-bottle-kpick.glb"
-               data-photo="assets/images/image-25-ba1aa1d861.webp"
-               data-photo-caption="Supplied mockup photo: K-PICK spray bottle"
-               data-reconstructed="Rear half of the wrap-around label"
-               data-recon-from="100" data-recon-to="260">
-            <img class="product-photo" src="assets/images/image-25-ba1aa1d861.webp" alt="Branded spray bottle" loading="lazy">
-          </div>
-          <figcaption><strong>Spray bottle</strong><span>Promotional giveaway</span></figcaption>
-        </figure>
-        <figure class="print-card">
-          <div class="product-stage" data-product="Booth cart"
-               data-model="assets/models/booth-cart-sinocare.glb"
-               data-photo="assets/images/image-26-3c72d7409f.webp"
-               data-photo-caption="Supplied mockup photo: Sinocare health-monitoring cart, 80 × 40 × 200 cm"
-               data-reconstructed="Right cheek, operator-side back panel and header reverse"
-               data-recon-from="95" data-recon-to="265">
-            <img class="product-photo" src="assets/images/image-26-3c72d7409f.webp" alt="Sinocare health-monitoring booth cart" loading="lazy">
-          </div>
-          <figcaption><strong>Booth cart</strong><span>Event production</span></figcaption>
-        </figure>
-        <figure class="print-card">
-          <div class="product-stage" data-product="Roll-up banners"
-               data-model="assets/models/roll-up-banners-sinocare.glb"
-               data-photo="assets/images/image-27-c3fd8f5793.webp"
-               data-photo-caption="Supplied mockup photo: Sinocare roll-up banners, iCan i3 and BA 823"
-               data-reconstructed="Unprinted banner reverse"
-               data-recon-from="100" data-recon-to="260">
-            <img class="product-photo" src="assets/images/image-27-c3fd8f5793.webp" alt="Large-format Sinocare roll-up banners" loading="lazy">
-          </div>
-          <figcaption><strong>Roll-up banners</strong><span>Large-format display</span></figcaption>
-        </figure>
-        <figure class="print-card">
-          <div class="product-stage" data-product="Calling card"
-               data-model="assets/models/business-cards-sinocare.glb"
-               data-photo="assets/images/image-28-c52ef6ff59.webp"
-               data-photo-caption="Supplied mockup photo: Sinocare calling card, both printed faces"
-               data-elevation="46">
-            <img class="product-photo" src="assets/images/image-28-c52ef6ff59.webp" alt="Sinocare corporate calling card design" loading="lazy">
-          </div>
-          <figcaption><strong>Calling card</strong><span>Corporate print collateral</span></figcaption>
-        </figure>
-        </div></div>
-        <div class="print-nav">
-          <button class="print-arrow" type="button" data-print-prev aria-label="Previous product">&#8249;</button>
-          <div class="print-dots" data-print-dots></div>
-          <button class="print-arrow" type="button" data-print-next aria-label="Next product">&#8250;</button>
+          <p class="showroom-hint" data-hint>Click a product to inspect it</p>
         </div>
-        <p class="print-live" data-print-live aria-live="polite"></p>
+
+        <div class="showroom-stage">
+          <canvas class="showroom-canvas" data-canvas aria-label="Interactive 3D product showroom"></canvas>
+          <p class="showroom-status" data-status role="status">The 3D showroom loads when you reach this section.</p>
+
+          <div class="showroom-detail" data-detail data-show-photo="false" hidden>
+            <div class="showroom-detail-head">
+              <p class="showroom-detail-brand" data-detail-brand></p>
+              <h3 data-detail-name></h3>
+              <p class="showroom-detail-role"><span data-detail-role></span> · <span data-detail-size></span></p>
+            </div>
+            <div class="showroom-detail-controls">
+              <div class="showroom-chips" data-detail-variants></div>
+              <div class="showroom-chips">
+                <button class="showroom-chip" type="button" data-photo-toggle aria-pressed="false">Original photo</button>
+                <button class="showroom-chip" type="button" data-reset>Reset view</button>
+                <button class="showroom-chip is-back" type="button" data-back>Back to showroom</button>
+              </div>
+            </div>
+            <figure class="showroom-detail-photo">
+              <a data-detail-photo target="_blank" rel="noopener"><img data-detail-photo-image src="" alt="" loading="lazy"></a>
+              <figcaption data-detail-photo-caption></figcaption>
+            </figure>
+          </div>
+        </div>
+
+        <ul class="showroom-picks" data-picks aria-label="Products in this collection"></ul>
+
+        <!-- The supplied photographs. They are the showroom's fallback when WebGL is
+             unavailable, and they stay reachable from every product's detail view. -->
+        <div class="showroom-fallback" data-fallback>
+          <figure><img src="assets/images/image-23-c9f86e0580.webp" alt="Branded tote bag concepts for K-PICK Trading Corp." loading="lazy"><figcaption><strong>Branded tote bag</strong><span>K-PICK · giveaway and event merchandise</span></figcaption></figure>
+          <figure><img src="assets/images/image-24-178ef540cb.webp" alt="Branded notebook and pen" loading="lazy"><figcaption><strong>Notebook and pen</strong><span>K-PICK · corporate stationery</span></figcaption></figure>
+          <figure><img src="assets/images/image-25-ba1aa1d861.webp" alt="Branded spray bottle" loading="lazy"><figcaption><strong>Spray bottle</strong><span>K-PICK · promotional giveaway</span></figcaption></figure>
+          <figure><img src="assets/images/image-27-c3fd8f5793.webp" alt="Large-format Sinocare roll-up banners" loading="lazy"><figcaption><strong>Roll-up banners</strong><span>Sinocare · large-format display</span></figcaption></figure>
+          <figure><img src="assets/images/image-26-3c72d7409f.webp" alt="Sinocare health-monitoring booth cart" loading="lazy"><figcaption><strong>Booth cart</strong><span>Sinocare · event production</span></figcaption></figure>
+          <figure><img src="assets/images/image-28-c52ef6ff59.webp" alt="Sinocare corporate calling card design" loading="lazy"><figcaption><strong>Calling card</strong><span>Sinocare · corporate print collateral</span></figcaption></figure>
+        </div>
       </div>
     </div></section>
 
@@ -148,11 +119,11 @@
   <footer class="footer"><div class="footer-inner shell"><span>© <span id="year">2026</span> Laila Mae Almario</span><span>Social Media & E-commerce Specialist</span></div></footer>
   <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-hidden="true" aria-label="Portfolio image viewer"><button class="lightbox-close" id="closeLightbox" type="button" aria-label="Close image viewer">×</button><button class="lightbox-prev" id="lightboxPrev" type="button" aria-label="Previous image">‹</button><figure><img id="lightboxImage" src="assets/images/image-03-e67638eeab.webp" alt=""><figcaption><span id="lightboxCaption"></span><span id="lightboxCount"></span></figcaption></figure><button class="lightbox-next" id="lightboxNext" type="button" aria-label="Next image">›</button></div>
   <script type="module" src="app.js"></script>
-  <!-- Loaded after app.js and kept in its own module: the print viewers must never be
-       able to stop the Selected work galleries from rendering. work-rail.js layers the
-       carousel controls onto those galleries and follows the same rule. -->
+  <!-- Loaded after app.js and kept in its own module: the Print & Production showroom
+       must never be able to stop the Selected work galleries from rendering.
+       work-rail.js layers the carousel controls onto those galleries and follows the
+       same rule. -->
   <script type="module" src="work-rail.js"></script>
-  <script type="module" src="print-3d.js"></script>
-  <script type="module" src="print-carousel.js"></script>
+  <script type="module" src="showroom.js"></script>
 </body>
 </html>
