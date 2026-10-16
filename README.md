@@ -46,6 +46,25 @@ publishable **anon** key, which is public by design and safe behind the RLS poli
 `private_inbox_setup.sql`. A `service_role` key must never go in any file in this repo —
 see `SETUP_PRIVATE_INBOX.md`.
 
+## Scroll choreography
+
+`scenes.js` adds the entrances: headings wipe up as they arrive, groups of things enter
+one after another, and the two photographed areas drift against the scroll. There is no
+pinning, no snapping and no scroll hijacking -- native scrolling is never touched, and
+entrances toggle rather than latch so they play on the way back up too.
+
+One rule makes it safe to add animation to a page that already works: **JavaScript hides
+and JavaScript reveals.** No element on this page is hidden by the stylesheet alone. The
+`.scene-item` and `.scene-text` classes are added at runtime and never appear in the
+markup, so if `scenes.js` fails to load, never runs, or throws halfway through, every
+section stays exactly as visible as it was before the module existed. `prefers-reduced-
+motion` skips the module entirely for the same reason.
+
+The storyboard the animation serves maps onto the seven sections that already exist.
+Graphic design and video are **tabs inside `#work`**, not sections of their own, so
+Kaia's line for that stop names both rather than pretending they are separate places to
+scroll to. No section was added to make the page match a storyboard.
+
 ## Kaia
 
 The **Desktop assistant** tab in Selected work is Kaia: a Python desktop assistant Laila

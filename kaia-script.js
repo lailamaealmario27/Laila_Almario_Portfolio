@@ -23,7 +23,7 @@ export const WELCOME =
 export const TOUR = [
   {
     id: 'home',
-    label: 'Welcome',
+    label: 'Cinematic hero',
     clip: 'hop',
     line: "This is Laila Mae Almario. She turns products, campaigns and ideas into " +
           "clear digital experiences, from the first content plan to the final post, " +
@@ -31,7 +31,7 @@ export const TOUR = [
   },
   {
     id: 'about',
-    label: 'About',
+    label: 'About the creator',
     clip: 'tilt',
     line: "Here's who she is. Her work sits where creative execution meets dependable " +
           "operations. She can shape a campaign, build its content, support the " +
@@ -39,7 +39,7 @@ export const TOUR = [
   },
   {
     id: 'experience',
-    label: 'Experience',
+    label: 'Career history',
     clip: 'nod',
     line: "Three roles built that. Social Media Manager at K-PICK Trading Corp., " +
           "E-commerce Specialist at Sinocare Healthcare Philippines, and before those, " +
@@ -47,15 +47,15 @@ export const TOUR = [
   },
   {
     id: 'work',
-    label: 'Selected work',
+    label: 'Design, video & multimedia',
     clip: 'tilt',
-    line: "This is the work. Planning systems, campaign design, short-form video, " +
-          "marketplace listings, and exhibits. There's a tab for me too, the desktop " +
-          "assistant she built. Tap any image to open it up close."
+    line: "This is the work. Campaign design and branding, short-form video, planning " +
+          "systems, marketplace listings, and exhibits — each one a tab you can " +
+          "open. There's a tab for me too, the desktop assistant she built."
   },
   {
     id: 'print',
-    label: 'Print production',
+    label: 'Interactive 3D showroom',
     clip: 'hop',
     line: "My favourite part. These are real three-D models of the pieces she produced: " +
           "K-PICK's merchandise on the table, and Sinocare's exhibit stand. Click a " +
@@ -63,15 +63,15 @@ export const TOUR = [
   },
   {
     id: 'skills',
-    label: 'Toolkit',
+    label: 'Skills & creative process',
     clip: 'nod',
-    line: "Her toolkit. Canva and CapCut for content, Notion and Google Workspace for " +
-          "systems, Python and the Claude API for the AI side, and e-commerce " +
-          "operations across all of it."
+    line: "Her toolkit and how she works. Canva and CapCut for content, Notion and " +
+          "Google Workspace for systems, Python and the Claude API for the AI side, " +
+          "and e-commerce operations across all of it."
   },
   {
     id: 'contact',
-    label: 'Contact',
+    label: 'Contact finale',
     clip: 'dance',
     line: "And that's the tour! If you'd like to work with her, her email, phone and " +
           "socials are all right here. Thanks for exploring. I hope you enjoyed it!"

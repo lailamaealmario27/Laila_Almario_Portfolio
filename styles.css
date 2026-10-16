@@ -792,6 +792,38 @@ html.intro-armed .intro {
 /* The word currently being spoken, where the browser reports boundaries. */
 .kaia-bubble-text .is-now { background: rgba(111,63,120,.16); border-radius: .2rem; box-shadow: 0 0 0 .12em rgba(111,63,120,.16); }
 
+/* ===================================================== scroll choreography
+   Every class here is added by scenes.js at runtime, never written into the markup.
+   That is deliberate: if the module does not load, nothing is hidden and the page is
+   simply the page. Nothing in this block hides anything on its own. */
+
+/* A group member waiting its turn. --delay is written per child so a row enters one
+   after another; --rise is how far it travels. */
+.scene-item {
+  opacity: 0;
+  transform: translate3d(0, var(--rise, 1.15rem), 0);
+  transition: opacity 720ms var(--ease-out), transform 860ms var(--ease-out);
+  transition-delay: var(--delay, 0ms);
+}
+.scene-item.is-in { opacity: 1; transform: none; }
+
+/* Headings uncover themselves instead of sliding. The open state insets outward so a
+   descender or an italic overhang is never clipped by a rounding error. */
+.scene-text {
+  opacity: 0;
+  clip-path: inset(0 0 100% 0);
+  transform: translate3d(0, .22em, 0);
+  transition: opacity 640ms var(--ease-out), clip-path 980ms var(--ease-out), transform 980ms var(--ease-out);
+}
+.scene-text.is-in { opacity: 1; clip-path: inset(-18% -18% -18% -18%); transform: none; }
+
+/* The drift. scale() is what gives the image room to move inside its own frame --
+   without it, an 18px travel shows 18px of the wrapper underneath. */
+[data-parallax] {
+  transform: translate3d(0, var(--parallax, 0px), 0) scale(1.12);
+  will-change: transform;
+}
+
 @media (hover: hover) and (pointer: fine) {
   .nav-links a:hover { background: rgba(22,19,26,.07); color: var(--ink); }
   .nav-cta:hover { background: var(--plum-dark) !important; }
@@ -995,7 +1027,7 @@ body.dialog-open .nav { opacity: 0; pointer-events: none; }
   html { scroll-behavior: auto; }
   *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; scroll-behavior: auto !important; }
   .reveal { opacity: 1; transform: none; }
-  .media-card img, .hero-photo img { transform: none !important; }
+  .media-card img, .hero-photo img, .photo-pair img { transform: none !important; }
   .intro-ambient { display: none; }
   .intro-eyebrow > span, .intro-sub > span, .intro-actions > button, .intro-line > span { transform: none !important; opacity: 1 !important; transition: opacity 120ms linear !important; }
   .intro.is-leaving .intro-eyebrow > span, .intro.is-leaving .intro-sub > span, .intro.is-leaving .intro-actions > button, .intro.is-leaving .intro-line > span { opacity: 0 !important; }

@@ -110,10 +110,10 @@ tabs.forEach((tab, index) => {
 });
 
 if (!reduceMotion) {
+  /* Toggled rather than latched: an entrance that only ever plays once leaves the
+     page static for anyone scrolling back up through it. */
   const revealObserver = new IntersectionObserver(entries => entries.forEach(entry => {
-    if (!entry.isIntersecting) return;
-    entry.target.classList.add('visible');
-    revealObserver.unobserve(entry.target);
+    entry.target.classList.toggle('visible', entry.isIntersecting);
   }), { rootMargin: '0px 0px -8% 0px', threshold: .08 });
   $$('.reveal').forEach((element, index) => {
     element.style.setProperty('--delay', `${(index % 4) * 55}ms`);
