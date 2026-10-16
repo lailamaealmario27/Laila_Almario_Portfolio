@@ -38,9 +38,10 @@ BLEND = os.path.join(HERE, "showroom.blend")
 TABLE_HEIGHT = 0.75
 TOP_RADIUS = 0.55
 
-# Matte ivory, a shade warmer than the studio floor so the table separates from it
-# without becoming a bright object in its own right.
-IVORY = (0.878, 0.853, 0.806)
+# Matte ivory. Deliberately well below white: at 0.878 the top rendered as a bright
+# white disc against the paper-coloured background and swallowed the products standing
+# on it, so the whole piece is pulled down into a warm beige.
+IVORY = (0.742, 0.706, 0.638)
 
 
 def reset():

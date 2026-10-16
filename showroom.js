@@ -30,7 +30,7 @@ const TABLE_HEIGHT = 0.75;
    studio floor fogs out into the same colour and the section reads as open page
    rather than a picture in a frame. */
 const PAPER = 0xf2efe8;
-const FLOOR = 0xe8e2d6;
+const FLOOR = 0xe6dfd1;
 
 /*
  * The two brand collections. Brand membership is not guessed: every model filename,
@@ -125,12 +125,12 @@ const CATALOGUE = {
   }
 };
 
-/* How the camera sits over each arrangement when nothing is selected. `pull` scales the
-   fitted distance, `lift` raises the eye above the subject for a slightly elevated
-   three-quarter view, and `look` is the height the camera aims at. */
+/* How the camera sits over each arrangement when nothing is selected. `elevation` is
+   how far above the horizontal the eye rides, `pad` is the breathing room left around
+   the set, and `aim` nudges the look-at point up the subject's own height. */
 const FRAMING = {
-  kpick: { pull: 1.02, lift: 0.46, look: 0.92, azimuth: -8 },
-  sinocare: { pull: 1.06, lift: 0.30, look: 1.02, azimuth: -6 }
+  kpick: { azimuth: -8, elevation: 19, pad: 1.14, aim: 0.05 },
+  sinocare: { azimuth: -6, elevation: 12, pad: 1.10, aim: 0.02 }
 };
 
 /* Timings, in milliseconds. The camera is delayed so the lift reads first, but not by
@@ -400,10 +400,16 @@ function boot(mount) {
     const tmpCentre = new THREE.Vector3();
     const narrow = () => matchMedia('(max-width: 1000px)').matches;
 
+    /* Height and width are fitted against their own field of view rather than against
+       the largest dimension twice over, which was pulling the camera much further back
+       than the set needed and leaving it adrift in empty frame. */
     function fitDistance(size, pad) {
-      const fov = THREE.MathUtils.degToRad(camera.fov);
-      const half = Math.max(size.x, size.y, size.z) * 0.5 * pad;
-      return Math.max(half / Math.tan(fov / 2), half / (Math.tan(fov / 2) * camera.aspect));
+      const vfov = THREE.MathUtils.degToRad(camera.fov);
+      const hfov = 2 * Math.atan(Math.tan(vfov / 2) * camera.aspect);
+      return Math.max(
+        (size.y * 0.5 * pad) / Math.tan(vfov / 2),
+        (Math.max(size.x, size.z) * 0.5 * pad) / Math.tan(hfov / 2)
+      );
     }
 
     function showroomShot(brandKey) {
@@ -412,17 +418,16 @@ function boot(mount) {
       tmpBox.getSize(tmpSize);
       tmpBox.getCenter(tmpCentre);
       const frame = FRAMING[brandKey];
-      const distance = fitDistance(tmpSize, narrow() ? 1.34 : 1.18) * frame.pull;
-      const azimuth = THREE.MathUtils.degToRad(frame.azimuth);
-      const target = new THREE.Vector3(tmpCentre.x, frame.look, tmpCentre.z + 0.08);
-      return {
-        target,
-        position: new THREE.Vector3(
-          target.x + Math.sin(azimuth) * distance,
-          target.y + distance * frame.lift,
-          target.z + Math.cos(azimuth) * distance
-        )
-      };
+      const distance = fitDistance(tmpSize, frame.pad * (narrow() ? 1.1 : 1));
+      const az = THREE.MathUtils.degToRad(frame.azimuth);
+      const el = THREE.MathUtils.degToRad(frame.elevation);
+      /* Aimed at the middle of the arrangement, so the set sits centred in the frame
+         instead of being pushed into a corner by a fixed look-at height. */
+      const target = new THREE.Vector3(
+        tmpCentre.x, tmpCentre.y + tmpSize.y * frame.aim, tmpCentre.z);
+      const dir = new THREE.Vector3(
+        Math.sin(az) * Math.cos(el), Math.sin(el), Math.cos(az) * Math.cos(el));
+      return { target, position: target.clone().addScaledVector(dir, distance) };
     }
 
     /* Framed on where the product will be once it has finished rising, so the camera
