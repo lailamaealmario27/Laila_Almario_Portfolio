@@ -442,7 +442,11 @@ img, video { max-width: 100%; }
 .kaia-layout { display: grid; grid-template-columns: minmax(0, 18rem) minmax(0, 1fr); gap: clamp(1.5rem, 4vw, 3.5rem); align-items: center; margin-bottom: 2.6rem; }
 .kaia-stage { position: relative; display: grid; justify-items: center; gap: 1rem; padding: 1.8rem 1rem 1.3rem; border-radius: var(--radius); background: radial-gradient(ellipse at 50% 34%, rgba(202,170,208,.20) 0%, rgba(202,170,208,.06) 46%, transparent 72%); }
 .kaia-canvas, .kaia-still { display: block; width: clamp(8.5rem, 24vw, 11.5rem); aspect-ratio: 140 / 215; cursor: pointer; }
-.kaia-canvas[hidden] { display: none; }
+/* Both halves of the swap need this, not just the canvas. `display: block` above is a
+   class selector and outranks the browser's own `[hidden] { display: none }`, so the
+   still ignored being hidden once the sprite loaded and a second, frozen Kaia stayed
+   on the stage beside the animating one. */
+.kaia-canvas[hidden], .kaia-still[hidden] { display: none; }
 .kaia-still { object-fit: contain; }
 .kaia-controls { display: flex; flex-wrap: wrap; justify-content: center; gap: .4rem; }
 .kaia-button { min-height: 2.2rem; padding: .4rem .9rem; border: 1px solid rgba(255,255,255,.22); border-radius: 999px; background: transparent; color: #d7cfd9; cursor: pointer; font: inherit; font-size: .69rem; font-weight: 700; transition: background-color 180ms var(--ease-out), color 180ms var(--ease-out); }
