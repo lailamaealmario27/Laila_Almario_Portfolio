@@ -27,10 +27,14 @@ if (window.__introSafety) {
   window.__introSafety = null;
 }
 
+/* The guide is hidden behind the overlay but would still be reachable by Tab, so she
+   goes inert with the rest of the page. Her view *inside* the intro is a different
+   element and stays live. */
 const inertable = () => [
   document.querySelector('.nav'),
   document.getElementById('main'),
-  document.querySelector('.footer')
+  document.querySelector('.footer'),
+  document.querySelector('[data-kaia-guide]')
 ].filter(Boolean);
 
 function setInert(on) {
@@ -65,10 +69,15 @@ function armIntro() {
 
   cta?.addEventListener('click', leave);
   intro.querySelector('[data-intro-skip]')?.addEventListener('click', leave);
+  /* Kaia asks for the portfolio herself once her welcome is finished. */
+  document.addEventListener('kaia:dismiss-intro', leave);
 
-  /* Reaching for the page is as good as asking for it. */
+  /* Reaching for the page is as good as asking for it -- unless Kaia is mid-sentence,
+     in which case a stray wheel would cut her off a word into the welcome. */
+  const busy = () => html.dataset.kaiaSpeaking === 'true';
+
   intro.addEventListener('wheel', event => {
-    if (event.deltaY > 2) leave();
+    if (event.deltaY > 2 && !busy()) leave();
   }, { passive: true });
 
   let touchStart = null;
@@ -76,7 +85,7 @@ function armIntro() {
     touchStart = event.touches[0]?.clientY ?? null;
   }, { passive: true });
   intro.addEventListener('touchmove', event => {
-    if (touchStart === null) return;
+    if (touchStart === null || busy()) return;
     if (touchStart - (event.touches[0]?.clientY ?? touchStart) > 24) leave();
   }, { passive: true });
 
@@ -84,8 +93,10 @@ function armIntro() {
   function onKey(event) {
     if (leaving) return;
     if (event.key === 'Escape' || event.key === 'Enter' || event.key === ' ') {
-      /* The button handles its own Enter and Space; this is for everywhere else. */
-      if (event.target === cta) return;
+      /* The buttons handle their own Enter and Space; this is for everywhere else. */
+      if (event.target instanceof HTMLButtonElement) return;
+      /* Escape always works; the rest wait for her to finish. */
+      if (busy() && event.key !== 'Escape') return;
       event.preventDefault();
       leave();
     }
@@ -109,6 +120,7 @@ function armIntro() {
       if ('scrollRestoration' in history) history.scrollRestoration = 'auto';
       /* Hand the keyboard somewhere sensible now that the page is live. */
       document.querySelector('.nav .brand')?.focus({ preventScroll: true });
+      document.dispatchEvent(new CustomEvent('intro:left'));
     }, settleAt);
   }
 }

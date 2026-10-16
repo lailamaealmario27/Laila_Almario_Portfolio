@@ -728,6 +728,70 @@ html.intro-armed .intro {
 
 .footer-replay { padding: 0; border: 0; background: transparent; color: inherit; cursor: pointer; font: inherit; font-size: inherit; text-decoration: underline; text-underline-offset: .25em; }
 
+/* ========================================================= Kaia, portfolio guide
+   One character, drawn in more than one place. These are her other two views; the
+   panel in Selected work keeps the .kaia-stage rules above. */
+
+/* --- her view inside the title card --- */
+.intro-kaia { position: absolute; right: 2vw; bottom: 0; width: clamp(7rem, 15vw, 12rem); pointer-events: none; opacity: 0; transform: translateY(2rem) scale(.9); transition: opacity 760ms var(--ease-out) 620ms, transform 980ms var(--ease-out) 620ms; }
+.intro.is-live .intro-kaia { opacity: 1; transform: none; }
+.intro.is-leaving .intro-kaia { opacity: 0; transform: translateY(1.4rem) scale(.94); transition-delay: 0ms; transition-duration: 420ms; }
+.intro-kaia .kaia-canvas, .intro-kaia .kaia-still { width: 100%; cursor: default; }
+
+.intro-cta.is-ghost { border-color: rgba(255,255,255,.2); color: #d4c7d8; }
+.intro-cta.is-ghost:disabled { opacity: .55; cursor: default; }
+
+/* --- the floating guide --- */
+.kaia-guide {
+  position: fixed;
+  left: var(--pad);
+  bottom: max(1.1rem, env(safe-area-inset-bottom));
+  z-index: 45;
+  width: min(23rem, calc(100vw - var(--pad) * 2));
+  display: grid;
+  gap: .5rem;
+  opacity: 0;
+  transform: translateY(1.4rem);
+  pointer-events: none;
+  transition: opacity 520ms var(--ease-out), transform 620ms var(--ease-out);
+}
+/* She arrives once the portfolio does, and steps out of the way for anything that
+   needs the screen more than she does. */
+.kaia-guide.is-ready { opacity: 1; transform: none; pointer-events: auto; }
+.kaia-guide.is-away,
+.kaia-guide.is-hidden { opacity: 0; transform: translateY(1rem); pointer-events: none; }
+
+.kaia-guide-body { position: relative; display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: end; gap: .7rem; padding: .7rem .8rem; border: 1px solid var(--line); border-radius: 1.2rem; background: rgba(242,239,232,.92); box-shadow: var(--shadow); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); }
+.kaia-guide-figure { position: relative; width: 3.6rem; }
+.kaia-guide-figure .kaia-canvas, .kaia-guide-figure .kaia-still { width: 100%; }
+/* A quiet ring while she talks, so there is visual feedback even with the sound off. */
+.kaia-guide-figure::after { position: absolute; inset: -.3rem -.25rem .1rem; border-radius: 50%; content: ""; box-shadow: 0 0 0 0 rgba(111,63,120,.4); opacity: 0; transition: opacity 240ms var(--ease-out); }
+.kaia-guide.is-speaking .kaia-guide-figure::after { opacity: 1; animation: kaia-pulse 1.7s ease-out infinite; }
+@keyframes kaia-pulse { 0% { box-shadow: 0 0 0 0 rgba(111,63,120,.38); } 100% { box-shadow: 0 0 0 .85rem rgba(111,63,120,0); } }
+
+.kaia-guide-controls { display: flex; flex-wrap: wrap; gap: .3rem; }
+.kaia-chip { min-height: 1.95rem; padding: .25rem .68rem; border: 1px solid var(--line); border-radius: 999px; background: transparent; color: var(--ink); cursor: pointer; font: inherit; font-size: .66rem; font-weight: 700; }
+/* Every one of these is toggled with the hidden attribute, and `display: flex` on the
+   row would otherwise out-rank the browser's own [hidden] rule. */
+.kaia-chip[hidden] { display: none; }
+.kaia-chip.is-primary { border-color: transparent; background: var(--ink); color: var(--white); }
+.kaia-chip[aria-pressed="true"] { border-color: transparent; background: var(--plum); color: #fff; }
+.kaia-chip:active { transform: scale(.96); }
+
+.kaia-guide-close { position: absolute; top: -.55rem; right: -.55rem; width: 1.6rem; height: 1.6rem; display: grid; place-items: center; border: 1px solid var(--line); border-radius: 50%; background: var(--white); color: var(--muted); cursor: pointer; font-size: .8rem; line-height: 1; }
+.kaia-guide.is-minimised .kaia-guide-controls,
+.kaia-guide.is-minimised .kaia-bubble { display: none; }
+.kaia-guide.is-minimised { width: auto; }
+
+/* --- the speech bubble --- */
+.kaia-bubble { position: relative; padding: .85rem 1rem; border: 1px solid var(--line); border-radius: 1.1rem 1.1rem 1.1rem .3rem; background: var(--white); box-shadow: var(--shadow); }
+.kaia-bubble[hidden] { display: none; }
+.kaia-bubble-section { margin: 0 0 .25rem; color: var(--plum); font-size: .58rem; font-weight: 750; letter-spacing: .14em; text-transform: uppercase; }
+.kaia-bubble-section:empty { display: none; }
+.kaia-bubble-text { margin: 0; max-height: 11rem; overflow-y: auto; color: var(--ink); font-size: .78rem; line-height: 1.55; }
+/* The word currently being spoken, where the browser reports boundaries. */
+.kaia-bubble-text .is-now { background: rgba(111,63,120,.16); border-radius: .2rem; box-shadow: 0 0 0 .12em rgba(111,63,120,.16); }
+
 @media (hover: hover) and (pointer: fine) {
   .nav-links a:hover { background: rgba(22,19,26,.07); color: var(--ink); }
   .nav-cta:hover { background: var(--plum-dark) !important; }
@@ -740,6 +804,10 @@ html.intro-armed .intro {
   .intro-cta:hover .intro-arrow { transform: translateX(.25rem); }
   .intro-skip:hover { color: #cfc4d4; }
   .to-top:hover { background: var(--ink); border-color: var(--ink); color: var(--white); }
+  .kaia-chip:hover { border-color: var(--plum); }
+  .kaia-chip.is-primary:hover { background: var(--plum); }
+  .intro-cta.is-ghost:hover { background: rgba(255,255,255,.12); border-color: rgba(255,255,255,.5); color: #fff; }
+  .kaia-guide-close:hover { color: var(--ink); border-color: var(--ink); }
   .kaia-button:hover { background: rgba(255,255,255,.1); color: #fff; }
   .brand-tab:hover[aria-selected="false"] { color: var(--ink); }
   .listing-card:hover { background: var(--plum-dark); }
@@ -863,6 +931,12 @@ html.intro-armed .intro {
   .intro-cta { width: 100%; justify-content: center; }
   .intro-ambient span { filter: blur(48px); }
   .footer-replay { text-align: left; }
+  .kaia-guide { left: .7rem; right: .7rem; width: auto; bottom: max(.7rem, env(safe-area-inset-bottom)); }
+  .kaia-guide-body { padding: .6rem .7rem; }
+  .kaia-guide-figure { width: 3rem; }
+  .kaia-bubble-text { max-height: 7.5rem; font-size: .74rem; }
+  .intro-kaia { right: -1vw; width: clamp(5.5rem, 26vw, 8rem); opacity: .9; }
+  .intro-cta.is-ghost { width: 100%; }
   .showroom-head { gap: .6rem; }
   .brand-tab { padding: .45rem .9rem; }
   .showroom-detail { padding: .8rem; gap: .6rem; max-height: 48%; }
@@ -927,6 +1001,9 @@ body.dialog-open .nav { opacity: 0; pointer-events: none; }
   .intro.is-leaving .intro-eyebrow > span, .intro.is-leaving .intro-sub > span, .intro.is-leaving .intro-actions > button, .intro.is-leaving .intro-line > span { opacity: 0 !important; }
   html.intro-armed .intro { transition-duration: 160ms; }
   .intro.is-leaving { transform: none; }
+  .intro-kaia { transition-delay: 0ms; transition-duration: 160ms; }
+  .kaia-guide { transition-duration: 160ms; }
+  .kaia-guide.is-speaking .kaia-guide-figure::after { animation: none; }
   html.intro-revealing .nav, html.intro-revealing .footer, html.intro-revealing #main { transition-duration: 160ms; transition-delay: 0ms; }
   .rail-dot { transition: none; }
 }
