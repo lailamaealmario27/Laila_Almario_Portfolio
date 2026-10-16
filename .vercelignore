@@ -1,5 +1,7 @@
-# Model sources. The site only serves assets/models/*.glb, so the Blender project,
-# its working textures and the archived single-file build do not need deploying.
+# Asset sources. The site only serves assets/models/*.glb and the packed Kaia sprite,
+# so the Blender project, its working textures, Kaia's 46 source frames and the
+# archived single-file build do not need deploying.
 blender/
+kaia/
 archive/
 index.legacy.html

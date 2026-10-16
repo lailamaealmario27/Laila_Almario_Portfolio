@@ -437,6 +437,27 @@ img, video { max-width: 100%; }
 .media-card.is-video .media-caption { inset: .8rem .8rem auto .8rem; }
 .zoom-button { position: absolute; inset: 0; width: 100%; border: 0; background: transparent; cursor: zoom-in; }
 
+/* Kaia, the desktop assistant. She sits in the dark Selected work panel, so the stage
+   gives her a soft pool of light to stand in rather than a card. */
+.kaia-layout { display: grid; grid-template-columns: minmax(0, 20rem) minmax(0, 1fr); gap: clamp(1.5rem, 4vw, 3.5rem); align-items: center; }
+.kaia-stage { position: relative; display: grid; justify-items: center; gap: 1rem; padding: 2rem 1rem 1.4rem; border-radius: var(--radius); background: radial-gradient(ellipse at 50% 34%, rgba(202,170,208,.20) 0%, rgba(202,170,208,.06) 46%, transparent 72%); }
+.kaia-canvas, .kaia-still { display: block; width: clamp(9rem, 26vw, 12.5rem); aspect-ratio: 140 / 215; cursor: pointer; }
+.kaia-canvas[hidden] { display: none; }
+.kaia-still { object-fit: contain; }
+.kaia-controls { display: flex; flex-wrap: wrap; justify-content: center; gap: .4rem; }
+.kaia-button { min-height: 2.2rem; padding: .4rem .9rem; border: 1px solid rgba(255,255,255,.22); border-radius: 999px; background: transparent; color: #d7cfd9; cursor: pointer; font: inherit; font-size: .69rem; font-weight: 700; transition: background-color 180ms var(--ease-out), color 180ms var(--ease-out); }
+.kaia-button:active { transform: scale(.97); }
+
+.kaia-notes { display: grid; gap: 1.6rem; }
+.kaia-facts { display: grid; gap: 0; margin: 0; padding: 0; list-style: none; border-top: 1px solid rgba(255,255,255,.14); }
+.kaia-facts li { display: grid; grid-template-columns: 8.5rem minmax(0, 1fr); gap: 1rem; padding: .8rem 0; border-bottom: 1px solid rgba(255,255,255,.14); }
+.kaia-facts strong { color: #fff; font-size: .76rem; }
+.kaia-facts span { color: #b8b0ba; font-size: .76rem; }
+
+.kaia-turnaround { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 1.1rem; margin: 0; }
+.kaia-turnaround img { height: clamp(4.5rem, 11vw, 6.5rem); width: auto; }
+.kaia-turnaround figcaption { flex-basis: 100%; color: #8f8794; font-size: .64rem; font-weight: 650; letter-spacing: .1em; text-transform: uppercase; }
+
 .listing-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1px; overflow: hidden; border: 1px solid rgba(255,255,255,.18); border-radius: var(--radius); background: rgba(255,255,255,.18); }
 .listing-card { min-height: 16rem; display: flex; flex-direction: column; justify-content: space-between; gap: 2rem; padding: clamp(1.4rem, 3vw, 2.3rem); background: #201c22; transition: background-color 180ms ease; }
 .listing-card span { color: #a99fab; font-size: .7rem; letter-spacing: .12em; text-transform: uppercase; }
@@ -580,6 +601,7 @@ img, video { max-width: 100%; }
   .work-tab:hover { color: #fff; border-color: rgba(255,255,255,.5); }
   .media-card:hover img { transform: scale(1.035); }
   .showroom-chip:hover, .showroom-pick:hover { border-color: var(--plum); }
+  .kaia-button:hover { background: rgba(255,255,255,.1); color: #fff; }
   .brand-tab:hover[aria-selected="false"] { color: var(--ink); }
   .listing-card:hover { background: var(--plum-dark); }
   .contact-links a:hover { border-color: #fff; }
@@ -613,6 +635,8 @@ img, video { max-width: 100%; }
   .hero-copy { grid-template-columns: 1fr; gap: 1.6rem; }
   .section-heading { grid-template-columns: 1fr; gap: 1.5rem; }
   .project-intro { grid-template-columns: 1fr; gap: 1.1rem; }
+  .kaia-layout { grid-template-columns: 1fr; gap: 2rem; }
+  .kaia-facts li { grid-template-columns: 7rem minmax(0, 1fr); }
   .about-grid { grid-template-columns: 1fr; gap: 3rem; }
   .photo-pair { min-height: 38rem; }
   .about-copy h3 { max-width: none; }
@@ -699,6 +723,8 @@ img, video { max-width: 100%; }
   .showroom-detail { padding: .8rem; gap: .6rem; max-height: 48%; }
   .showroom-detail-head h3 { font-size: 1.5rem; }
   .showroom-fallback { grid-template-columns: 1fr; }
+  .kaia-facts li { grid-template-columns: 1fr; gap: .15rem; }
+  .kaia-turnaround { gap: .7rem; }
   .contact-grid { grid-template-columns: 1fr; }
   .contact-copy { position: static; }
   .field-row { grid-template-columns: 1fr; gap: 0; }

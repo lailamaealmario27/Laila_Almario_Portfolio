@@ -46,6 +46,34 @@ publishable **anon** key, which is public by design and safe behind the RLS poli
 `private_inbox_setup.sql`. A `service_role` key must never go in any file in this repo —
 see `SETUP_PRIVATE_INBOX.md`.
 
+## Kaia
+
+The **Desktop assistant** tab in Selected work is Kaia, the character from
+`assistant.py` in the parent folder -- the assistant that watches which app is in front,
+sorts the day into categories and pushes the summary to the K-PICK Hub.
+
+| Path | What it is |
+| --- | --- |
+| `kaia/frames/` | Her 46 source frames, five clips: idle, nod, tilt, hop, dance. |
+| `kaia/poses/` | The four turnaround views. |
+| `kaia/build_kaia_sprite.py` | Packs the frames onto one sheet and converts the views to WebP. |
+| `assets/images/kaia-sprite.webp` | The sheet the site loads: one clip per row. |
+| `kaia.js` | Walks a row a column at a time on a canvas. |
+
+Rebuild after changing a frame:
+
+```sh
+python kaia/build_kaia_sprite.py
+```
+
+It prints the sheet geometry. `CLIPS` in `kaia.js` has to agree with it -- that is how
+the animator knows how many columns a clip has before it wraps. `kaia/` is in
+`.vercelignore`: 46 PNGs is 1.3 MB and 46 requests, the packed sheet is 529 KB and one.
+
+She idles by default and breaks into a nod or a head tilt on her own every few seconds;
+clicking her makes her hop. Under `prefers-reduced-motion` she holds a single frame. If
+the sheet fails to load, the static turnaround view it replaces stays on screen.
+
 `index.html` is the website entry point. The visual system lives in `styles.css`, interactions live in `app.js`, and images/videos are stored in `assets/`.
 
 The previous single-file version is retained in `archive/index.legacy.html` for reference only and is not loaded by the production site.
