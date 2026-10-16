@@ -55,7 +55,7 @@
         <div class="work-panel" id="panel-commerce" role="tabpanel"><div class="project-intro"><div><p class="project-index">Marketplace work</p><h3>Product content that supports the decision.</h3></div><p>Live listings supported with thumbnails, variations, A+ descriptions, presentation, and customer-facing details.</p></div><div class="listing-grid"><a class="listing-card" href="https://shopee.ph/Lotus-Biscoff-Spread-%28Smooth-and-Crunchy%29-i.325202725.26366336864" target="_blank" rel="noopener"><span>Shopee listing ↗</span><h4>Lotus Biscoff Spread</h4><small>Multiple variations and listing media</small></a><a class="listing-card" href="https://shopee.ph/Sungshim-Insulin-Syringe-1mL-%2829G%29-x-13mm-i.325202725.56009459791" target="_blank" rel="noopener"><span>Shopee listing ↗</span><h4>Sungshim Insulin Syringe</h4><small>Medical product imagery and variants</small></a><a class="listing-card" href="https://shopee.ph/HANSOL-BU-HANG-30PCS-CUPPING-SET-i.325202725.56056289079" target="_blank" rel="noopener"><span>Shopee listing ↗</span><h4>Hansol Cupping Set</h4><small>Product-focused presentation</small></a><a class="listing-card" href="https://shopee.ph/Convatec-Stomahesive-Powder-%2828.3g%29-i.325202725.23747566948" target="_blank" rel="noopener"><span>Shopee listing ↗</span><h4>Convatec Stomahesive Powder</h4><small>Multi-variation product listing</small></a></div></div>
         <div class="work-panel" id="panel-events" role="tabpanel"><div class="project-intro"><div><p class="project-index">Exhibits and conventions</p><h3>Brand work in the room, not only on the screen.</h3></div><p>Customer engagement, product presentation, live event support, lead assistance, and content capture.</p></div><div class="media-rail" data-set="events"></div></div>
         <div class="work-panel" id="panel-assistant" role="tabpanel">
-          <div class="project-intro"><div><p class="project-index">Desktop assistant</p><h3>Kaia writes the daily report.</h3></div><p>A small assistant that sits on the desktop, notices which app is in front, sorts the day into categories, and pushes the summary to the K-PICK Hub so the daily report writes itself.</p></div>
+          <div class="project-intro"><div><p class="project-index">Tools I build</p><h3>Kaia, the assistant I built.</h3></div><p>A Python assistant that lives on the corner of my screen. She notices which app I am in, sorts the day into categories, drafts the end-of-day report in plain language and sends it to the K-PICK Hub — so the report writes itself while I work.</p></div>
           <div class="kaia-layout">
             <div class="kaia-stage" data-kaia>
               <!-- The still is what shows until the sprite sheet lands, and what stays
@@ -68,21 +68,57 @@
               </div>
             </div>
             <div class="kaia-notes">
-              <ul class="kaia-facts">
-                <li><strong>Watches</strong><span>Which app and window is in front, every few seconds</span></li>
-                <li><strong>Sorts</strong><span>The day into design, social media, web research, and more</span></li>
-                <li><strong>Pauses</strong><span>Stops counting once the keyboard and mouse go quiet</span></li>
-                <li><strong>Never reads</strong><span>Files, messages, screen contents, or anything typed</span></li>
-              </ul>
-              <figure class="kaia-turnaround">
-                <img src="assets/images/kaia-front.webp" alt="Kaia, front view" loading="lazy">
-                <img src="assets/images/kaia-threequarter.webp" alt="Kaia, three-quarter view" loading="lazy">
-                <img src="assets/images/kaia-side.webp" alt="Kaia, side view" loading="lazy">
-                <img src="assets/images/kaia-back.webp" alt="Kaia, back view" loading="lazy">
-                <figcaption>Character turnaround</figcaption>
-              </figure>
+              <p class="kaia-label">A day with Kaia</p>
+              <ol class="kaia-day">
+                <li><strong>She watches the front window</strong><span>Which app, and the title of its window, every five seconds.</span></li>
+                <li><strong>She sorts it</strong><span>Into one of twelve categories, from design and video editing to marketplace work.</span></li>
+                <li><strong>She stops when I do</strong><span>Three minutes without the keyboard or mouse and she stops counting.</span></li>
+                <li><strong>She drafts the report</strong><span>What I worked on, in plain language, ready before I need it.</span></li>
+                <li><strong>She sends it on</strong><span>To the K-PICK Hub every five minutes, with a local copy kept in case the Hub is off.</span></li>
+              </ol>
             </div>
           </div>
+
+          <div class="kaia-details">
+            <article class="kaia-card">
+              <h4>What she tracks</h4>
+              <p>The app in front and its window title. Twelve categories: design, video, Shopee and Lazada, the K-PICK dashboard, content calendar, social media, team chat, AI work, email, documents, files, research.</p>
+              <p>Her rules read window titles first and process names second. Without that split a broad match like <em>chrome</em> swallows every browser window before the specific rules are ever read.</p>
+            </article>
+            <article class="kaia-card">
+              <h4>What she never sees</h4>
+              <p>Not my files, not my messages, not my screen, not a single keystroke. Only the window title — the same thing already printed on the taskbar.</p>
+              <p>Banking, e-wallets, password managers, job boards, medical and streaming windows are counted as private and never named. Even her app-time report leaves the word out, so <em>no report ever contains it</em> stays a rule with no exceptions.</p>
+            </article>
+            <article class="kaia-card">
+              <h4>How she writes it up</h4>
+              <p>Today's summary, time by app, a detailed breakdown, and a draft for the company group.</p>
+              <p>She writes <em>worked on</em>, never <em>finished</em>: a window title cannot prove a task was completed, and only a note I add myself can. The company draft carries no durations at all — what I worked on is the company's business; how long it took is mine.</p>
+            </article>
+            <article class="kaia-card">
+              <h4>Who she talks to</h4>
+              <p>Telegram, with eleven commands — what I am on right now, today, app time, the full report, add a note, draft and send the company report, pause, resume.</p>
+              <p>Her chat runs on the Claude API, or on a local model through Ollama when I would rather nothing left the machine. She answers in English or Tagalog, whichever I used.</p>
+            </article>
+            <article class="kaia-card">
+              <h4>How I steer her</h4>
+              <p>Right-click her: chat, check whether her brain is reachable, ask what I have done today, push to the Hub now, pause tracking, forget a category, reset the day.</p>
+              <p>Or tell her to dance.</p>
+            </article>
+            <article class="kaia-card">
+              <h4>What she is made of</h4>
+              <ul class="kaia-stack"><li>Python</li><li>tkinter</li><li>Claude API</li><li>Ollama</li><li>Telegram Bot API</li><li>Windows window APIs</li></ul>
+              <p>One file, no installer. She holds a single-instance lock so two of her can never count the same day twice.</p>
+            </article>
+          </div>
+
+          <figure class="kaia-turnaround">
+            <img src="assets/images/kaia-front.webp" alt="Kaia, front view" loading="lazy">
+            <img src="assets/images/kaia-threequarter.webp" alt="Kaia, three-quarter view" loading="lazy">
+            <img src="assets/images/kaia-side.webp" alt="Kaia, side view" loading="lazy">
+            <img src="assets/images/kaia-back.webp" alt="Kaia, back view" loading="lazy">
+            <figcaption>Character turnaround — she idles, nods at a change of task, and hops when clicked</figcaption>
+          </figure>
         </div>
       </div>
     </div></section>
@@ -138,7 +174,7 @@
       </div>
     </div></section>
 
-    <section class="section section-rule shell" id="skills"><div class="section-heading reveal"><div><p class="section-label">Tools and strengths</p><h2>A practical, connected toolkit.</h2></div><p>The tools change. The through-line is communication, organization, customer awareness, and the willingness to learn the next useful thing.</p></div><div class="skills-grid reveal"><article class="skill-group"><h3>Content</h3><ul><li>Canva</li><li>CapCut</li><li>Meta Business Suite</li><li>Facebook</li><li>Instagram</li><li>TikTok</li></ul></article><article class="skill-group"><h3>Systems</h3><ul><li>Notion</li><li>Google Workspace</li><li>Microsoft Office</li><li>Content calendars</li><li>Task monitoring</li></ul></article><article class="skill-group"><h3>AI</h3><ul><li>ChatGPT</li><li>Claude AI</li><li>Telegram bots</li><li>Research</li><li>AI-assisted workflows</li></ul></article><article class="skill-group"><h3>Business</h3><ul><li>E-commerce</li><li>Order management</li><li>Customer service</li><li>Sales support</li><li>Supplier coordination</li></ul></article></div></section>
+    <section class="section section-rule shell" id="skills"><div class="section-heading reveal"><div><p class="section-label">Tools and strengths</p><h2>A practical, connected toolkit.</h2></div><p>The tools change. The through-line is communication, organization, customer awareness, and the willingness to learn the next useful thing.</p></div><div class="skills-grid reveal"><article class="skill-group"><h3>Content</h3><ul><li>Canva</li><li>CapCut</li><li>Meta Business Suite</li><li>Facebook</li><li>Instagram</li><li>TikTok</li></ul></article><article class="skill-group"><h3>Systems</h3><ul><li>Notion</li><li>Google Workspace</li><li>Microsoft Office</li><li>Content calendars</li><li>Task monitoring</li></ul></article><article class="skill-group"><h3>AI</h3><ul><li>Python automation</li><li>Claude API</li><li>Local models (Ollama)</li><li>Telegram bots</li><li>AI-assisted workflows</li></ul></article><article class="skill-group"><h3>Business</h3><ul><li>E-commerce</li><li>Order management</li><li>Customer service</li><li>Sales support</li><li>Supplier coordination</li></ul></article></div></section>
 
     <section class="section contact-section" id="contact"><div class="shell contact-grid">
       <div class="contact-copy reveal"><p class="section-label">Start a conversation</p><h2>Let’s make something useful.</h2><p>Have a role, project, or collaboration in mind? Send a note or reach me directly.</p><div class="contact-links"><a href="mailto:leilaalmario28@gmail.com">leilaalmario28@gmail.com</a><a href="tel:+639984465939">+63 998 446 5939</a><a href="https://www.linkedin.com/in/lailaemaealmario" target="_blank" rel="noopener">LinkedIn ↗</a><a href="https://www.facebook.com/leilamaealmario" target="_blank" rel="noopener">Facebook ↗</a><a href="https://www.tiktok.com/@mauirye_" target="_blank" rel="noopener">TikTok ↗</a></div></div>

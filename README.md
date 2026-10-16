@@ -48,9 +48,15 @@ see `SETUP_PRIVATE_INBOX.md`.
 
 ## Kaia
 
-The **Desktop assistant** tab in Selected work is Kaia, the character from
-`assistant.py` in the parent folder -- the assistant that watches which app is in front,
-sorts the day into categories and pushes the summary to the K-PICK Hub.
+The **Desktop assistant** tab in Selected work is Kaia: a Python desktop assistant Laila
+designed and built, and the only thing in the portfolio that is her own software rather
+than her client work. She watches which app is in front, sorts the day into twelve
+categories, drafts the end-of-day report and pushes it to the K-PICK Hub.
+
+The panel is written from the source, `assistant.py` in the parent folder -- the
+category rules, the private-window list, the wording rules in the report builders, the
+Telegram commands and the right-click menu. If the assistant changes, the copy in
+`#panel-assistant` is what goes stale; check it against the source rather than guessing.
 
 | Path | What it is |
 | --- | --- |
