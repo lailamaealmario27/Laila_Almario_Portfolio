@@ -36,9 +36,11 @@ const GROUPS = [
   { box: '.footer-inner', items: 'span', step: 70, rise: '.4rem' }
 ];
 
-/* Headings get the wipe rather than the rise: the line uncovers itself. */
+/* Headings get the wipe rather than the rise: the line uncovers itself.
+   The hero h1 is deliberately NOT in this list. It is the visitor's name for the whole
+   site and the first thing the page is for; it does not get to depend on an observer
+   firing, a class landing, or anything else that can fail quietly. It renders. */
 const HEADINGS = [
-  '.hero h1',
   '.section-heading h2',
   '.project-intro h3',
   '.print-sticky h2',
@@ -61,6 +63,9 @@ function run() {
     headings();
     parallax();
     scrollHint();
+    settle();
+    setTimeout(settle, 900);
+    addEventListener('load', settle, { once: true });
   } catch (error) {
     /* Anything unexpected leaves the page visible rather than half-revealed. */
     console.warn('[scenes] choreography unavailable', error);
@@ -70,14 +75,37 @@ function run() {
   }
 }
 
+const watched = [];
+
 /* Toggled rather than latched, so an entrance plays again on the way back up. The
    bottom margin means a thing resets only once it is properly gone, not when it grazes
    the edge of the viewport. */
 function watch(box, apply) {
+  watched.push({ box, apply });
   const observer = new IntersectionObserver(entries => {
     entries.forEach(entry => apply(entry.isIntersecting));
   }, { threshold: 0.08, rootMargin: '0px 0px -6% 0px' });
   observer.observe(box);
+}
+
+/*
+ * The backstop.
+ *
+ * Everything above hides an element and waits for an observer to say when to show it
+ * again. That is a bet, and the losing side of it is content that is simply never
+ * visible -- which is exactly what happened to the hero headline. So the state is also
+ * worked out directly from the geometry: once at startup, and twice more shortly after
+ * in case fonts or images have moved things.
+ *
+ * This only ever reveals. It can bring something in early; it can never hide anything,
+ * so it cannot fight the observer.
+ */
+function settle() {
+  const height = window.innerHeight;
+  watched.forEach(({ box, apply }) => {
+    const rect = box.getBoundingClientRect();
+    if (rect.bottom > 0 && rect.top < height) apply(true);
+  });
 }
 
 function choreograph() {
