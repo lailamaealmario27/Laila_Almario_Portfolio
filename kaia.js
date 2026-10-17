@@ -4,10 +4,10 @@
  * Her frames come from the assistant itself. kaia/build_kaia_sprite.py packs them onto
  * one sheet, five clips, one per row; this walks a row a column at a time.
  *
- * There is one Kaia. She can be drawn in more than one place -- her own panel in
- * Selected work, the intro, the floating guide -- but every canvas renders the same
- * character from the same clip and the same frame, out of one shared state. Nothing
- * here creates a second character, and no canvas animates independently of the others.
+ * There is one Kaia. She can be drawn in more than one place, but every canvas renders
+ * the same character from the same clip and the same frame, out of one shared state.
+ * Nothing here creates a second character, and no canvas animates independently of the
+ * others.
  *
  * Loaded in its own module and guarded the same way the showroom is: if the sheet never
  * arrives, the static turnaround view stays on screen and nothing else on the page is
@@ -40,10 +40,7 @@ const state = {
   frame: 0,
   last: 0,
   nextBreak: 0,
-  running: false,
-  /* While she is speaking she keeps gesturing instead of standing still; idle breaks
-     are suspended so the two do not fight over the clip. */
-  speaking: false
+  running: false
 };
 
 const views = new Set();
@@ -144,16 +141,15 @@ const tick = now => {
         state.clip = CLIPS.idle;
         state.clipName = 'idle';
         state.frame = 0;
-        state.nextBreak = now + (state.speaking ? 900 : gap());
+        state.nextBreak = now + gap();
       }
     }
     drawAll();
   }
   /* A small unprompted movement now and then, so she reads as present rather than as a
-     looping graphic. While she is talking the same mechanism keeps her gesturing. */
+     looping graphic. */
   if (state.clipName === 'idle' && now >= state.nextBreak) {
-    if (state.speaking) play(Math.random() < 0.6 ? 'nod' : 'tilt');
-    else play(Math.random() < 0.55 ? 'nod' : 'tilt');
+    play(Math.random() < 0.55 ? 'nod' : 'tilt');
   }
   requestAnimationFrame(tick);
 };
@@ -188,13 +184,6 @@ export const kaia = {
   mount,
   /** Play one of her clips once, then fall back to idling. */
   play,
-  /** While true she gestures continuously instead of standing still between breaks. */
-  set speaking(value) {
-    state.speaking = Boolean(value);
-    document.documentElement.dataset.kaiaSpeaking = state.speaking ? 'true' : 'false';
-    if (state.speaking) play(Math.random() < 0.5 ? 'nod' : 'tilt');
-  },
-  get speaking() { return state.speaking; },
   get ready() { return sheetReady; }
 };
 

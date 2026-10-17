@@ -46,24 +46,15 @@ publishable **anon** key, which is public by design and safe behind the RLS poli
 `private_inbox_setup.sql`. A `service_role` key must never go in any file in this repo —
 see `SETUP_PRIVATE_INBOX.md`.
 
+## The landing
+
+The page opens on `#welcome`, a full-screen cinematic section **in the normal flow** --
+not an overlay. There is nothing to dismiss, nothing locks the scroll and no deep link
+has to route around it: you scroll past it the way you scroll past any other section.
+An earlier version of this was a fixed overlay with a dismiss gate; it was replaced
+because a gate is a thing that can trap someone, and a section cannot.
+
 ## Scroll choreography
-
-`scenes.js` adds the entrances: headings wipe up as they arrive, groups of things enter
-one after another, and the two photographed areas drift against the scroll. There is no
-pinning, no snapping and no scroll hijacking -- native scrolling is never touched, and
-entrances toggle rather than latch so they play on the way back up too.
-
-One rule makes it safe to add animation to a page that already works: **JavaScript hides
-and JavaScript reveals.** No element on this page is hidden by the stylesheet alone. The
-`.scene-item` and `.scene-text` classes are added at runtime and never appear in the
-markup, so if `scenes.js` fails to load, never runs, or throws halfway through, every
-section stays exactly as visible as it was before the module existed. `prefers-reduced-
-motion` skips the module entirely for the same reason.
-
-The storyboard the animation serves maps onto the seven sections that already exist.
-Graphic design and video are **tabs inside `#work`**, not sections of their own, so
-Kaia's line for that stop names both rather than pretending they are separate places to
-scroll to. No section was added to make the page match a storyboard.
 
 ## Kaia
 
@@ -98,6 +89,8 @@ the animator knows how many columns a clip has before it wraps. `kaia/` is in
 She idles by default and breaks into a nod or a head tilt on her own every few seconds;
 clicking her makes her hop. Under `prefers-reduced-motion` she holds a single frame. If
 the sheet fails to load, the static turnaround view it replaces stays on screen.
+
+She is a portfolio piece, not a chatbot: she lives in her own tab and nowhere else.
 
 `index.html` is the website entry point. The visual system lives in `styles.css`, interactions live in `app.js`, and images/videos are stored in `assets/`.
 

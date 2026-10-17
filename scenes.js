@@ -20,6 +20,7 @@ const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
    them; `rise` is how far they travel. Selectors that match nothing are skipped, so
    this list can name things that only exist on some pages. */
 const GROUPS = [
+  { box: '.stage-inner', items: '.stage-eyebrow > span, .stage-line > span, .stage-intro > span, .stage-cta', step: 110 },
   { box: '.hero-proof', items: '.proof-item', step: 80 },
   { box: '.capabilities', items: 'span', step: 55, rise: '.6rem' },
   { box: '.photo-pair', items: 'figure', step: 140 },
@@ -50,27 +51,16 @@ const HEADINGS = [
 const PARALLAX = '.hero-photo img, .photo-pair figure img';
 const DRIFT = 18;
 
-if (!reduceMotion) begin();
-
-function begin() {
-  /* The title card owns the screen until it leaves; starting underneath it would spend
-     every entrance on an audience that cannot see them. */
-  if (document.documentElement.classList.contains('intro-armed')) {
-    let started = false;
-    const go = () => { if (!started) { started = true; run(); } };
-    document.addEventListener('intro:left', go, { once: true });
-    /* If the intro is disarmed by its own safety timer, intro:left never fires. */
-    setTimeout(go, 6500);
-  } else {
-    run();
-  }
-}
+/* The back-to-top control is not an animation and is wanted either way. */
+backToTop();
+if (!reduceMotion) run();
 
 function run() {
   try {
     choreograph();
     headings();
     parallax();
+    scrollHint();
   } catch (error) {
     /* Anything unexpected leaves the page visible rather than half-revealed. */
     console.warn('[scenes] choreography unavailable', error);
@@ -110,6 +100,37 @@ function headings() {
   document.querySelectorAll(HEADINGS.join(',')).forEach(heading => {
     heading.classList.add('scene-text');
     watch(heading, on => heading.classList.toggle('is-in', on));
+  });
+}
+
+/* The landing invites a scroll; once the visitor has taken it, the invitation goes. */
+function scrollHint() {
+  const hint = document.querySelector('[data-stage-scroll]');
+  if (!hint) return;
+  const sync = () => {
+    hint.style.opacity = window.scrollY > window.innerHeight * 0.25 ? '0' : '';
+  };
+  addEventListener('scroll', sync, { passive: true });
+  sync();
+}
+
+/* Appears once there is something to come back from, and stays out of the way of
+   anything holding the screen. */
+function backToTop() {
+  const button = document.querySelector('[data-to-top]');
+  if (!button) return;
+  let shown = false;
+  const sync = () => {
+    const should = window.scrollY > window.innerHeight * 1.1 &&
+      !document.body.classList.contains('dialog-open');
+    if (should === shown) return;
+    shown = should;
+    button.hidden = !should;
+  };
+  addEventListener('scroll', sync, { passive: true });
+  sync();
+  button.addEventListener('click', () => {
+    window.scrollTo({ top: 0, behavior: reduceMotion ? 'auto' : 'smooth' });
   });
 }
 

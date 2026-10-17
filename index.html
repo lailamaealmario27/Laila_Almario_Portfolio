@@ -11,43 +11,10 @@
   <title>Laila Mae Almario | Portfolio</title>
   <link rel="icon" type="image/png" href="assets/images/la-monogram.png">
   <link rel="stylesheet" href="styles.css">
-  <script>
-    /* Armed before first paint so the portfolio never flashes behind the intro. A deep
-       link skips it entirely, and the timer hands the site back if intro.js never
-       arrives -- the overlay can never become a wall. */
-    (function () {
-      if (location.hash) return;
-      document.documentElement.classList.add('intro-armed');
-      window.__introSafety = setTimeout(function () {
-        document.documentElement.classList.remove('intro-armed');
-      }, 5000);
-    })();
-  </script>
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
 
-  <!-- Cinematic intro. Display is gated on html.intro-armed, so with JavaScript off it
-       is never shown at all and the portfolio below is the whole page. -->
-  <div class="intro" data-intro role="dialog" aria-modal="true" aria-label="Introduction">
-    <div class="intro-ambient" aria-hidden="true"><span></span><span></span><span></span></div>
-    <div class="intro-inner">
-      <p class="intro-eyebrow" data-intro-step><span>Laila Mae Almario</span></p>
-      <p class="intro-title">
-        <span class="intro-line" data-intro-step><span>Creativity</span></span>
-        <span class="intro-line" data-intro-step><span><em>in motion.</em></span></span>
-      </p>
-      <p class="intro-sub" data-intro-step><span>Multimedia Design • Visual Storytelling • Digital Experiences</span></p>
-      <p class="intro-actions" data-intro-step><button class="intro-cta" type="button" data-intro-enter>View my portfolio <span class="intro-arrow" aria-hidden="true">→</span></button><button class="intro-cta is-ghost" type="button" data-kaia-meet>Meet Kaia</button></p>
-    </div>
-      <!-- The same Kaia as everywhere else: kaia.js draws one character into every
-           canvas that asks for her. This is a second view, not a second character. -->
-      <div class="intro-kaia" data-kaia-hero aria-hidden="true">
-        <img class="kaia-still" data-kaia-still src="assets/images/kaia-front.webp" alt="" loading="lazy">
-        <canvas class="kaia-canvas" data-kaia-canvas hidden></canvas>
-      </div>
-    <button class="intro-skip" type="button" data-intro-skip data-intro-step>Scroll, or press enter</button>
-  </div>
   <header class="nav" aria-label="Primary navigation"><div class="nav-inner">
     <a class="brand" href="#home" aria-label="Laila Mae Almario, home"><img src="assets/images/la-monogram.png" alt=""><span>Laila Mae Almario</span></a>
     <button class="menu-button" id="menuButton" type="button" aria-expanded="false" aria-controls="navLinks" aria-label="Toggle navigation"></button>
@@ -55,6 +22,20 @@
   </div></header>
 
   <main id="main">
+    <section class="stage" id="welcome" aria-label="Welcome">
+      <div class="stage-ambient" aria-hidden="true"><span></span><span></span><span></span></div>
+      <div class="stage-inner">
+        <p class="stage-eyebrow"><span>Welcome to my creative space</span></p>
+        <p class="stage-title">
+          <span class="stage-line"><span>Creativity</span></span>
+          <span class="stage-line"><span><em>in motion.</em></span></span>
+        </p>
+        <p class="stage-intro"><span>I&rsquo;m Laila Mae, a multimedia creative transforming ideas into compelling visuals and digital experiences.</span></p>
+        <p class="stage-actions"><a class="stage-cta" href="#work">Explore my work <span class="stage-arrow" aria-hidden="true">&darr;</span></a></p>
+      </div>
+      <a class="stage-scroll" href="#home" data-stage-scroll><span>Scroll to explore</span><span class="stage-scroll-rule" aria-hidden="true"></span></a>
+    </section>
+
     <section class="hero shell" id="home"><div class="hero-grid">
       <div class="hero-content"><p class="hero-kicker">Social media · E-commerce · Content</p><h1>Laila Mae <em>Almario</em></h1>
         <div class="hero-copy"><p>I turn products, campaigns, and ideas into clear digital experiences, from the first content plan to the final post, listing, reel, or printed piece.</p><div class="hero-actions"><a class="button primary" href="#work">Explore work <span class="arrow" aria-hidden="true">↗</span></a><a class="button" href="assets/Laila_Mae_Almario_ATS_Resume.pdf" target="_blank" rel="noopener">Résumé <span class="arrow" aria-hidden="true">↗</span></a></div></div>
@@ -216,31 +197,9 @@
     </div></section>
   </main>
 
-  <footer class="footer"><div class="footer-inner shell"><span>© <span id="year">2026</span> Laila Mae Almario</span><span>Social Media & E-commerce Specialist</span><button class="footer-replay" type="button" data-intro-replay>Replay intro</button></div></footer>
+  <footer class="footer"><div class="footer-inner shell"><span>© <span id="year">2026</span> Laila Mae Almario</span><span>Social Media & E-commerce Specialist</span></div></footer>
   <button class="to-top" type="button" data-to-top aria-label="Back to top" hidden><span aria-hidden="true">↑</span></button>
 
-  <!-- The floating guide. One widget, one character; she steps aside when her own
-       panel in Selected work is on screen so two of her are never visible at once. -->
-  <aside class="kaia-guide" data-kaia-guide aria-label="Kaia, portfolio guide">
-    <div class="kaia-bubble" data-kaia-bubble hidden>
-      <p class="kaia-bubble-section" data-kaia-section></p>
-      <p class="kaia-bubble-text" data-kaia-caption role="status" aria-live="polite"></p>
-    </div>
-    <div class="kaia-guide-body">
-      <div class="kaia-guide-figure" data-kaia>
-        <img class="kaia-still" data-kaia-still src="assets/images/kaia-front.webp" alt="Kaia, portfolio guide" loading="lazy">
-        <canvas class="kaia-canvas" data-kaia-canvas hidden></canvas>
-      </div>
-      <div class="kaia-guide-controls">
-        <button class="kaia-chip is-primary" type="button" data-kaia-start>Start tour</button>
-        <button class="kaia-chip" type="button" data-kaia-pause aria-pressed="false" hidden>Pause</button>
-        <button class="kaia-chip" type="button" data-kaia-replay hidden>Replay</button>
-        <button class="kaia-chip" type="button" data-kaia-mute aria-pressed="false">Mute</button>
-        <button class="kaia-chip" type="button" data-kaia-end hidden>End tour</button>
-      </div>
-    </div>
-    <button class="kaia-guide-close" type="button" data-kaia-close aria-label="Minimise Kaia"><span aria-hidden="true">–</span></button>
-  </aside>
   <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-hidden="true" aria-label="Portfolio image viewer"><button class="lightbox-close" id="closeLightbox" type="button" aria-label="Close image viewer">×</button><button class="lightbox-prev" id="lightboxPrev" type="button" aria-label="Previous image">‹</button><figure><img id="lightboxImage" src="assets/images/image-03-e67638eeab.webp" alt=""><figcaption><span id="lightboxCaption"></span><span id="lightboxCount"></span></figcaption></figure><button class="lightbox-next" id="lightboxNext" type="button" aria-label="Next image">›</button></div>
   <script type="module" src="app.js"></script>
   <!-- Loaded after app.js and kept in its own module: the Print & Production showroom
@@ -250,8 +209,6 @@
   <script type="module" src="work-rail.js"></script>
   <script type="module" src="showroom.js"></script>
   <script type="module" src="kaia.js"></script>
-  <script type="module" src="kaia-tour.js"></script>
-  <script type="module" src="intro.js"></script>
   <!-- Last: it decorates what the others have already built. -->
   <script type="module" src="scenes.js"></script>
 </body>
