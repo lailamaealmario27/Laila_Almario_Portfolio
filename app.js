@@ -173,37 +173,66 @@ document.addEventListener('keydown', event => {
 
 const form = $('#contactForm');
 const formStatus = $('#formStatus');
+const DIRECT_EMAIL = 'leilaalmario28@gmail.com';
+
+/*
+ * The contact form posts straight to Web3Forms, which emails the message on. There is
+ * no database behind it and nothing to log into: if the post fails, the visitor is
+ * given the address to write to directly, which is the only fallback that cannot
+ * itself be down.
+ */
 form?.addEventListener('submit', async event => {
   event.preventDefault();
   if (!form.reportValidity()) return;
   const data = new FormData(form);
+  /* The honeypot is invisible to a real visitor, so anything in it came from a bot. */
   if (data.get('website')) return;
+
   const button = $('button[type="submit"]', form);
   button.disabled = true;
   formStatus.textContent = 'Sending your message…';
+
   try {
-    const [{ createClient }, config] = await Promise.all([
-      import('https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm'),
-      import('./site-config.js')
-    ]);
-    const ready = config.SUPABASE_URL.startsWith('https://') && config.SUPABASE_ANON_KEY.length > 30;
-    if (!ready) throw new Error('Inbox is not configured');
-    const supabase = createClient(config.SUPABASE_URL, config.SUPABASE_ANON_KEY);
-    const { error } = await supabase.from('portfolio_messages').insert({
-      sender_name: String(data.get('name')).trim(),
-      sender_email: String(data.get('email')).trim(),
-      project: String(data.get('project')).trim(),
-      message: String(data.get('message')).trim()
+    const { WEB3FORMS_ACCESS_KEY: key } = await import('./site-config.js');
+    /* An unfilled placeholder is not a configuration. Saying so here is what turns a
+       silent non-delivery into the visible fallback below. */
+    if (typeof key !== 'string' || key.length < 20 || key.includes('PASTE')) {
+      throw new Error('Web3Forms access key is not set in site-config.js');
+    }
+
+    const name = String(data.get('name') || '').trim();
+    const email = String(data.get('email') || '').trim();
+    const response = await fetch('https://api.web3forms.com/submit', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+      body: JSON.stringify({
+        access_key: key,
+        subject: `Portfolio message from ${name || 'a visitor'}`,
+        from_name: 'Laila Mae Almario portfolio',
+        name,
+        email,
+        /* So replying in the inbox answers the visitor, not the form. */
+        replyto: email,
+        project: String(data.get('project') || '').trim() || '—',
+        message: String(data.get('message') || '').trim(),
+        /* Web3Forms' own honeypot. Empty means human. */
+        botcheck: ''
+      })
     });
-    if (error) throw error;
+    const result = await response.json().catch(() => ({}));
+    if (!response.ok || result.success === false) {
+      throw new Error(result.message || `Web3Forms replied ${response.status}`);
+    }
+
     form.reset();
     formStatus.textContent = 'Thank you. Your message has been sent.';
-  } catch {
-    formStatus.textContent = 'The private inbox is unavailable. Please email me directly: ';
-    const email = document.createElement('a');
-    email.href = 'mailto:leilaalmario28@gmail.com';
-    email.textContent = 'leilaalmario28@gmail.com';
-    formStatus.append(email);
+  } catch (error) {
+    console.warn('[contact] not delivered:', error);
+    formStatus.textContent = 'The form is unavailable right now. Please email me directly: ';
+    const link = document.createElement('a');
+    link.href = `mailto:${DIRECT_EMAIL}`;
+    link.textContent = DIRECT_EMAIL;
+    formStatus.append(link);
   } finally {
     button.disabled = false;
   }

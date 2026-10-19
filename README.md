@@ -35,16 +35,38 @@ is live within a minute or so of the push.
 
 ### What reaches production
 
-`.vercelignore` keeps `blender/`, `archive/`, and `index.legacy.html` out of the
-deployment — the Blender sources stay in git as the models' source of truth, but the
-site only ever serves `assets/models/*.glb`. `vercel.json` sets `cleanUrls` (so the
-private inbox is `/admin`, not `/admin.html`) and the `X-Content-Type-Options` and
-`Referrer-Policy` headers.
+`.vercelignore` keeps `blender/`, `kaia/`, `archive/`, and `index.legacy.html` out of
+the deployment — the Blender sources and Kaia's frames stay in git as the source of
+truth, but the site only ever serves the built assets. `vercel.json` sets `cleanUrls`
+and the `X-Content-Type-Options` and `Referrer-Policy` headers.
 
-`site-config.js` is committed on purpose: it holds only the Supabase project URL and the
-publishable **anon** key, which is public by design and safe behind the RLS policies in
-`private_inbox_setup.sql`. A `service_role` key must never go in any file in this repo —
-see `SETUP_PRIVATE_INBOX.md`.
+## The contact form
+
+The form posts to [Web3Forms](https://web3forms.com), which emails the message on.
+There is no database, no admin page and nothing to log into.
+
+`site-config.js` holds the one thing it needs:
+
+```js
+export const WEB3FORMS_ACCESS_KEY = '...';
+```
+
+That key is committed on purpose. It is public by design — it only ever permits sending
+to the single address it was issued for, which is why Web3Forms intends it to sit in a
+file the browser can read. It is not a secret.
+
+Two things worth knowing:
+
+* a key has to be **activated from the email Web3Forms sends you**. An unactivated key
+  is accepted by the form and then delivers nothing, silently;
+* while the key is still the `PASTE-…` placeholder, `app.js` treats that as "not
+  configured" rather than attempting the post, and the form tells visitors to email
+  directly instead. That is also what happens if the request fails for any other
+  reason — the fallback is an address, which cannot itself be down.
+
+The form carries a honeypot field that is invisible to a real visitor; anything in it is
+a bot and the submission is dropped before it is sent. Web3Forms' own `botcheck` is sent
+alongside it.
 
 ## The landing
 
