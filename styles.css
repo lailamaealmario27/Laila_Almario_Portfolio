@@ -664,6 +664,103 @@ img, video { max-width: 100%; }
 .stage-scroll-rule::after { position: absolute; top: 0; left: 0; width: 1px; height: 1rem; background: rgba(255,255,255,.85); content: ""; animation: stage-trace 2.4s ease-in-out infinite; }
 @keyframes stage-trace { 0% { transform: translateY(-1rem); opacity: 0; } 35% { opacity: 1; } 100% { transform: translateY(2.6rem); opacity: 0; } }
 
+/* ------------------------------------------------- the destination dock
+   Lives in the hero's empty right-hand side and scrolls away with it. Two nested
+   elements on purpose: the SLOT owns where it sits and its entrance, the PANEL owns
+   the pointer tilt. Keeping those on separate elements is what stops the entrance
+   transform and the tilt transform overwriting one another. */
+.stage-dock-slot { position: absolute; right: 0; bottom: 0; width: clamp(18.5rem, 22vw, 21.25rem); }
+
+.stage-dock {
+  --tilt-x: 0deg;
+  --tilt-y: 0deg;
+  --dock-float: 0px;
+  position: relative;
+  display: grid;
+  gap: 1.05rem;
+  padding: 1.3rem 1.25rem 1.1rem;
+  overflow: hidden;
+  border: 1px solid rgba(208, 180, 216, .17);
+  border-radius: 1.35rem;
+  /* Deep plum glass, darkening toward the lower edge so the panel sits into the
+     gradient behind it rather than floating on top of it. */
+  background:
+    linear-gradient(162deg, rgba(62, 34, 71, .62) 0%, rgba(27, 16, 33, .74) 58%, rgba(17, 10, 22, .8) 100%);
+  -webkit-backdrop-filter: blur(22px) saturate(1.15);
+  backdrop-filter: blur(22px) saturate(1.15);
+  /* First line is the internal highlight along the top edge; the rest is the ambient
+     shadow that gives it weight. */
+  box-shadow:
+    inset 0 1px 0 rgba(238, 222, 243, .14),
+    0 28px 60px -26px rgba(7, 4, 11, .9),
+    0 2px 12px rgba(7, 4, 11, .35);
+  transform: perspective(900px) rotateX(var(--tilt-x)) rotateY(var(--tilt-y)) translate3d(0, var(--dock-float), 0);
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+/* The ambient highlight that follows the pointer. Painted, not animated: hero-dock.js
+   only moves two custom properties. */
+.dock-sheen {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 420ms var(--ease-out);
+  background: radial-gradient(14rem 14rem at var(--glow-x, 50%) var(--glow-y, 0%), rgba(203, 168, 214, .16), transparent 70%);
+}
+.stage-dock:hover .dock-sheen, .stage-dock:focus-within .dock-sheen { opacity: 1; }
+
+.dock-head { display: grid; gap: .22rem; }
+.dock-title { color: #efe4f0; font-size: .64rem; font-weight: 750; letter-spacing: .2em; text-transform: uppercase; }
+.dock-sub { color: #9d8ea4; font-size: .7rem; letter-spacing: .01em; }
+
+.dock-grid { display: grid; grid-template-columns: 1fr 1fr; gap: .5rem; margin: 0; padding: 0; list-style: none; }
+
+.dock-tile {
+  position: relative;
+  display: grid;
+  gap: .5rem;
+  padding: .72rem .75rem .66rem;
+  border: 1px solid rgba(208, 180, 216, .12);
+  border-radius: .85rem;
+  background: rgba(238, 224, 243, .035);
+  color: #d6c9da;
+  transition:
+    background-color 300ms var(--ease-out),
+    border-color 300ms var(--ease-out),
+    color 300ms var(--ease-out),
+    box-shadow 300ms var(--ease-out);
+}
+.dock-top { display: flex; align-items: center; justify-content: space-between; }
+.dock-index { color: #9b7fa6; font-size: .58rem; font-weight: 750; letter-spacing: .14em; font-variant-numeric: tabular-nums; transition: color 300ms var(--ease-out); }
+.dock-icon, .dock-arrow { fill: none; stroke: currentColor; stroke-linecap: round; stroke-linejoin: round; }
+.dock-icon { width: 1.2rem; height: 1.2rem; stroke-width: 1.2; opacity: .82; transition: transform 340ms var(--ease-out), opacity 300ms var(--ease-out); }
+.dock-arrow { width: .76rem; height: .76rem; stroke-width: 1.5; opacity: .45; transition: transform 340ms var(--ease-out), opacity 300ms var(--ease-out); }
+.dock-label { color: #e8dcea; font-size: .73rem; font-weight: 650; line-height: 1.25; letter-spacing: .005em; transition: color 300ms var(--ease-out); }
+
+.dock-foot { display: flex; align-items: center; gap: .55rem; color: #8b7d92; font-size: .55rem; font-weight: 700; letter-spacing: .18em; text-transform: uppercase; }
+.dock-rule { flex: 1; height: 1px; background: linear-gradient(to right, rgba(208, 180, 216, .26), transparent); }
+
+/* Focus has to be visible on a dark glass panel, so it is a ring rather than a tint. */
+.dock-tile:focus-visible { outline: 2px solid #cba8d6; outline-offset: 2px; }
+
+/* The press. Specificity is deliberate: .scene-item.is-in sets transform: none, and a
+   bare .dock-tile:active would lose to it and never register. */
+.stage-dock .dock-tile:active { transform: scale(.975); }
+
+/* Ambient drift. Registered so it can be animated at all -- a custom property is a
+   string to the animation engine until its type is declared. Where @property is
+   unsupported the declaration is ignored, the float stays at 0 and nothing else
+   changes. */
+@property --dock-float {
+  syntax: '<length>';
+  inherits: false;
+  initial-value: 0px;
+}
+@keyframes dock-drift { 50% { --dock-float: -5px; } }
+
 /* ===================================================== scroll choreography
    Every class here is added by scenes.js at runtime, never written into the markup.
    That is deliberate: if the module does not load, nothing is hidden and the page is
@@ -705,6 +802,16 @@ img, video { max-width: 100%; }
   .media-card:hover img { transform: scale(1.035); }
   .showroom-chip:hover, .showroom-pick:hover { border-color: var(--plum); }
   .stage-cta:hover { background: #fff; border-color: #fff; color: var(--ink); }
+  /* Tile hover: lighter plum, the icon lifts, the arrow leaves diagonally, the text
+     brightens and the border lights. All four at once, all of them small. */
+  .dock-tile:hover { background: rgba(142, 94, 156, .22); border-color: rgba(214, 186, 222, .34); box-shadow: 0 10px 26px -18px rgba(5, 2, 9, .9); }
+  .dock-tile:hover .dock-icon { transform: translateY(-2px); opacity: 1; }
+  .dock-tile:hover .dock-arrow { transform: translate3d(2px, -2px, 0); opacity: .95; }
+  .dock-tile:hover .dock-label { color: #fbf5fb; }
+  .dock-tile:hover .dock-index { color: #c8a9d0; }
+  /* The drift only runs where there is a real pointer: it is the one continuous
+     animation here, and a phone should not be paying for it. */
+  .stage-dock { animation: dock-drift 9s ease-in-out infinite; }
   .stage-cta:hover .stage-arrow { transform: translateY(.25rem); }
   .stage-scroll:hover { color: #cfc4d4; }
   .to-top:hover { background: var(--ink); border-color: var(--ink); color: var(--white); }
@@ -773,6 +880,14 @@ img, video { max-width: 100%; }
   .media-rail { grid-auto-columns: 46vw; }
 }
 
+/* The headline is sized in vw and will not reflow, so below this width it reaches the
+   dock's corner. The dock leaves the corner and rejoins the flow under the call to
+   action, which is also where it belongs on a phone. */
+@media (max-width: 1100px) {
+  .stage-dock-slot { position: static; width: min(21.25rem, 100%); margin-top: 2.5rem; }
+  .stage-dock { animation: none; }
+}
+
 /* Tablet portrait: the hero's second column is too narrow to hold the portrait, so the
    photo moves under the headline instead of being squeezed beside it. */
 @media (max-width: 880px) {
@@ -829,6 +944,10 @@ img, video { max-width: 100%; }
   .stage-title { margin: .9rem 0 1.2rem; }
   .stage-actions { margin-top: 2rem; }
   .stage-cta { width: 100%; justify-content: center; }
+  .stage-dock-slot { width: 100%; margin-top: 2rem; }
+  .stage-dock { padding: 1.1rem 1rem .95rem; gap: .9rem; }
+  /* Comfortably past the 44px touch target at every size. */
+  .dock-tile { padding: .85rem .8rem .78rem; }
   .stage-ambient span { filter: blur(48px); }
   .showroom-head { gap: .6rem; }
   .brand-tab { padding: .45rem .9rem; }
@@ -890,5 +1009,8 @@ body.dialog-open .nav { opacity: 0; pointer-events: none; }
   .reveal { opacity: 1; transform: none; }
   .media-card img, .hero-photo img, .photo-pair img { transform: none !important; }
   .stage-ambient span, .stage-scroll-rule::after { animation: none; }
+  .stage-dock { animation: none; transform: none !important; }
+  .dock-sheen { display: none; }
+  .dock-icon, .dock-arrow, .dock-tile { transition: none; }
   .rail-dot { transition: none; }
 }

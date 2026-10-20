@@ -20,7 +20,10 @@ const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
    them; `rise` is how far they travel. Selectors that match nothing are skipped, so
    this list can name things that only exist on some pages. */
 const GROUPS = [
-  { box: '.stage-inner', items: '.stage-eyebrow > span, .stage-line > span, .stage-intro > span, .stage-cta', step: 110 },
+  { box: '.stage-inner', items: '.stage-eyebrow > span, .stage-line > span, .stage-intro > span, .stage-cta, .stage-dock-slot', step: 110 },
+  /* The panel arrives, then its tiles fill in. The slot carries the entrance so the
+     panel's own transform stays free for the pointer tilt. */
+  { box: '.dock-grid', items: '.dock-tile', step: 70, rise: '.55rem' },
   { box: '.hero-proof', items: '.proof-item', step: 80 },
   { box: '.capabilities', items: 'span', step: 55, rise: '.6rem' },
   { box: '.photo-pair', items: 'figure', step: 140 },
