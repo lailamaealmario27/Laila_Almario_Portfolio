@@ -13,4 +13,4 @@
 // Web3Forms recommends using it from the browser.
 //
 // Until this is filled in, the form tells visitors to email directly instead.
-export const WEB3FORMS_ACCESS_KEY = 'PASTE-YOUR-WEB3FORMS-ACCESS-KEY-HERE';
+export const WEB3FORMS_ACCESS_KEY = '4fc50ab1-5c15-488e-871d-1b267dfda2bd';
