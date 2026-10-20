@@ -215,8 +215,8 @@ form?.addEventListener('submit', async event => {
         replyto: email,
         project: String(data.get('project') || '').trim() || '—',
         message: String(data.get('message') || '').trim(),
-        /* Web3Forms' own honeypot. Empty means human. */
-        botcheck: ''
+        /* Web3Forms' own honeypot, documented as a boolean. False means human. */
+        botcheck: false
       })
     });
     const result = await response.json().catch(() => ({}));
