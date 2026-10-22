@@ -677,6 +677,10 @@ img, video { max-width: 100%; }
   display: grid;
   grid-template-columns: 1fr 1fr;
   aspect-ratio: 8 / 5;
+  /* Held in from the full panel width and centred: a spread that runs the whole
+     column reads as a banner rather than as something you pick up and read. */
+  width: min(62rem, 100%);
+  margin-inline: auto;
   /* Deep enough that a turning page leans rather than lurches. */
   perspective: 2600px;
   perspective-origin: 50% 45%;
