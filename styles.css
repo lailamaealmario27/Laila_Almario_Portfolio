@@ -365,6 +365,7 @@ img, video { max-width: 100%; }
    rail sideways on every touch device. The browser disambiguates the two directions on
    its own, so vertical page scrolling still works. */
 .media-rail { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(290px, 39vw); gap: 1rem; overflow-x: auto; overscroll-behavior-inline: contain; padding: .5rem 0 1.5rem; scroll-snap-type: x mandatory; scrollbar-color: var(--plum) rgba(255,255,255,.12); }
+.media-rail[hidden] { display: none; }
 .media-rail:focus-visible { outline: 2px solid var(--plum); outline-offset: 4px; }
 /* While a pointer drag is in progress the snap points fight the manual scrollLeft, and
    a drag that ends over a card must not read as a click on it. */
@@ -664,6 +665,68 @@ img, video { max-width: 100%; }
 .stage-scroll-rule::after { position: absolute; top: 0; left: 0; width: 1px; height: 1rem; background: rgba(255,255,255,.85); content: ""; animation: stage-trace 2.4s ease-in-out infinite; }
 @keyframes stage-trace { 0% { transform: translateY(-1rem); opacity: 0; } 35% { opacity: 1; } 100% { transform: translateY(2.6rem); opacity: 0; } }
 
+/* ------------------------------------------------------------ catalogue book
+   A presentation layer over the catalogue rail. catalogue.js builds it and hides the
+   rail; nothing here hides anything on its own, so with the module absent the rail is
+   simply what you get. */
+.book { display: grid; gap: 1rem; }
+.book[hidden] { display: none; }
+
+.book-stage {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  aspect-ratio: 8 / 5;
+  /* Deep enough that a turning page leans rather than lurches. */
+  perspective: 2600px;
+  perspective-origin: 50% 45%;
+}
+
+.book-page { position: relative; overflow: hidden; background: #fff; box-shadow: 0 18px 44px -26px rgba(0,0,0,.85); }
+.book-page img { display: block; width: 100%; height: 100%; object-fit: contain; background: #fff; }
+.book-page.is-left { border-radius: .5rem 0 0 .5rem; }
+.book-page.is-right { border-radius: 0 .5rem .5rem 0; }
+/* An unpaired side is the outside of a cover, not a blank sheet. */
+.book-page.is-blank { background: transparent; box-shadow: none; }
+.book-page.is-blank img { display: none; }
+.book-stage > .book-page { cursor: zoom-in; }
+.book-page.is-blank { cursor: default; }
+
+/* The gutter: a soft darkening either side of the spine, which is what makes two
+   images read as one bound object. */
+.book-stage::after {
+  position: absolute;
+  inset: 0 auto 0 50%;
+  z-index: 2;
+  width: 4.5rem;
+  transform: translateX(-50%);
+  pointer-events: none;
+  content: "";
+  background: linear-gradient(to right, transparent, rgba(12,8,16,.22) 44%, rgba(12,8,16,.30) 50%, rgba(12,8,16,.22) 56%, transparent);
+  opacity: 0;
+  transition: opacity 320ms var(--ease-out);
+}
+.book[data-open="spread"] .book-stage::after { opacity: 1; }
+
+.book-leaf { position: absolute; top: 0; height: 100%; width: 50%; z-index: 3; transform-style: preserve-3d; }
+.book-leaf[hidden] { display: none; }
+.book-leaf[data-direction="forward"] { left: 50%; transform-origin: left center; }
+.book-leaf[data-direction="back"] { left: 0; transform-origin: right center; }
+.book-leaf-face { position: absolute; inset: 0; backface-visibility: hidden; }
+/* Pre-turned, so it faces the reader once the leaf has gone over. */
+.book-leaf-face.is-back { transform: rotateY(180deg); }
+.book-leaf[data-direction="forward"].is-turning { animation: book-turn-forward 620ms cubic-bezier(.46,.03,.52,.96) forwards; }
+.book-leaf[data-direction="back"].is-turning { animation: book-turn-back 620ms cubic-bezier(.46,.03,.52,.96) forwards; }
+@keyframes book-turn-forward { to { transform: rotateY(-180deg); } }
+@keyframes book-turn-back { to { transform: rotateY(180deg); } }
+
+.book-bar { display: flex; align-items: center; justify-content: center; gap: 1.1rem; }
+.book-turn { width: 2.6rem; height: 2.6rem; display: grid; place-items: center; border: 1px solid rgba(255,255,255,.22); border-radius: 50%; background: transparent; color: #d7cfd9; cursor: pointer; font-size: 1.15rem; line-height: 1; transition: background-color 200ms var(--ease-out), color 200ms var(--ease-out), border-color 200ms var(--ease-out); }
+.book-turn:disabled { opacity: .3; cursor: default; }
+.book-turn:active:not(:disabled) { transform: scale(.94); }
+.book-status { margin: 0; min-width: 11rem; color: #b8b0ba; font-size: .72rem; font-weight: 650; letter-spacing: .04em; text-align: center; font-variant-numeric: tabular-nums; }
+.book:focus-visible { outline: 2px solid var(--plum); outline-offset: 6px; border-radius: .4rem; }
+
 /* ------------------------------------------------- the destination dock
    Lives in the hero's empty right-hand side and scrolls away with it. Two nested
    elements on purpose: the SLOT owns where it sits and its entrance, the PANEL owns
@@ -801,6 +864,7 @@ img, video { max-width: 100%; }
   .work-tab:hover { color: #fff; border-color: rgba(255,255,255,.5); }
   .media-card:hover img { transform: scale(1.035); }
   .showroom-chip:hover, .showroom-pick:hover { border-color: var(--plum); }
+  .book-turn:hover:not(:disabled) { background: rgba(255,255,255,.1); border-color: rgba(255,255,255,.5); color: #fff; }
   .stage-cta:hover { background: #fff; border-color: #fff; color: var(--ink); }
   /* Tile hover: lighter plum, the icon lifts, the arrow leaves diagonally, the text
      brightens and the border lights. All four at once, all of them small. */
@@ -934,6 +998,14 @@ img, video { max-width: 100%; }
   /* One card per screen, with the next one peeking. Heights come from the ratios set
      at the 1000px breakpoint, so the 29rem floor is gone. */
   .media-rail { grid-auto-columns: 84vw; }
+  /* One page at a time: two columns of spec text in the width of a hand is unreadable. */
+  .book-stage { grid-template-columns: 1fr; aspect-ratio: 4 / 5; }
+  .book-page.is-left { display: none; }
+  .book-page.is-right { border-radius: .5rem; }
+  .book-leaf { width: 100%; }
+  .book-leaf[data-direction="forward"] { left: 0; }
+  .book-stage::after { display: none; }
+  .book-status { min-width: 8rem; font-size: .68rem; }
   /* Vertical video fills the card edge to edge rather than being letterboxed into a
      4/5 frame, which on a phone wasted roughly a third of the card on black. */
   .media-card.is-video { aspect-ratio: 9 / 16; }
@@ -1009,6 +1081,7 @@ body.dialog-open .nav { opacity: 0; pointer-events: none; }
   .reveal { opacity: 1; transform: none; }
   .media-card img, .hero-photo img, .photo-pair img { transform: none !important; }
   .stage-ambient span, .stage-scroll-rule::after { animation: none; }
+  .book-leaf.is-turning { animation: none; }
   .stage-dock { animation: none; transform: none !important; }
   .dock-sheen { display: none; }
   .dock-icon, .dock-arrow, .dock-tile { transition: none; }
