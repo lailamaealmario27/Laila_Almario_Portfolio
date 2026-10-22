@@ -78,6 +78,36 @@ because a gate is a thing that can trap someone, and a section cannot.
 
 ## Scroll choreography
 
+## The KOKOLOCK catalogue
+
+The **Product catalogue** tab in Selected work is the 32-page KOKOLOCK Philippines
+catalogue produced for K-PICK Trading Corp. -- smart door locks on pages 2-16, safety
+vaults on 17-32, with page 1 the cover. The split is read off the page headers, not
+assumed.
+
+The masters arrive as 32 PNGs at 1080 x 1350, around 15 MB, which is more than the rest
+of the site put together. `catalogue/build_catalogue.py` writes each page twice:
+
+| File | Width | Used for |
+| --- | --- | --- |
+| `assets/images/kokolock-NN.webp` | 1080px | opened in the viewer |
+| `assets/images/kokolock-NN-sm.webp` | 560px | the card in the rail |
+
+Which is why `app.js` has a `TWO_SIZE` set: for those galleries the card shows the small
+file and the zoom button carries the full page, so a rail of 32 lazy cards costs under a
+megabyte and a full page is only fetched when someone actually opens one.
+
+Quality is deliberately high for an image this size. These pages are mostly type, and
+lossy WebP softens small text long before it softens a photograph -- a price list that
+cannot be read is not worth the bytes it saves.
+
+The PNG masters are not kept in the repository; the full-size WebP is the archived copy.
+Pass the source directories as arguments to rebuild from the originals:
+
+```sh
+python catalogue/build_catalogue.py "path/to/pages" "path/to/more pages"
+```
+
 ## Kaia
 
 The **Desktop assistant** tab in Selected work is Kaia: a Python desktop assistant Laila

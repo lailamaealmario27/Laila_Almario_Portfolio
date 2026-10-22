@@ -21,6 +21,44 @@ const portfolioSets = {
     ['image-12-373a4b2005.webp', 'Proof of transactions', 'Trust content'],
     ['image-13-892b4a35a1.webp', 'World Diabetes Day', 'Awareness creative']
   ],
+  /* The KOKOLOCK product catalogue, 32 pages, built for K-PICK Trading Corp.
+     Page 1 is the cover, 2-16 are the door locks, 17-32 are the safety vaults.
+     Rebuild the images with catalogue/build_catalogue.py; this list has to match
+     the number of pages it writes. */
+  catalogue: [
+    ['kokolock-01.webp', 'KOKOLOCK catalogue', 'Cover'],
+    ['kokolock-02.webp', 'Smart door lock', 'Page 2 of 32'],
+    ['kokolock-03.webp', 'Smart door lock', 'Page 3 of 32'],
+    ['kokolock-04.webp', 'Smart door lock', 'Page 4 of 32'],
+    ['kokolock-05.webp', 'Smart door lock', 'Page 5 of 32'],
+    ['kokolock-06.webp', 'Smart door lock', 'Page 6 of 32'],
+    ['kokolock-07.webp', 'Smart door lock', 'Page 7 of 32'],
+    ['kokolock-08.webp', 'Smart door lock', 'Page 8 of 32'],
+    ['kokolock-09.webp', 'Smart door lock', 'Page 9 of 32'],
+    ['kokolock-10.webp', 'Smart door lock', 'Page 10 of 32'],
+    ['kokolock-11.webp', 'Smart door lock', 'Page 11 of 32'],
+    ['kokolock-12.webp', 'Smart door lock', 'Page 12 of 32'],
+    ['kokolock-13.webp', 'Smart door lock', 'Page 13 of 32'],
+    ['kokolock-14.webp', 'Smart door lock', 'Page 14 of 32'],
+    ['kokolock-15.webp', 'Smart door lock', 'Page 15 of 32'],
+    ['kokolock-16.webp', 'Smart door lock', 'Page 16 of 32'],
+    ['kokolock-17.webp', 'Safety vaults', 'Page 17 of 32'],
+    ['kokolock-18.webp', 'Safety vaults', 'Page 18 of 32'],
+    ['kokolock-19.webp', 'Safety vaults', 'Page 19 of 32'],
+    ['kokolock-20.webp', 'Safety vaults', 'Page 20 of 32'],
+    ['kokolock-21.webp', 'Safety vaults', 'Page 21 of 32'],
+    ['kokolock-22.webp', 'Safety vaults', 'Page 22 of 32'],
+    ['kokolock-23.webp', 'Safety vaults', 'Page 23 of 32'],
+    ['kokolock-24.webp', 'Safety vaults', 'Page 24 of 32'],
+    ['kokolock-25.webp', 'Safety vaults', 'Page 25 of 32'],
+    ['kokolock-26.webp', 'Safety vaults', 'Page 26 of 32'],
+    ['kokolock-27.webp', 'Safety vaults', 'Page 27 of 32'],
+    ['kokolock-28.webp', 'Safety vaults', 'Page 28 of 32'],
+    ['kokolock-29.webp', 'Safety vaults', 'Page 29 of 32'],
+    ['kokolock-30.webp', 'Safety vaults', 'Page 30 of 32'],
+    ['kokolock-31.webp', 'Safety vaults', 'Page 31 of 32'],
+    ['kokolock-32.webp', 'Safety vaults', 'Page 32 of 32']
+  ],
   events: [
     ['image-14-0a804db065.webp', 'Customer engagement', 'PhilMedical Expo'],
     ['image-15-133ef44b5e.webp', 'Exhibit support', 'On-site'],
@@ -34,13 +72,20 @@ const portfolioSets = {
   ]
 };
 
+/* Sets whose pages are dense enough to be worth two files: a small one for the card
+   in the rail, the full page kept back for the viewer. Thirty-two full-size catalogue
+   pages in a rail would be several megabytes of images nobody has asked to read yet. */
+const TWO_SIZE = new Set(['catalogue']);
+
 $$('.media-rail[data-set]').forEach(rail => {
   const set = rail.dataset.set;
   const items = portfolioSets[set] || [];
-  const shape = set === 'design' ? ' square' : set === 'events' ? ' portrait' : '';
+  const shape = set === 'design' ? ' square'
+    : set === 'events' || set === 'catalogue' ? ' portrait' : '';
   rail.innerHTML = items.map(([file, title, type]) => {
-    const src = `assets/images/${file}`;
-    return `<figure class="media-card${shape}"><img src="${src}" alt="${title}" loading="lazy"><figcaption class="media-caption"><strong>${title}</strong><span>${type}</span></figcaption><button class="zoom-button" data-gallery="${set}" data-src="${src}" data-alt="${title}" data-caption="${title}" aria-label="Open ${title} image"></button></figure>`;
+    const full = `assets/images/${file}`;
+    const card = TWO_SIZE.has(set) ? full.replace(/\.webp$/, '-sm.webp') : full;
+    return `<figure class="media-card${shape}"><img src="${card}" alt="${title}" loading="lazy"><figcaption class="media-caption"><strong>${title}</strong><span>${type}</span></figcaption><button class="zoom-button" data-gallery="${set}" data-src="${full}" data-alt="${title}" data-caption="${title} \u2014 ${type}" aria-label="Open ${title}, ${type}"></button></figure>`;
   }).join('');
 });
 

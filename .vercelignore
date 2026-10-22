@@ -3,5 +3,6 @@
 # archived single-file build do not need deploying.
 blender/
 kaia/
+catalogue/
 archive/
 index.legacy.html
