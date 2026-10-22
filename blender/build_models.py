@@ -422,6 +422,48 @@ def build_cards():
     return coll
 
 
+
+# =================================================================== 8. handout flyers
+def build_flyers():
+    """
+    Two handout flyers carrying the roll-up banner artwork.
+
+    The brief was "exactly like the X-stand banner layout", so the proportion is the
+    banner's own: the stands are 85 x 200 cm, a ratio of 1 : 2.35, and these keep it at
+    105 x 247 mm. That is a long flyer rather than an A-size one, which is the price of
+    reproducing the layout without recomposing it -- squeezing a 1 : 2.35 design onto A5
+    would mean redrawing someone else's artwork.
+
+    The faces use the same rectified textures as the banners. The reverse uses the same
+    reconstructed liner, because no photograph shows the back of either piece.
+    """
+    coll = L.collection("Flyers")
+    paper_edge = L.solid("flyer_edge", (0.950, 0.948, 0.941), roughness=0.78)
+    fw, fh, ft = 0.105, 0.247, 0.00040
+
+    def lay(ox, oy, oz, angle):
+        ca, sa = math.cos(angle), math.sin(angle)
+
+        def place(x, y, z):
+            return (ox + x * ca - y * sa, oy + x * sa + y * ca, oz + z)
+        return place
+
+    for tag, offset, angle, lift in (("B", (0.016, -0.013), -7.5, 1.0),
+                                     ("A", (-0.013, 0.014), 10.0, 2.4)):
+        face = L.textured("flyer_%s_face" % tag, "banner_" + tag.lower(),
+                          roughness=0.46, specular=0.40)
+        liner = L.textured("flyer_%s_back" % tag, "banner_%s_back" % tag.lower(),
+                           roughness=0.62)
+        L.printed_slab("Flyer_" + tag, coll, fw, fh, ft, 0.0012,
+                       lay(offset[0], offset[1], ft * lift, math.radians(angle)),
+                       (face, liner, paper_edge), nu=64)
+
+    # The top flyer sits across the one beneath it rather than dead flat on the counter.
+    for obj in coll.objects:
+        if obj.name.startswith("Flyer_A"):
+            obj.rotation_euler = (math.radians(1.1), math.radians(-1.7), 0.0)
+    return coll
+
 # ============================================================================== export
 def export(coll, filename):
     bpy.ops.object.select_all(action="DESELECT")
@@ -455,6 +497,7 @@ def main():
         (build_cart(), "booth-cart-sinocare.glb"),
         (build_banners(), "roll-up-banners-sinocare.glb"),
         (build_cards(), "business-cards-sinocare.glb"),
+        (build_flyers(), "flyers-sinocare.glb"),
     ]
     for coll, _ in jobs:
         print("  built %-22s %3d objects" % (coll.name, len(coll.objects)))

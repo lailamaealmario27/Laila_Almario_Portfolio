@@ -26,6 +26,11 @@ const RUNTIME = 'vendor/three';
    TABLE_HEIGHT and TOP_RADIUS in blender/build_showroom.py. */
 const TABLE_HEIGHT = 0.75;
 
+/* The booth cart's counter top. From blender/build_models.py: Cart_Top is a 48mm slab
+   centred at 0.816, so its surface is 0.840 above the floor. Anything placed `on:
+   'cart'` is measured from here. */
+const CART_TOP = 0.84;
+
 /* The canvas clears to the page's own --paper so the scene has no visible edge: the
    studio floor fogs out into the same colour and the section reads as open page
    rather than a picture in a frame. */
@@ -116,10 +121,22 @@ const CATALOGUE = {
         model: 'assets/models/business-cards-sinocare.glb',
         photo: 'assets/images/image-28-c52ef6ff59.webp',
         photoCaption: 'Supplied mockup photo: Sinocare calling card, both printed faces',
-        /* Held in the air in front of the cart's left shoulder: a 9 cm card laid on the
-           floor beside a two-metre cart would be unreadable, and it must not touch the
-           cart. The cart's own footprint starts at x 0.53 / z -1.27. */
-        place: { on: 'air', x: 0.33, z: -0.46, y: 0.92, spin: -24, tilt: -58 }
+        /* On the counter, where a calling card actually lives. x and z here are in
+           the cart's own frame, not the room's -- see placeOn(). */
+        place: { on: 'cart', x: -0.17, z: 0.11, spin: 6 }
+      },
+      {
+        id: 'flyers',
+        name: 'Handout flyers',
+        role: 'Counter print',
+        size: '105 × 247 mm',
+        model: 'assets/models/flyers-sinocare.glb',
+        photo: 'assets/images/image-27-c3fd8f5793.webp',
+        /* There is no photograph of a flyer. It carries the roll-up banners' artwork at
+           the banners' own 1 : 2.35 proportion, so the banner photo is what it is drawn
+           from, and the caption says so rather than implying a supplied sample. */
+        photoCaption: 'Flyer artwork taken from the supplied roll-up banner photo: iCan i3 and BA 823',
+        place: { on: 'cart', x: 0.16, z: 0.03, spin: -9 }
       }
     ]
   }
@@ -333,22 +350,44 @@ function boot(mount) {
       return copy;
     }
 
+    /* The cart is turned on the spot, so a thing standing on its counter has to be
+       turned with it. `on: 'cart'` coordinates are given in the cart's own frame and
+       rotated into the room's here -- which means the counter can be moved or re-aimed
+       and whatever is sitting on it follows, instead of sliding off. */
+    const CART = CATALOGUE.sinocare.products.find(item => item.id === 'cart').place;
+
+    function placeOn(place) {
+      if (place.on !== 'cart') return place;
+      const angle = THREE.MathUtils.degToRad(CART.spin || 0);
+      const cos = Math.cos(angle);
+      const sin = Math.sin(angle);
+      return {
+        ...place,
+        x: CART.x + place.x * cos + place.z * sin,
+        z: CART.z - place.x * sin + place.z * cos,
+        spin: (CART.spin || 0) + (place.spin || 0)
+      };
+    }
+
     /* Stand an object on a surface: turn it, then measure what that turn produced and
        drop it so its own lowest point rests on the surface and its footprint is centred
        on the requested spot. Measuring afterwards is what lets a product be laid on its
        face without hand-tuning an offset for it. */
     function stand(object, place) {
+      const spot = placeOn(place);
       object.position.set(0, 0, 0);
       object.rotation.set(
-        THREE.MathUtils.degToRad(place.tilt || 0),
-        THREE.MathUtils.degToRad(place.spin || 0),
+        THREE.MathUtils.degToRad(spot.tilt || 0),
+        THREE.MathUtils.degToRad(spot.spin || 0),
         0
       );
       object.updateMatrixWorld(true);
       const box = new THREE.Box3().setFromObject(object);
       const centre = box.getCenter(new THREE.Vector3());
-      const base = place.on === 'table' ? TABLE_HEIGHT : place.on === 'air' ? (place.y || 0) : 0;
-      object.position.set(place.x - centre.x, base - box.min.y, place.z - centre.z);
+      const base = place.on === 'table' ? TABLE_HEIGHT
+        : place.on === 'cart' ? CART_TOP
+          : place.on === 'air' ? (place.y || 0) : 0;
+      object.position.set(spot.x - centre.x, base - box.min.y, spot.z - centre.z);
       object.updateMatrixWorld(true);
     }
 
