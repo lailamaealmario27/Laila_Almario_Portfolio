@@ -22,3 +22,6 @@ __pycache__/
 .env.*
 
 node_modules/
+
+# Review contact sheets: useful locally, not part of the site.
+catalogue/PREVIEW-*.png
