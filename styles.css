@@ -828,6 +828,134 @@ img, video { max-width: 100%; }
 }
 @keyframes dock-drift { 50% { --dock-float: -5px; } }
 
+/* =================================================== state A: the intro gate
+   A fixed overlay, never a section. Display is gated on html.intro-armed, which an
+   inline script in <head> sets before first paint and intro.js takes ownership of, so
+   with JavaScript off the class is never added and the portfolio is the whole page. */
+.intro { display: none; }
+
+html.intro-armed, html.intro-armed body { overflow: hidden; }
+
+html.intro-armed .intro {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: grid;
+  grid-template-rows: 1fr auto;
+  place-items: center;
+  overflow: hidden;
+  padding: max(3.5rem, 8vh) var(--pad) 1.6rem;
+  /* Deep charcoal rather than black: a true black flattens the card's shadow. */
+  background:
+    radial-gradient(ellipse 60% 50% at 50% 38%, #1b1f2b 0%, #101218 55%, #0a0b0f 100%);
+  color: #eef1f6;
+}
+.intro.is-leaving { opacity: 0; transition: opacity 760ms var(--ease-out); pointer-events: none; }
+
+/* Soft blue accent lighting, drifting slowly enough not to read as animation. */
+.intro-glow { position: absolute; inset: -25%; pointer-events: none; }
+.intro-glow span { position: absolute; border-radius: 50%; filter: blur(80px); }
+.intro-glow span:nth-child(1) { top: 10%; left: 12%; width: 36vw; height: 36vw; background: radial-gradient(circle, rgba(74,124,214,.40) 0%, transparent 70%); animation: intro-drift-a 26s ease-in-out infinite; }
+.intro-glow span:nth-child(2) { right: 8%; bottom: 12%; width: 32vw; height: 32vw; background: radial-gradient(circle, rgba(58,96,178,.34) 0%, transparent 70%); animation: intro-drift-b 33s ease-in-out infinite; }
+.intro-glow span:nth-child(3) { top: 46%; left: 54%; width: 24vw; height: 24vw; background: radial-gradient(circle, rgba(140,110,180,.20) 0%, transparent 70%); animation: intro-drift-c 29s ease-in-out infinite; }
+@keyframes intro-drift-a { 50% { transform: translate3d(4vw, 3vh, 0) scale(1.12); } }
+@keyframes intro-drift-b { 50% { transform: translate3d(-5vw, -4vh, 0) scale(1.08); } }
+@keyframes intro-drift-c { 50% { transform: translate3d(-3vw, 5vh, 0) scale(1.16); } }
+
+/*
+ * Card and mascot share one box and one transform. That is what keeps Kaia attached to
+ * the card when the pointer moves it: tilting them separately is what makes a mascot
+ * look like a sticker floating next to a card.
+ */
+.intro-scene {
+  position: relative;
+  align-self: center;
+  width: min(34rem, 100%);
+  transform: perspective(1400px) rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg));
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+.intro-card {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  gap: .55rem;
+  padding: clamp(1.9rem, 4vw, 2.9rem) clamp(1.6rem, 3.5vw, 2.6rem);
+  border: 1px solid rgba(148, 180, 236, .20);
+  border-radius: 1.5rem;
+  background: linear-gradient(158deg, rgba(32,38,52,.96) 0%, rgba(20,24,34,.98) 60%, rgba(15,18,26,.99) 100%);
+  /* Edge light along the top, a blue rim, then the depth under it. */
+  box-shadow:
+    inset 0 1px 0 rgba(198, 220, 255, .22),
+    inset 0 0 0 1px rgba(74, 124, 214, .06),
+    0 42px 80px -30px rgba(0, 0, 0, .9),
+    0 8px 24px -12px rgba(0, 0, 0, .6);
+}
+.intro-eyebrow { margin: 0; color: #7fa6e4; font-size: .62rem; font-weight: 750; letter-spacing: .26em; text-transform: uppercase; }
+.intro-name { margin: .35rem 0 0; font-family: var(--display); font-size: clamp(2.3rem, 6vw, 3.5rem); font-weight: 400; letter-spacing: -.035em; line-height: .96; }
+.intro-name em { font-style: italic; color: #a9c6f2; }
+.intro-role { margin: .25rem 0 0; color: #a7b2c6; font-size: .78rem; font-weight: 650; }
+.intro-rule { height: 1px; margin: 1rem 0 .2rem; background: linear-gradient(to right, rgba(148,180,236,.34), transparent); }
+.intro-disciplines { margin: 0; color: #c3cde0; font-size: .72rem; font-weight: 650; letter-spacing: .1em; }
+.intro-enter { justify-self: start; display: inline-flex; align-items: center; gap: .6rem; min-height: 3rem; margin-top: 1.5rem; padding: .85rem 1.7rem; border: 1px solid rgba(168, 198, 245, .34); border-radius: 999px; background: rgba(74, 124, 214, .14); color: #eef4ff; cursor: pointer; font: inherit; font-size: .74rem; font-weight: 750; letter-spacing: .13em; text-transform: uppercase; transition: background-color 300ms var(--ease-out), border-color 300ms var(--ease-out), color 300ms var(--ease-out); }
+.intro-enter:active { transform: scale(.98); }
+.intro-enter[disabled] { opacity: .55; cursor: default; }
+.intro-enter-arrow { transition: transform 300ms var(--ease-out); }
+
+/*
+ * Kaia leaning on the card's left edge.
+ *
+ * The rotation sits on this wrapper and turns about her feet, so her artwork is only
+ * ever moved, never scaled unevenly, skewed or stretched. Her own frames are all
+ * front-facing and upright -- there is no leaning pose in the sprite sheet -- so the
+ * lean is this one safe transform and nothing more. See PORTFOLIO_CONTENT_REVIEW.md.
+ */
+.intro-kaia {
+  position: absolute;
+  left: 0;
+  bottom: -1.5%;
+  z-index: 2;
+  width: clamp(7.5rem, 15vw, 10.5rem);
+  transform: translateX(-56%) rotate(7deg);
+  transform-origin: 50% 100%;
+}
+.intro-kaia .kaia-canvas, .intro-kaia .kaia-still { display: block; width: 100%; aspect-ratio: 140 / 215; cursor: default; }
+.intro-kaia .kaia-canvas[hidden], .intro-kaia .kaia-still[hidden] { display: none; }
+/* Contact shadow, so she stands on something instead of hovering. */
+.intro-kaia-shadow { position: absolute; left: 50%; bottom: -2%; width: 74%; height: 7%; transform: translateX(-50%); border-radius: 50%; background: radial-gradient(ellipse, rgba(0,0,0,.55) 0%, transparent 72%); filter: blur(3px); }
+
+.intro-hello { position: absolute; left: 52%; bottom: 96%; width: max-content; max-width: 13rem; margin: 0 0 .5rem; padding: .5rem .75rem; border: 1px solid rgba(168,198,245,.26); border-radius: .8rem .8rem .8rem .2rem; background: rgba(26,32,46,.96); color: #e8eefb; font-size: .68rem; line-height: 1.4; box-shadow: 0 14px 30px -16px rgba(0,0,0,.9); }
+.intro-hello[hidden] { display: none; }
+
+.intro-skip { margin: 0; }
+.intro-skip-button { padding: .5rem .9rem; border: 0; background: transparent; color: #6d7a90; cursor: pointer; font: inherit; font-size: .62rem; font-weight: 700; letter-spacing: .18em; text-transform: uppercase; }
+
+/* --- the entrance. Timings follow the brief: background, then card, then Kaia,
+       then the card's text. The button is clickable from the first frame. --- */
+.intro-card, .intro-kaia, .intro-skip { opacity: 0; }
+.intro-card { transform: translateY(1.4rem) scale(.97); }
+.intro-kaia { opacity: 0; }
+.intro.is-live .intro-card { opacity: 1; transform: none; transition: opacity 800ms var(--ease-out) 500ms, transform 800ms var(--ease-out) 500ms; }
+.intro.is-live .intro-kaia { opacity: 1; transition: opacity 800ms var(--ease-out) 1000ms; }
+.intro.is-live .intro-eyebrow,
+.intro.is-live .intro-name,
+.intro.is-live .intro-role,
+.intro.is-live .intro-rule,
+.intro.is-live .intro-disciplines,
+.intro.is-live .intro-enter { animation: intro-reveal 420ms var(--ease-out) 1800ms both; }
+.intro.is-live .intro-skip { opacity: 1; transition: opacity 400ms var(--ease-out) 2200ms; }
+@keyframes intro-reveal { from { opacity: 0; transform: translateY(.5rem); } to { opacity: 1; transform: none; } }
+
+/* Leaving: the card goes, the overlay follows. */
+.intro.is-leaving .intro-scene { transform: translateY(-1.2rem) scale(1.04); transition: transform 760ms var(--ease-out); }
+
+/* The portfolio waits behind, and arrives as the overlay goes. */
+html.intro-armed .nav, html.intro-armed .footer { opacity: 0; }
+html.intro-armed #main { opacity: 0; transform: translateY(1.2rem); transform-origin: 50% 0; }
+html.intro-revealing .nav, html.intro-revealing .footer { opacity: 1; transition: opacity 700ms var(--ease-out) 180ms; }
+html.intro-revealing #main { opacity: 1; transform: none; transition: opacity 760ms var(--ease-out) 120ms, transform 860ms var(--ease-out) 120ms; }
+
 /* ------------------------------------------------------- case studies
    The trigger sits in a project intro; the reader is a native <dialog>, which brings
    the focus trap, the backdrop and Escape with it. */
@@ -931,6 +1059,9 @@ img, video { max-width: 100%; }
   .case-open:hover .case-open-arrow { transform: translateX(.22rem); }
   .print-sticky .case-open:hover { background: var(--ink); border-color: var(--ink); color: var(--white); }
   .case-close:hover { border-color: var(--ink); color: var(--ink); }
+  .intro-enter:hover { background: rgba(74,124,214,.3); border-color: rgba(190,214,250,.6); color: #fff; }
+  .intro-enter:hover .intro-enter-arrow { transform: translateX(.25rem); }
+  .intro-skip-button:hover { color: #aab6c9; }
   .stage-cta:hover { background: #fff; border-color: #fff; color: var(--ink); }
   /* Tile hover: lighter plum, the icon lifts, the arrow leaves diagonally, the text
      brightens and the border lights. All four at once, all of them small. */
@@ -1102,6 +1233,16 @@ img, video { max-width: 100%; }
   .case-body { padding: .4rem 1.2rem 1.3rem; }
   .case-foot { padding: .8rem 1.2rem 1rem; }
   .case-facts { gap: .2rem 1rem; }
+  /* Phone: the card takes the width and Kaia stands beside its lower corner rather
+     than hanging off it, so she never covers the name or the button. */
+  html.intro-armed .intro { padding: max(2.5rem, 6vh) 1rem calc(1rem + env(safe-area-inset-bottom)); }
+  .intro-scene { width: 100%; }
+  .intro-card { padding: 1.5rem 1.2rem 1.4rem; border-radius: 1.2rem; }
+  .intro-enter { width: 100%; justify-content: center; margin-top: 1.2rem; }
+  .intro-kaia { width: clamp(5.5rem, 26vw, 7.5rem); left: auto; right: 0; bottom: auto; top: 0; transform: translate(34%, -62%) rotate(7deg); }
+  .intro-kaia-shadow { display: none; }
+  .intro-hello { left: auto; right: 0; bottom: auto; top: 100%; margin: .4rem 0 0; border-radius: .8rem .2rem .8rem .8rem; font-size: .64rem; }
+  .intro-glow span { filter: blur(52px); }
   .kaia-details { grid-template-columns: 1fr; }
   .kaia-turnaround { gap: .7rem; }
   .contact-grid { grid-template-columns: 1fr; }
@@ -1159,6 +1300,14 @@ body.dialog-open .nav { opacity: 0; pointer-events: none; }
   .stage-ambient span, .stage-scroll-rule::after { animation: none; }
   .book-leaf.is-turning { animation: none; }
   .case-open-arrow { transition: none; }
+  /* Reduced motion: the intro still introduces, it simply does not move. */
+  .intro-glow span { animation: none; }
+  .intro-card, .intro-kaia, .intro-skip { opacity: 1 !important; transform: none !important; }
+  .intro-kaia { transform: translateX(-56%) rotate(7deg) !important; }
+  .intro.is-live .intro-eyebrow, .intro.is-live .intro-name, .intro.is-live .intro-role,
+  .intro.is-live .intro-rule, .intro.is-live .intro-disciplines, .intro.is-live .intro-enter { animation: none; }
+  .intro-scene { transform: none !important; }
+  html.intro-revealing .nav, html.intro-revealing .footer, html.intro-revealing #main { transition-duration: 160ms; transition-delay: 0ms; }
   .stage-dock { animation: none; transform: none !important; }
   .dock-sheen { display: none; }
   .dock-icon, .dock-arrow, .dock-tile { transition: none; }

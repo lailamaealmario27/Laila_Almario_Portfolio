@@ -151,11 +151,48 @@ tutorial — tell me which and I'll split it out.
 
 ---
 
-## 5. Not yet deployed
+## 5. Missing Kaia frames — the intro's one compromise
+
+The intro asks for Kaia **leaning against the card**, **blinking**, and **waving**.
+I checked her sprite sheet before building. It has five clips, all front-facing and
+upright:
+
+| Clip | Frames | What it actually is |
+|---|---|---|
+| `idle` | 8 | Standing, arms down, slight sway — used for her idle |
+| `nod` | 6 | Head dips — **used as the hover greeting** |
+| `tilt` | 8 | Head and body tilt — **used as the parting gesture** |
+| `hop` | 8 | A bounce; **both feet leave the ground** |
+| `dance` | 16 | Includes a full turn showing her back |
+
+Plus four single static stills: front, three-quarter, side, back.
+
+**There is no lean pose, no wave, and no blink anywhere in the set.** So:
+
+- [ ] **The lean is a transform, not a pose.** Her front-facing artwork is rotated 7°
+      about her feet on a wrapper element, with a contact shadow under her. Nothing is
+      stretched, skewed or scaled unevenly — your rule about not distorting her is kept.
+      It reads as leaning, but a drawn leaning pose would be better.
+- [ ] **No wave.** `hop` was the nearest gesture, but its feet leave the ground, which
+      contradicts your "feet must remain on the ground" requirement and would break the
+      lean. I used `nod` for the hover greeting instead. **A 6–8 frame wave, feet
+      planted, is the single most valuable frame set you could add.**
+- [ ] **No blink.** Her eyes are open in all 46 frames. I did not fake one by scaling
+      her face. 2–3 blink frames would let me add it.
+
+If you can supply a leaning pose and a wave — same style, same proportions, 140×215 —
+drop them in `kaia/frames/` as `lean_00.png`, `wave_00.png` and so on, and
+`python kaia/build_kaia_sprite.py` will repack the sheet. I'll then wire them in; the
+code already selects clips by name.
+
+---
+
+## 6. Not yet deployed
 
 Per your instruction, nothing has been pushed. The changes are committed locally only
 once you say so. Current state:
 
+- `intro.js` — new, the State A / State B gate
 - `case-studies.js` — new, all case-study content
 - `case-study.js` — new, the reader dialog
 - `index.html` — "Read the case study" triggers, plus the Approach and Growth sections
