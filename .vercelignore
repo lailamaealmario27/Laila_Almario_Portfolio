@@ -6,3 +6,8 @@ kaia/
 catalogue/
 archive/
 index.legacy.html
+
+# A working document, not a page. It carries open questions about attribution
+# and unconfirmed drafts, and is kept in git for Laila rather than served to
+# whoever guesses the filename.
+PORTFOLIO_CONTENT_REVIEW.md
