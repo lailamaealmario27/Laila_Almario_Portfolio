@@ -11,9 +11,7 @@
      than two purples that nearly agree. --plum-dark stays where it is: five other
      rules depend on it and none of them is the last page. */
   --night: #100B1C;
-  --night-lift: #1A1230;
   --night-card: #1B142B;
-  --night-deep: #0B0714;
   --violet: #A855F7;
   --lavender: #C4B5FD;
   --night-text: #F8F5FF;
@@ -158,12 +156,12 @@ img, video { max-width: 100%; }
  */
 .nav[data-skin="ink"] .nav-inner {
   border-color: rgba(255, 255, 255, .13);
-  background: rgba(22, 19, 26, .74);
+  background: var(--ink);
   box-shadow: 0 12px 45px rgba(0, 0, 0, .34);
 }
 .nav[data-skin="night"] .nav-inner {
   border-color: var(--night-line);
-  background: rgba(27, 20, 43, .78);
+  background: var(--night-card);
   box-shadow: 0 12px 45px rgba(10, 4, 24, .5);
 }
 /* The wordmark beside the monogram inherits the page ink, which on a dark bar would be
@@ -668,8 +666,7 @@ img, video { max-width: 100%; }
    other side instead of a copy of its composition. */
 .contact-section {
   padding-bottom: max(3rem, env(safe-area-inset-bottom));
-  background:
-    radial-gradient(ellipse 78% 60% at 50% 0%, var(--night-lift) 0%, var(--night) 58%, var(--night-deep) 100%);
+  background: var(--night);
   color: var(--night-text);
 }
 .contact-grid { display: grid; grid-template-columns: .82fr 1.18fr; gap: clamp(3rem, 8vw, 9rem); }
@@ -681,10 +678,9 @@ img, video { max-width: 100%; }
 /* The same card the intro introduces her on: same gradient, same violet rim. */
 .contact-form {
   padding: clamp(1.4rem, 4vw, 3rem);
-  border: 1px solid var(--night-line);
+  border: 1px solid var(--night-edge);
   border-radius: var(--radius);
-  background: linear-gradient(158deg, #241A3A 0%, var(--night-card) 58%, #130E20 100%);
-  box-shadow: inset 0 1px 0 rgba(196, 181, 253, .2);
+  background: var(--night-card);
 }
 .contact-form h3 { margin: 0 0 2rem; font-family: var(--display); font-size: clamp(2rem, 4vw, 3.7rem); font-weight: 400; letter-spacing: -.045em; line-height: 1; }
 .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
@@ -700,7 +696,9 @@ img, video { max-width: 100%; }
 .contact-form .button { border-color: var(--night-edge); background: var(--night-raise); color: var(--night-text); }
 .honeypot { position: absolute !important; left: -9999px !important; }
 
-.footer { padding: 2rem var(--pad); background: var(--night-deep); color: var(--night-muted); }
+/* The same solid as the contact section above it; the rule inside .footer-inner is
+   what marks the join, rather than a second shade of purple. */
+.footer { padding: 2rem var(--pad); background: var(--night); color: var(--night-muted); }
 .footer-inner { display: flex; align-items: center; justify-content: space-between; gap: 2rem; padding-top: 1.2rem; border-top: 1px solid var(--night-line); font-size: .72rem; }
 /* This had no styling at all -- it was a browser-default button sitting on a dark
    footer, which on most platforms meant grey-on-grey. */
@@ -813,9 +811,7 @@ html.intro-armed, html.intro-armed body { overflow: hidden; }
 
 html.intro-armed .intro {
   --i-bg: var(--night);
-  --i-bg-lift: var(--night-lift);
   --i-card: var(--night-card);
-  --i-card-deep: #130E20;
   --i-violet: var(--violet);
   --i-lavender: var(--lavender);
   --i-text: var(--night-text);
@@ -830,8 +826,7 @@ html.intro-armed .intro {
   place-items: center;
   overflow: hidden;
   padding: max(3.5rem, 8vh) var(--pad) 1.6rem;
-  background:
-    radial-gradient(ellipse 62% 52% at 50% 38%, var(--i-bg-lift) 0%, var(--i-bg) 58%, var(--night-deep) 100%);
+  background: var(--i-bg);
   color: var(--i-text);
 }
 .intro.is-leaving { opacity: 0; transition: opacity 760ms var(--ease-out); pointer-events: none; }
@@ -856,14 +851,14 @@ html.intro-armed .intro {
   display: grid;
   gap: .55rem;
   padding: clamp(1.9rem, 4vw, 2.9rem) clamp(1.6rem, 3.5vw, 2.6rem);
-  border: 1px solid var(--i-line);
+  /* Flat purple on flat purple is 1.09:1, so the edge is what makes this a card at
+     all. It takes the same 3:1 border the buttons use rather than the hairline, which
+     measured 1.41:1 and would have left the card floating in the page. */
+  border: 1px solid var(--night-edge);
   border-radius: 1.5rem;
-  background: linear-gradient(158deg, #241A3A 0%, var(--i-card) 58%, var(--i-card-deep) 100%);
-  /* A lavender edge light along the top, a hairline violet rim, then the depth under
-     it. Edges, not bloom -- there is no halo in this list. */
+  background: var(--i-card);
+  /* Depth only: no edge light, no inset rim, no accent colour on the surface. */
   box-shadow:
-    inset 0 1px 0 rgba(196, 181, 253, .26),
-    inset 0 0 0 1px rgba(168, 85, 247, .08),
     0 42px 86px -30px rgba(10, 4, 24, .92),
     0 8px 24px -12px rgba(10, 4, 24, .7);
 }
@@ -921,7 +916,7 @@ html.intro-armed .intro {
 /* Lifted: the pool under her shrinks and softens, the way a real one would. */
 .intro-kaia.is-dragging .intro-kaia-shadow { width: 52%; opacity: .55; filter: blur(8px); }
 
-.intro-hello { position: absolute; left: 56%; bottom: 92%; width: max-content; max-width: 13rem; margin: 0 0 .5rem; padding: .5rem .75rem; border: 1px solid var(--i-line); border-radius: .8rem .8rem .8rem .2rem; background: rgba(32, 22, 54, .97); color: var(--i-text); font-size: .68rem; line-height: 1.4; box-shadow: 0 14px 34px -16px rgba(10, 4, 24, .95); }
+.intro-hello { position: absolute; left: 56%; bottom: 92%; width: max-content; max-width: 13rem; margin: 0 0 .5rem; padding: .5rem .75rem; border: 1px solid var(--i-line); border-radius: .8rem .8rem .8rem .2rem; background: var(--night-card); color: var(--i-text); font-size: .68rem; line-height: 1.4; box-shadow: 0 14px 34px -16px rgba(10, 4, 24, .95); }
 .intro-hello[hidden] { display: none; }
 
 /* Announced, never drawn. The cursor says "draggable" to a mouse user and nothing at
