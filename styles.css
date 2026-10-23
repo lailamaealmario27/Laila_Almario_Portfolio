@@ -19,6 +19,15 @@
   --night-text: #F8F5FF;
   --night-muted: #A79BC4;
   --night-line: rgba(168, 85, 247, .28);
+  /* Solid button surfaces on the dark pages. Tinted fills read as glow at these
+     sizes, so the buttons sit on a real colour instead of a wash of violet. */
+  --night-raise: #2C2142;
+  --night-raise-hi: #3A2C56;
+  /* Button boundaries. With the glow gone the edge is the only thing marking a button
+     out from the surface under it, so it is held at 3:1 rather than left as a hairline
+     like the decorative rules elsewhere. */
+  --night-edge: rgba(196, 181, 253, .55);
+  --night-edge-hi: rgba(196, 181, 253, .8);
 
   /* The monogram's four inks. The mark is one flat colour by design, so adapting it
      is a matter of choosing which. Every pairing below is contrast-checked against
@@ -155,7 +164,7 @@ img, video { max-width: 100%; }
 .nav[data-skin="night"] .nav-inner {
   border-color: var(--night-line);
   background: rgba(27, 20, 43, .78);
-  box-shadow: 0 12px 45px rgba(10, 4, 24, .5), 0 0 32px -20px rgba(168, 85, 247, .7);
+  box-shadow: 0 12px 45px rgba(10, 4, 24, .5);
 }
 /* The wordmark beside the monogram inherits the page ink, which on a dark bar would be
    as invisible as the mark was. */
@@ -675,9 +684,7 @@ img, video { max-width: 100%; }
   border: 1px solid var(--night-line);
   border-radius: var(--radius);
   background: linear-gradient(158deg, #241A3A 0%, var(--night-card) 58%, #130E20 100%);
-  box-shadow:
-    inset 0 1px 0 rgba(196, 181, 253, .2),
-    0 0 52px -26px rgba(168, 85, 247, .55);
+  box-shadow: inset 0 1px 0 rgba(196, 181, 253, .2);
 }
 .contact-form h3 { margin: 0 0 2rem; font-family: var(--display); font-size: clamp(2rem, 4vw, 3.7rem); font-weight: 400; letter-spacing: -.045em; line-height: 1; }
 .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
@@ -689,15 +696,15 @@ img, video { max-width: 100%; }
 .field textarea { min-height: 8rem; resize: vertical; }
 .form-foot { display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin-top: 1.5rem; }
 .form-status { max-width: 36ch; margin: 0; color: var(--night-muted); font-size: .72rem; }
-/* The send button is the Enter-portfolio button: the gate's shape, the gate's violet. */
-.contact-form .button { border-color: rgba(168, 85, 247, .5); background: rgba(168, 85, 247, .18); color: var(--night-text); box-shadow: 0 0 26px -8px rgba(168, 85, 247, .5); }
+/* The send button is the Enter-portfolio button: the gate's shape, the gate's surface. */
+.contact-form .button { border-color: var(--night-edge); background: var(--night-raise); color: var(--night-text); }
 .honeypot { position: absolute !important; left: -9999px !important; }
 
 .footer { padding: 2rem var(--pad); background: var(--night-deep); color: var(--night-muted); }
 .footer-inner { display: flex; align-items: center; justify-content: space-between; gap: 2rem; padding-top: 1.2rem; border-top: 1px solid var(--night-line); font-size: .72rem; }
 /* This had no styling at all -- it was a browser-default button sitting on a dark
    footer, which on most platforms meant grey-on-grey. */
-.footer-replay { padding: .5rem .9rem; border: 1px solid var(--night-line); border-radius: 999px; background: transparent; color: var(--lavender); cursor: pointer; font: inherit; font-size: .68rem; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; transition: border-color 260ms var(--ease-out), background-color 260ms var(--ease-out), color 260ms var(--ease-out); }
+.footer-replay { padding: .5rem .9rem; border: 1px solid var(--night-edge); border-radius: 999px; background: transparent; color: var(--lavender); cursor: pointer; font: inherit; font-size: .68rem; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; transition: border-color 260ms var(--ease-out), background-color 260ms var(--ease-out), color 260ms var(--ease-out); }
 .footer-replay:focus-visible { outline: 2px solid var(--lavender); outline-offset: 3px; }
 
 .lightbox {
@@ -829,16 +836,6 @@ html.intro-armed .intro {
 }
 .intro.is-leaving { opacity: 0; transition: opacity 760ms var(--ease-out); pointer-events: none; }
 
-/* Violet accent lighting, drifting slowly enough not to read as animation. */
-.intro-glow { position: absolute; inset: -25%; pointer-events: none; }
-.intro-glow span { position: absolute; border-radius: 50%; filter: blur(80px); }
-.intro-glow span:nth-child(1) { top: 10%; left: 12%; width: 36vw; height: 36vw; background: radial-gradient(circle, rgba(168, 85, 247, .40) 0%, transparent 70%); animation: intro-drift-a 26s ease-in-out infinite; }
-.intro-glow span:nth-child(2) { right: 8%; bottom: 12%; width: 32vw; height: 32vw; background: radial-gradient(circle, rgba(196, 181, 253, .26) 0%, transparent 70%); animation: intro-drift-b 33s ease-in-out infinite; }
-.intro-glow span:nth-child(3) { top: 46%; left: 54%; width: 24vw; height: 24vw; background: radial-gradient(circle, rgba(124, 58, 237, .30) 0%, transparent 70%); animation: intro-drift-c 29s ease-in-out infinite; }
-@keyframes intro-drift-a { 50% { transform: translate3d(4vw, 3vh, 0) scale(1.12); } }
-@keyframes intro-drift-b { 50% { transform: translate3d(-5vw, -4vh, 0) scale(1.08); } }
-@keyframes intro-drift-c { 50% { transform: translate3d(-3vw, 5vh, 0) scale(1.16); } }
-
 /*
  * Card and mascot share one box and one transform. That is what keeps Kaia with the
  * card when the pointer moves it: tilting them separately is what makes a mascot look
@@ -862,12 +859,12 @@ html.intro-armed .intro {
   border: 1px solid var(--i-line);
   border-radius: 1.5rem;
   background: linear-gradient(158deg, #241A3A 0%, var(--i-card) 58%, var(--i-card-deep) 100%);
-  /* Lavender edge light along the top, a violet rim, then the depth under it. */
+  /* A lavender edge light along the top, a hairline violet rim, then the depth under
+     it. Edges, not bloom -- there is no halo in this list. */
   box-shadow:
     inset 0 1px 0 rgba(196, 181, 253, .26),
     inset 0 0 0 1px rgba(168, 85, 247, .08),
     0 42px 86px -30px rgba(10, 4, 24, .92),
-    0 0 48px -22px rgba(168, 85, 247, .55),
     0 8px 24px -12px rgba(10, 4, 24, .7);
 }
 .intro-eyebrow { margin: 0; color: var(--i-lavender); font-size: .62rem; font-weight: 750; letter-spacing: .26em; text-transform: uppercase; }
@@ -875,7 +872,7 @@ html.intro-armed .intro {
 .intro-name em { font-style: italic; color: var(--i-lavender); }
 .intro-rule { height: 1px; margin: 1rem 0 .2rem; background: linear-gradient(to right, var(--i-violet), rgba(168, 85, 247, 0)); }
 .intro-disciplines { margin: 0; color: var(--i-muted); font-size: .72rem; font-weight: 650; letter-spacing: .1em; }
-.intro-enter { justify-self: start; display: inline-flex; align-items: center; gap: .6rem; min-height: 3rem; margin-top: 1.5rem; padding: .85rem 1.7rem; border: 1px solid rgba(168, 85, 247, .45); border-radius: 999px; background: rgba(168, 85, 247, .16); color: var(--i-text); cursor: pointer; font: inherit; font-size: .74rem; font-weight: 750; letter-spacing: .13em; text-transform: uppercase; transition: background-color 300ms var(--ease-out), border-color 300ms var(--ease-out), box-shadow 300ms var(--ease-out); }
+.intro-enter { justify-self: start; display: inline-flex; align-items: center; gap: .6rem; min-height: 3rem; margin-top: 1.5rem; padding: .85rem 1.7rem; border: 1px solid var(--night-edge); border-radius: 999px; background: var(--night-raise); color: var(--i-text); cursor: pointer; font: inherit; font-size: .74rem; font-weight: 750; letter-spacing: .13em; text-transform: uppercase; transition: background-color 300ms var(--ease-out), border-color 300ms var(--ease-out); }
 .intro-enter:active { transform: scale(.98); }
 .intro-enter[disabled] { opacity: .55; cursor: default; }
 .intro-enter:focus-visible { outline: 2px solid var(--i-lavender); outline-offset: 3px; }
@@ -919,12 +916,12 @@ html.intro-armed .intro {
    [hidden] { display: none }, so both halves of any swap need this guard. */
 .intro-pose[hidden], .intro-kaia-figure[hidden] { display: none; }
 @keyframes intro-breathe { 50% { transform: translateY(-.45rem); } }
-/* A violet pool under her, so she stands on the light rather than hovering in it. */
-.intro-kaia-shadow { position: absolute; left: 50%; bottom: 1%; width: 68%; height: 6%; transform: translateX(-50%); border-radius: 50%; background: radial-gradient(ellipse, rgba(88, 28, 135, .75) 0%, rgba(168, 85, 247, .18) 45%, transparent 72%); filter: blur(4px); transition: width 240ms var(--ease-out), opacity 240ms var(--ease-out), filter 240ms var(--ease-out); }
+/* A plain contact shadow, so she stands on something rather than hovering. */
+.intro-kaia-shadow { position: absolute; left: 50%; bottom: 1%; width: 68%; height: 6%; transform: translateX(-50%); border-radius: 50%; background: radial-gradient(ellipse, rgba(0, 0, 0, .6) 0%, transparent 72%); filter: blur(4px); transition: width 240ms var(--ease-out), opacity 240ms var(--ease-out), filter 240ms var(--ease-out); }
 /* Lifted: the pool under her shrinks and softens, the way a real one would. */
 .intro-kaia.is-dragging .intro-kaia-shadow { width: 52%; opacity: .55; filter: blur(8px); }
 
-.intro-hello { position: absolute; left: 56%; bottom: 92%; width: max-content; max-width: 13rem; margin: 0 0 .5rem; padding: .5rem .75rem; border: 1px solid var(--i-line); border-radius: .8rem .8rem .8rem .2rem; background: rgba(32, 22, 54, .97); color: var(--i-text); font-size: .68rem; line-height: 1.4; box-shadow: 0 14px 34px -16px rgba(10, 4, 24, .95), 0 0 24px -14px rgba(168, 85, 247, .6); }
+.intro-hello { position: absolute; left: 56%; bottom: 92%; width: max-content; max-width: 13rem; margin: 0 0 .5rem; padding: .5rem .75rem; border: 1px solid var(--i-line); border-radius: .8rem .8rem .8rem .2rem; background: rgba(32, 22, 54, .97); color: var(--i-text); font-size: .68rem; line-height: 1.4; box-shadow: 0 14px 34px -16px rgba(10, 4, 24, .95); }
 .intro-hello[hidden] { display: none; }
 
 /* Announced, never drawn. The cursor says "draggable" to a mouse user and nothing at
@@ -944,12 +941,9 @@ html.intro-armed .intro {
 .intro.is-live .intro-name,
 .intro.is-live .intro-rule,
 .intro.is-live .intro-disciplines { animation: intro-reveal 420ms var(--ease-out) 1800ms both; }
-/* The violet settles into the button as the text lands, rather than glowing from the
-   first frame. Two animations on one element, so the reveal is not lost. */
-.intro.is-live .intro-enter { animation: intro-reveal 420ms var(--ease-out) 1800ms both, intro-pulse 560ms var(--ease-out) 2200ms both; }
+.intro.is-live .intro-enter { animation: intro-reveal 420ms var(--ease-out) 1800ms both; }
 .intro.is-live .intro-skip { opacity: 1; transition: opacity 400ms var(--ease-out) 2200ms; }
 @keyframes intro-reveal { from { opacity: 0; transform: translateY(.5rem); } to { opacity: 1; transform: none; } }
-@keyframes intro-pulse { from { box-shadow: 0 0 0 0 rgba(168, 85, 247, 0); } to { box-shadow: 0 0 28px -6px rgba(168, 85, 247, .5); } }
 
 /* Leaving: the card goes, the overlay follows. */
 .intro.is-leaving .intro-scene { transform: translateY(-1.2rem) scale(1.04); transition: transform 760ms var(--ease-out); }
@@ -1063,7 +1057,7 @@ html.intro-revealing #main { opacity: 1; transform: none; transition: opacity 76
   .case-open:hover .case-open-arrow { transform: translateX(.22rem); }
   .print-sticky .case-open:hover { background: var(--ink); border-color: var(--ink); color: var(--white); }
   .case-close:hover { border-color: var(--ink); color: var(--ink); }
-  .intro-enter:hover { background: rgba(168, 85, 247, .34); border-color: rgba(196, 181, 253, .7); box-shadow: 0 0 36px -6px rgba(168, 85, 247, .7); }
+  .intro-enter:hover { background: var(--night-raise-hi); border-color: var(--night-edge-hi); }
   .intro-enter:hover .intro-enter-arrow { transform: translateX(.25rem); }
   .intro-skip-button:hover { color: var(--i-lavender, #C4B5FD); }
   /* Tile hover: lighter plum, the icon lifts, the arrow leaves diagonally, the text
@@ -1075,8 +1069,8 @@ html.intro-revealing #main { opacity: 1; transform: none; transition: opacity 76
   .brand-tab:hover[aria-selected="false"] { color: var(--ink); }
   .listing-card:hover { background: var(--plum-dark); }
   .contact-links a:hover { border-color: var(--lavender); color: var(--lavender); }
-  .contact-form .button:hover { border-color: rgba(196, 181, 253, .7); background: rgba(168, 85, 247, .34); color: var(--night-text); box-shadow: 0 0 36px -6px rgba(168, 85, 247, .7); }
-  .footer-replay:hover { border-color: rgba(196, 181, 253, .6); background: rgba(168, 85, 247, .16); color: var(--night-text); }
+  .contact-form .button:hover { border-color: var(--night-edge-hi); background: var(--night-raise-hi); color: var(--night-text); }
+  .footer-replay:hover { border-color: var(--night-edge-hi); background: var(--night-raise); color: var(--night-text); }
 }
 
 /* Portrait viewports taller than they are wide (every tablet held upright, Surface,
@@ -1234,7 +1228,6 @@ html.intro-revealing #main { opacity: 1; transform: none; transition: opacity 76
   .intro-kaia::after { content: ""; position: absolute; inset: -8%; }
   .intro-kaia-shadow { display: none; }
   .intro-hello { left: auto; right: 0; bottom: auto; top: 100%; margin: .4rem 0 0; border-radius: .8rem .2rem .8rem .8rem; font-size: .64rem; }
-  .intro-glow span { filter: blur(52px); }
   .kaia-details { grid-template-columns: 1fr; }
   .kaia-turnaround { gap: .7rem; }
   .contact-grid { grid-template-columns: 1fr; }
@@ -1292,7 +1285,6 @@ body.dialog-open .nav { opacity: 0; pointer-events: none; }
   .book-leaf.is-turning { animation: none; }
   .case-open-arrow { transition: none; }
   /* Reduced motion: the intro still introduces, it simply does not move. */
-  .intro-glow span { animation: none; }
   .intro-kaia-figure { animation: none; }
   .intro-card, .intro-kaia, .intro-skip { opacity: 1 !important; transform: none !important; }
   /* Dragging is the visitor's own motion, so it stays. Only the idle float goes. */
@@ -1300,7 +1292,6 @@ body.dialog-open .nav { opacity: 0; pointer-events: none; }
   .intro-kaia-shadow { transition: none; }
   .intro.is-live .intro-eyebrow, .intro.is-live .intro-name,
   .intro.is-live .intro-rule, .intro.is-live .intro-disciplines, .intro.is-live .intro-enter { animation: none; }
-  .intro-enter { box-shadow: 0 0 26px -6px rgba(168, 85, 247, .45); }
   .intro-pose { transition: none; }
   .intro-scene { transform: none !important; }
   html.intro-revealing .nav, html.intro-revealing .footer, html.intro-revealing #main { transition-duration: 160ms; transition-delay: 0ms; }
