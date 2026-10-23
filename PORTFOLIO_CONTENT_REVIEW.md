@@ -151,39 +151,44 @@ tutorial — tell me which and I'll split it out.
 
 ---
 
-## 5. Missing Kaia frames — the intro's one compromise
+## 5. Kaia in the intro — what the supplied sheet solved, and what it didn't
 
-The intro asks for Kaia **leaning against the card**, **blinking**, and **waving**.
-I checked her sprite sheet before building. It has five clips, all front-facing and
-upright:
+You sent a sheet of **17 original poses**, which replaced the workaround that was
+here before. They are cut out, keyed off the black background and saved as
+`kaia/poses/pose-01.png` … `pose-17.png`, with the three in use exported to
+`assets/images/`.
 
-| Clip | Frames | What it actually is |
+The background was removed by flood-filling inward from the border rather than by
+keying out black, because **her eyes and her headgear are genuinely black** and a
+global key would have erased them. Anything enclosed by her artwork is never reached
+by the fill, so her eyes survived intact.
+
+**Now in the intro:**
+
+| File | Pose | Where it shows |
 |---|---|---|
-| `idle` | 8 | Standing, arms down, slight sway — used for her idle |
-| `nod` | 6 | Head dips — **used as the hover greeting** |
-| `tilt` | 8 | Head and body tilt — **used as the parting gesture** |
-| `hop` | 8 | A bounce; **both feet leave the ground** |
-| `dance` | 16 | Includes a full turn showing her back |
+| `kaia-present.webp` | pointing toward the card | her resting pose |
+| `kaia-greet.webp` | open palm, greeting | when you hover or focus her |
+| `kaia-cheer.webp` | arms up | as you enter the portfolio |
 
-Plus four single static stills: front, three-quarter, side, back.
+All three were placed on one 250×360 canvas with her feet on a shared baseline and her
+legs centred, so swapping pose does not move her. Nothing is rotated, skewed, scaled
+unevenly or recoloured. The only motion is a slow breathing float of the whole figure.
 
-**There is no lean pose, no wave, and no blink anywhere in the set.** So:
+**What the sheet still does not contain:**
 
-- [ ] **The lean is a transform, not a pose.** Her front-facing artwork is rotated 7°
-      about her feet on a wrapper element, with a contact shadow under her. Nothing is
-      stretched, skewed or scaled unevenly — your rule about not distorting her is kept.
-      It reads as leaning, but a drawn leaning pose would be better.
-- [ ] **No wave.** `hop` was the nearest gesture, but its feet leave the ground, which
-      contradicts your "feet must remain on the ground" requirement and would break the
-      lean. I used `nod` for the hover greeting instead. **A 6–8 frame wave, feet
-      planted, is the single most valuable frame set you could add.**
-- [ ] **No blink.** Her eyes are open in all 46 frames. I did not fake one by scaling
-      her face. 2–3 blink frames would let me add it.
+- [ ] **No leaning pose.** None of the 17 leans on anything. Rather than rotate her
+      again to fake one, she now stands beside the card and *gestures at it* — which is
+      a pose she really has. If you want the lean specifically, that frame would need
+      to be drawn.
+- [ ] **No blink.** Her eyes are open in every pose. Not faked.
+- [ ] **Resolution.** Each pose is about 200×330 on the sheet, so she is sharp at her
+      display size but has no 2× headroom. Larger exports would help if you ever want
+      her bigger than she is now.
 
-If you can supply a leaning pose and a wave — same style, same proportions, 140×215 —
-drop them in `kaia/frames/` as `lean_00.png`, `wave_00.png` and so on, and
-`python kaia/build_kaia_sprite.py` will repack the sheet. I'll then wire them in; the
-code already selects clips by name.
+The other 14 poses — sitting, lying down, holding a blank card, holding a heart, the
+side and back turnarounds, the puzzled one — are cut out and waiting in `kaia/poses/`
+if you want her used elsewhere on the site.
 
 ---
 
@@ -193,6 +198,8 @@ Per your instruction, nothing has been pushed. The changes are committed locally
 once you say so. Current state:
 
 - `intro.js` — new, the State A / State B gate
+- `assets/images/kaia-present|greet|cheer.webp` — three of your supplied poses
+- `kaia/poses/` — all 17, cut out (not deployed; `kaia/` is in .vercelignore)
 - `case-studies.js` — new, all case-study content
 - `case-study.js` — new, the reader dialog
 - `index.html` — "Read the case study" triggers, plus the Approach and Growth sections

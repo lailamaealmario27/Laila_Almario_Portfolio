@@ -10,17 +10,19 @@
  * Two states, not two scroll positions. While State A is up the page is inert and the
  * scroll is locked; entering hands both back and the overlay is gone, not scrolled past.
  *
- * Kaia is not animated from here. kaia.js owns the one character and already drives her
- * idle loop, including the small unprompted head movements every few seconds. This file
- * only asks her for a gesture on hover, and only ever uses clips that exist.
+ * Kaia is three of her own supplied poses stacked on top of each other, cross-faded by
+ * CSS. Nothing here rotates or distorts her to stand in for a pose she does not have.
+ * kaia.js is untouched and still drives the packed sprite in Selected work; this file
+ * does not import it, because the gate no longer needs an animation engine to show her
+ * gesturing at the card.
  */
-import { kaia } from './kaia.js';
 
 /* The brief's timeline: background, card at 0.5s, Kaia at 1.0s, card text at 1.8s,
    idle from 2.2s. The CSS carries the delays; these are the two moments JS needs. */
 const SETTLE_MS = 2400;
 const LEAVE_MS = 1000;
 const REVEAL_AT = 240;
+const REST_POSE = 'present';
 
 const html = document.documentElement;
 const intro = document.querySelector('[data-intro]');
@@ -54,9 +56,10 @@ backToIntro();
 
 function arm() {
   const scene = intro.querySelector('[data-intro-scene]');
-  const figure = intro.querySelector('[data-intro-kaia]');
+  const kaiaBox = intro.querySelector('[data-intro-kaia]');
   const hello = intro.querySelector('[data-intro-hello]');
   const enters = [...intro.querySelectorAll('[data-intro-enter]')];
+  const pose = poseSwitcher(intro.querySelector('[data-intro-figure]'));
   let leaving = false;
 
   setInert(true);
@@ -82,22 +85,19 @@ function arm() {
   }
 
   /* --- the pointer tilt. Card and mascot share one transformed box, so she cannot
-         drift away from the edge she is leaning on. --- */
+         drift away from the card she is gesturing at. --- */
   if (scene && finePointer && !reduceMotion) tilt(scene);
 
-  /* --- hover. She has no wave frames, so the greeting is a nod, which she does have.
-         See PORTFOLIO_CONTENT_REVIEW.md for what is missing. --- */
-  if (figure && hello) {
-    const greet = () => { hello.hidden = false; kaia.play('nod'); };
-    const part = () => { hello.hidden = true; };
-    figure.addEventListener('pointerenter', greet);
-    figure.addEventListener('pointerleave', part);
-    figure.addEventListener('focusin', greet);
-    figure.addEventListener('focusout', part);
-    figure.tabIndex = 0;
-    figure.setAttribute('role', 'img');
-    figure.setAttribute('aria-label', 'Kaia, the mascot who introduces this portfolio');
-    figure.addEventListener('keydown', event => {
+  /* --- hover. She changes to her open-palm pose and says hello. --- */
+  if (kaiaBox && hello) {
+    const greet = () => { hello.hidden = false; pose.show('greet'); };
+    const part = () => { hello.hidden = true; pose.show(REST_POSE); };
+    kaiaBox.addEventListener('pointerenter', greet);
+    kaiaBox.addEventListener('pointerleave', part);
+    kaiaBox.addEventListener('focusin', greet);
+    kaiaBox.addEventListener('focusout', part);
+    kaiaBox.tabIndex = 0;
+    kaiaBox.addEventListener('keydown', event => {
       if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); greet(); }
     });
   }
@@ -107,8 +107,8 @@ function arm() {
     leaving = true;
     enters.forEach(button => { button.disabled = true; });
     document.removeEventListener('keydown', onKey);
-    /* A parting gesture, using a clip she actually has. */
-    if (!reduceMotion) kaia.play('tilt');
+    /* A parting gesture, in a pose she actually has. */
+    pose.show('cheer');
     intro.classList.remove('is-live');
     intro.classList.add('is-leaving');
 
@@ -125,6 +125,29 @@ function arm() {
       document.dispatchEvent(new CustomEvent('intro:left'));
     }, doneAt);
   }
+}
+
+/*
+ * One pose visible at a time.
+ *
+ * The poses sit on top of each other and only their opacity changes, so the swap costs
+ * nothing and she never shifts position. Whichever she is in carries her alt text; the
+ * rest are aria-hidden, so a screen reader meets her once rather than three times.
+ */
+function poseSwitcher(figure) {
+  const frames = new Map();
+  if (figure) {
+    figure.querySelectorAll('[data-pose]').forEach(img => frames.set(img.dataset.pose, img));
+  }
+  let current = REST_POSE;
+  return {
+    show(name) {
+      if (!frames.has(name) || name === current) return;
+      frames.get(current)?.classList.remove('is-on');
+      frames.get(name).classList.add('is-on');
+      current = name;
+    }
+  };
 }
 
 /* Restrained: four degrees, damped, and it stops as soon as it has settled. */
@@ -172,6 +195,10 @@ function backToIntro() {
       if (!intro || html.classList.contains('intro-armed')) return;
       window.scrollTo(0, 0);
       intro.classList.remove('is-leaving');
+      /* Whatever pose she left in, she is back to resting when the gate reopens. */
+      intro.querySelectorAll('[data-pose]').forEach(img => {
+        img.classList.toggle('is-on', img.dataset.pose === REST_POSE);
+      });
       html.classList.add('intro-armed');
       arm();
     });

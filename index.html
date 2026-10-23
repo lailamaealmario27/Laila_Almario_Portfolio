@@ -28,9 +28,10 @@
   <a class="skip-link" href="#main">Skip to content</a>
 
   <!-- State A. A fixed overlay, not a section: the portfolio below is inert and
-       unscrollable until someone enters. Kaia is the same character as the one in
-       Selected work -- kaia.js mounts every [data-kaia] element from one shared state,
-       so this is another view of her, not a second mascot. -->
+       unscrollable until someone enters. Kaia here is her own supplied artwork, three
+       poses off the original sheet rather than the packed sprite kaia.js drives in
+       Selected work. Same character, higher resolution, and real poses instead of a
+       transform standing in for one. -->
   <div class="intro" data-intro role="dialog" aria-modal="true" aria-label="Welcome">
     <div class="intro-glow" aria-hidden="true"><span></span><span></span><span></span></div>
 
@@ -38,18 +39,22 @@
       <article class="intro-card" data-intro-card>
         <p class="intro-eyebrow">Creative portfolio</p>
         <p class="intro-name">Laila Mae <em>Almario</em></p>
-        <p class="intro-role">Social Media Manager &middot; K-PICK Trading Corp.</p>
         <p class="intro-rule" aria-hidden="true"></p>
         <p class="intro-disciplines">Design &bull; Strategy &bull; Multimedia &bull; Storytelling</p>
         <button class="intro-enter" type="button" data-intro-enter>Enter portfolio <span class="intro-enter-arrow" aria-hidden="true">&rarr;</span></button>
       </article>
 
-      <!-- Leaning against the card's left edge. The rotation is on this wrapper and
-           turns about her feet, so the artwork itself is never distorted or stretched. -->
-      <div class="intro-kaia" data-kaia data-intro-kaia>
+      <!-- Three of her own poses, stacked and cross-faded. They were lifted off the
+           supplied sheet onto a shared baseline, so a swap changes her pose without
+           moving her. No rotation, no skew, no recolouring: the artwork is hers. The
+           two she is not currently in are aria-hidden, so she is announced once. -->
+      <div class="intro-kaia" data-intro-kaia>
         <span class="intro-kaia-shadow" aria-hidden="true"></span>
-        <img class="kaia-still" data-kaia-still src="assets/images/kaia-front.webp" alt="Kaia, the mascot who introduces this portfolio">
-        <canvas class="kaia-canvas" data-kaia-canvas hidden></canvas>
+        <span class="intro-kaia-figure" data-intro-figure>
+          <img class="intro-pose is-on" data-pose="present" width="250" height="360" src="assets/images/kaia-present.webp" alt="Kaia, the mascot who introduces this portfolio, gesturing toward the card">
+          <img class="intro-pose" data-pose="greet" width="250" height="360" src="assets/images/kaia-greet.webp" alt="" aria-hidden="true">
+          <img class="intro-pose" data-pose="cheer" width="250" height="360" src="assets/images/kaia-cheer.webp" alt="" aria-hidden="true">
+        </span>
         <p class="intro-hello" data-intro-hello hidden>Hi! I&rsquo;m Kaia. Welcome to my portfolio!</p>
       </div>
     </div>
