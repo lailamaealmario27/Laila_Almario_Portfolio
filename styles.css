@@ -185,6 +185,8 @@ img, video { max-width: 100%; }
  * curve. Only the ink changes.
  */
 .brand-mark { flex: none; display: block; width: 1.75rem; height: 1.75rem; }
+/* The mark is never hidden by a rule meant for the wordmark beside it. */
+.brand .brand-mark { display: block; }
 .brand-mark img { width: 100%; height: 100%; object-fit: contain; display: block; }
 
 /* The four named variants, usable on any element carrying the mark. */
@@ -1153,7 +1155,10 @@ html.intro-revealing #main { opacity: 1; transform: none; transition: opacity 76
   /* The floating pill tracks the same gutter as the content underneath it. */
   .nav { width: calc(100% - var(--pad) * 2); }
   .nav-inner { min-height: 3.4rem; }
-  .brand span { display: none; }
+  /* The wordmark only. This used to say `.brand span`, which also matched the
+     monogram once the mark became a <span> -- and at (0,1,1) it outranked
+     .brand-mark's (0,1,0), so the logo vanished on every phone. */
+  .brand-name { display: none; }
   .menu-button { width: 2.7rem; height: 2.7rem; display: grid; place-items: center; border: 0; border-radius: 50%; background: var(--ink); color: var(--white); cursor: pointer; user-select: none; }
   .menu-button::before { content: "Menu"; font-size: .63rem; font-weight: 750; letter-spacing: .06em; text-transform: uppercase; }
   .menu-button[aria-expanded="true"]::before { content: "Close"; }
@@ -1222,7 +1227,11 @@ html.intro-revealing #main { opacity: 1; transform: none; transition: opacity 76
   .intro-scene { width: 100%; }
   .intro-card { padding: 1.5rem 1.2rem 1.4rem; border-radius: 1.2rem; }
   .intro-enter { width: 100%; justify-content: center; margin-top: 1.2rem; }
-  .intro-kaia { width: clamp(6rem, 28vw, 8.5rem); left: auto; right: 0; bottom: auto; top: 0; transform: translate(28%, -58%) translate3d(var(--drag-x, 0px), var(--drag-y, 0px), 0); }
+  /* touch-action is restated rather than inherited from the desktop rule, so it is
+     obvious that carrying her must not scroll the page on a phone. */
+  .intro-kaia { width: clamp(6rem, 28vw, 8.5rem); left: auto; right: 0; bottom: auto; top: 0; transform: translate(28%, -58%) translate3d(var(--drag-x, 0px), var(--drag-y, 0px), 0); touch-action: none; }
+  /* A finger is not a cursor: give her a little more to grab than her own outline. */
+  .intro-kaia::after { content: ""; position: absolute; inset: -8%; }
   .intro-kaia-shadow { display: none; }
   .intro-hello { left: auto; right: 0; bottom: auto; top: 100%; margin: .4rem 0 0; border-radius: .8rem .2rem .8rem .8rem; font-size: .64rem; }
   .intro-glow span { filter: blur(52px); }

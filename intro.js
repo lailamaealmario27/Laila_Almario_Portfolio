@@ -127,6 +127,8 @@ function wire() {
       hello.hidden = true;
       pose.show(REST_POSE);
     };
+    /* Touch has no pointerleave to rely on, so the drag tells us when it is over. */
+    kaiaBox.addEventListener('kaia:released', part);
     kaiaBox.addEventListener('pointerenter', greet);
     kaiaBox.addEventListener('pointerleave', part);
     kaiaBox.addEventListener('focusin', greet);
@@ -210,11 +212,22 @@ function draggable(box) {
     return { left: r.left - x, top: r.top - y, w: r.width, h: r.height };
   };
 
-  /* She can go anywhere on the screen, but never off it. */
+  /*
+   * She can go anywhere on the screen, but never off it.
+   *
+   * The range always includes zero. On a phone she rests tucked over the card's top
+   * corner, partly outside the scene, and a clamp that did not allow her resting
+   * position would shove her into view the instant she was touched -- a jump, not a
+   * drag. Home is always reachable; everything else is bounded by the viewport.
+   */
   const moveTo = (nx, ny) => {
     const b = base || measure();
-    x = Math.min(Math.max(nx, EDGE - b.left), window.innerWidth - EDGE - b.w - b.left);
-    y = Math.min(Math.max(ny, EDGE - b.top), window.innerHeight - EDGE - b.h - b.top);
+    const loX = Math.min(EDGE - b.left, 0);
+    const hiX = Math.max(window.innerWidth - EDGE - b.w - b.left, 0);
+    const loY = Math.min(EDGE - b.top, 0);
+    const hiY = Math.max(window.innerHeight - EDGE - b.h - b.top, 0);
+    x = Math.min(Math.max(nx, loX), hiX);
+    y = Math.min(Math.max(ny, loY), hiY);
     apply();
   };
 
@@ -238,10 +251,14 @@ function draggable(box) {
 
   const drop = event => {
     if (event.pointerId !== pointer) return;
+    const touched = event.pointerType !== 'mouse';
     dragging = false;
     pointer = null;
     base = null;
     box.classList.remove('is-dragging');
+    /* A finger has no hover to leave. Without this the greeting she opened on
+       pointerdown would stay up until something else happened to dismiss it. */
+    if (touched) box.dispatchEvent(new CustomEvent('kaia:released'));
   };
   box.addEventListener('pointerup', drop);
   box.addEventListener('pointercancel', drop);
