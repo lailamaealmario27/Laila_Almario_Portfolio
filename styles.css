@@ -19,6 +19,14 @@
   --night-text: #F8F5FF;
   --night-muted: #A79BC4;
   --night-line: rgba(168, 85, 247, .28);
+
+  /* The monogram's four inks. The mark is one flat colour by design, so adapting it
+     is a matter of choosing which. Every pairing below is contrast-checked against
+     the navigation skin it is used on. */
+  --logo-light: #FFFFFF;
+  --logo-dark: #111111;
+  --logo-lavender: #E9D5FF;
+  --logo-deep: #4C1D95;
   --line: rgba(22, 19, 26, 0.17);
   --soft-line: rgba(22, 19, 26, 0.09);
   --white: #fffdf9;
@@ -125,7 +133,37 @@ img, video { max-width: 100%; }
   box-shadow: 0 12px 45px rgba(31, 23, 33, .09);
   -webkit-backdrop-filter: blur(20px) saturate(130%);
   backdrop-filter: blur(20px) saturate(130%);
+  transition: background-color 250ms ease, border-color 250ms ease, box-shadow 250ms ease;
 }
+
+/*
+ * The navigation takes the tone of whatever it is over.
+ *
+ * It has to. The bar is 81% opaque, so a section behind it barely shows through: over
+ * the dark work section a paper pill still renders near-paper, and a mark that adapted
+ * to "the section" rather than to the bar would be adapting to something it cannot see.
+ * Giving the bar a skin is what makes the mark's choice real instead of decorative.
+ *
+ * logo.js sets data-skin from the section crossing the bar. Nothing below runs without
+ * it except the paper default, which is what the bar has always looked like.
+ */
+.nav[data-skin="ink"] .nav-inner {
+  border-color: rgba(255, 255, 255, .13);
+  background: rgba(22, 19, 26, .74);
+  box-shadow: 0 12px 45px rgba(0, 0, 0, .34);
+}
+.nav[data-skin="night"] .nav-inner {
+  border-color: var(--night-line);
+  background: rgba(27, 20, 43, .78);
+  box-shadow: 0 12px 45px rgba(10, 4, 24, .5), 0 0 32px -20px rgba(168, 85, 247, .7);
+}
+/* The wordmark beside the monogram inherits the page ink, which on a dark bar would be
+   as invisible as the mark was. */
+.nav[data-skin="ink"] .brand, .nav[data-skin="night"] .brand { color: var(--white); }
+.nav[data-skin="ink"] .nav-links a, .nav[data-skin="night"] .nav-links a { color: rgba(255, 253, 249, .72); }
+.nav[data-skin="ink"] .nav-links a[aria-current="true"] { background: var(--white); color: var(--ink); }
+.nav[data-skin="night"] .nav-links a[aria-current="true"] { background: var(--lavender); color: #2A1840; }
+.nav[data-skin="ink"] .menu-button, .nav[data-skin="night"] .menu-button { color: var(--white); border-color: rgba(255, 253, 249, .3); }
 
 .brand {
   display: inline-flex;
@@ -138,7 +176,45 @@ img, video { max-width: 100%; }
   text-transform: uppercase;
 }
 
-.brand img { width: 1.75rem; height: 1.75rem; object-fit: contain; }
+/*
+ * The monogram.
+ *
+ * It is painted, not placed: the PNG is used as a mask and the colour underneath is a
+ * custom property. The shape is therefore the artwork's own alpha channel, pixel for
+ * pixel -- no trace, no SVG rebuild, no filter that could soften an edge or shift a
+ * curve. Only the ink changes.
+ */
+.brand-mark { flex: none; display: block; width: 1.75rem; height: 1.75rem; }
+.brand-mark img { width: 100%; height: 100%; object-fit: contain; display: block; }
+
+/* The four named variants, usable on any element carrying the mark. */
+[data-logo="light"] { --logo-ink: var(--logo-light); }
+[data-logo="dark"] { --logo-ink: var(--logo-dark); }
+[data-logo="purple"] { --logo-ink: var(--logo-lavender); }
+[data-logo="deep"] { --logo-ink: var(--logo-deep); }
+/* auto: whatever the bar it sits on is wearing. Paper is the default, so the mark is
+   correct before logo.js has said anything. */
+[data-logo="auto"] { --logo-ink: var(--logo-dark); }
+.nav[data-skin="paper"] [data-logo="auto"] { --logo-ink: var(--logo-dark); }
+.nav[data-skin="ink"] [data-logo="auto"] { --logo-ink: var(--logo-light); }
+.nav[data-skin="night"] [data-logo="auto"] { --logo-ink: var(--logo-lavender); }
+
+@supports ((-webkit-mask-image: url("x")) or (mask-image: url("x"))) {
+  .brand-mark {
+    background-color: var(--logo-ink, var(--logo-dark));
+    -webkit-mask: url("assets/images/la-monogram.png") center / contain no-repeat;
+    mask: url("assets/images/la-monogram.png") center / contain no-repeat;
+    transition: background-color 250ms ease;
+  }
+  /* The <img> is the no-mask fallback and must not paint its own white on top. */
+  .brand-mark img { display: none; }
+}
+
+/* Without mask support the original image is shown instead. brightness(0) changes only
+   its colour, never its geometry, which is the one filter this is safe to use. */
+@supports not ((-webkit-mask-image: url("x")) or (mask-image: url("x"))) {
+  .nav[data-skin="paper"] .brand-mark img { filter: brightness(0); }
+}
 .nav-links { display: flex; align-items: center; gap: .15rem; }
 .nav-links a {
   padding: .7rem .9rem;
@@ -1220,4 +1296,6 @@ body.dialog-open .nav { opacity: 0; pointer-events: none; }
   .intro-scene { transform: none !important; }
   html.intro-revealing .nav, html.intro-revealing .footer, html.intro-revealing #main { transition-duration: 160ms; transition-delay: 0ms; }
   .rail-dot { transition: none; }
+  /* The mark still changes colour, it simply changes at once. */
+  .brand-mark, .nav-inner { transition: none; }
 }
