@@ -6,6 +6,19 @@
   --muted: #665f69;
   --plum: #6f3f78;
   --plum-dark: #432149;
+  /* The night palette. The intro gate opens on these and the contact section closes
+     on them, so the first screen and the last are literally the same colours rather
+     than two purples that nearly agree. --plum-dark stays where it is: five other
+     rules depend on it and none of them is the last page. */
+  --night: #100B1C;
+  --night-lift: #1A1230;
+  --night-card: #1B142B;
+  --night-deep: #0B0714;
+  --violet: #A855F7;
+  --lavender: #C4B5FD;
+  --night-text: #F8F5FF;
+  --night-muted: #A79BC4;
+  --night-line: rgba(168, 85, 247, .28);
   --line: rgba(22, 19, 26, 0.17);
   --soft-line: rgba(22, 19, 26, 0.09);
   --white: #fffdf9;
@@ -563,29 +576,51 @@ img, video { max-width: 100%; }
 .skill-group ul { display: flex; flex-wrap: wrap; gap: .45rem; margin: 0; padding: 0; list-style: none; }
 .skill-group li { padding: .45rem .65rem; border: 1px solid var(--soft-line); border-radius: 999px; background: rgba(255,255,255,.32); color: var(--muted); font-size: .72rem; }
 
-.contact-section { padding-bottom: max(3rem, env(safe-area-inset-bottom)); background: var(--plum-dark); color: var(--white); }
+/* The last page, in the intro's colours. The violet lift sits at the top edge here
+   rather than the middle, so the section reads as the gate's room entered from the
+   other side instead of a copy of its composition. */
+.contact-section {
+  padding-bottom: max(3rem, env(safe-area-inset-bottom));
+  background:
+    radial-gradient(ellipse 78% 60% at 50% 0%, var(--night-lift) 0%, var(--night) 58%, var(--night-deep) 100%);
+  color: var(--night-text);
+}
 .contact-grid { display: grid; grid-template-columns: .82fr 1.18fr; gap: clamp(3rem, 8vw, 9rem); }
 .contact-copy { position: sticky; top: 7rem; align-self: start; }
-.contact-copy .section-label { color: #d4b4da; }
-.contact-copy p { max-width: 44ch; color: #d9cfdc; }
+.contact-copy .section-label { color: var(--lavender); }
+.contact-copy p { max-width: 44ch; color: var(--night-muted); }
 .contact-links { display: grid; gap: .65rem; margin-top: 2.2rem; }
-.contact-links a { width: fit-content; padding-bottom: .1rem; border-bottom: 1px solid rgba(255,255,255,.35); color: #fff; font-size: .9rem; }
-.contact-form { padding: clamp(1.4rem, 4vw, 3rem); border: 1px solid rgba(255,255,255,.18); border-radius: var(--radius); background: rgba(255,255,255,.07); }
+.contact-links a { width: fit-content; padding-bottom: .1rem; border-bottom: 1px solid rgba(168, 85, 247, .5); color: var(--night-text); font-size: .9rem; }
+/* The same card the intro introduces her on: same gradient, same violet rim. */
+.contact-form {
+  padding: clamp(1.4rem, 4vw, 3rem);
+  border: 1px solid var(--night-line);
+  border-radius: var(--radius);
+  background: linear-gradient(158deg, #241A3A 0%, var(--night-card) 58%, #130E20 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(196, 181, 253, .2),
+    0 0 52px -26px rgba(168, 85, 247, .55);
+}
 .contact-form h3 { margin: 0 0 2rem; font-family: var(--display); font-size: clamp(2rem, 4vw, 3.7rem); font-weight: 400; letter-spacing: -.045em; line-height: 1; }
 .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
 .field { display: grid; gap: .45rem; margin-bottom: 1rem; }
-.field span { color: #ded4e0; font-size: .72rem; font-weight: 650; }
-.field input, .field textarea { width: 100%; border: 0; border-bottom: 1px solid rgba(255,255,255,.28); border-radius: 0; padding: .8rem 0; background: transparent; color: #fff; font-size: 1rem; outline: none; transition: border-color 160ms ease; }
-.field input::placeholder, .field textarea::placeholder { color: rgba(255,255,255,.45); }
-.field input:focus, .field textarea:focus { border-color: #fff; }
+.field span { color: var(--night-muted); font-size: .72rem; font-weight: 650; }
+.field input, .field textarea { width: 100%; border: 0; border-bottom: 1px solid rgba(168, 85, 247, .34); border-radius: 0; padding: .8rem 0; background: transparent; color: var(--night-text); font-size: 1rem; outline: none; transition: border-color 260ms var(--ease-out); }
+.field input::placeholder, .field textarea::placeholder { color: rgba(196, 181, 253, .66); }
+.field input:focus, .field textarea:focus { border-color: var(--violet); }
 .field textarea { min-height: 8rem; resize: vertical; }
 .form-foot { display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin-top: 1.5rem; }
-.form-status { max-width: 36ch; margin: 0; color: #d8cedb; font-size: .72rem; }
-.contact-form .button { border-color: #fff; background: #fff; color: var(--plum-dark); }
+.form-status { max-width: 36ch; margin: 0; color: var(--night-muted); font-size: .72rem; }
+/* The send button is the Enter-portfolio button: the gate's shape, the gate's violet. */
+.contact-form .button { border-color: rgba(168, 85, 247, .5); background: rgba(168, 85, 247, .18); color: var(--night-text); box-shadow: 0 0 26px -8px rgba(168, 85, 247, .5); }
 .honeypot { position: absolute !important; left: -9999px !important; }
 
-.footer { padding: 2rem var(--pad); background: var(--plum-dark); color: #c5b8c8; }
-.footer-inner { display: flex; justify-content: space-between; gap: 2rem; padding-top: 1.2rem; border-top: 1px solid rgba(255,255,255,.15); font-size: .72rem; }
+.footer { padding: 2rem var(--pad); background: var(--night-deep); color: var(--night-muted); }
+.footer-inner { display: flex; align-items: center; justify-content: space-between; gap: 2rem; padding-top: 1.2rem; border-top: 1px solid var(--night-line); font-size: .72rem; }
+/* This had no styling at all -- it was a browser-default button sitting on a dark
+   footer, which on most platforms meant grey-on-grey. */
+.footer-replay { padding: .5rem .9rem; border: 1px solid var(--night-line); border-radius: 999px; background: transparent; color: var(--lavender); cursor: pointer; font: inherit; font-size: .68rem; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; transition: border-color 260ms var(--ease-out), background-color 260ms var(--ease-out), color 260ms var(--ease-out); }
+.footer-replay:focus-visible { outline: 2px solid var(--lavender); outline-offset: 3px; }
 
 .lightbox {
   position: fixed;
@@ -692,15 +727,15 @@ img, video { max-width: 100%; }
 html.intro-armed, html.intro-armed body { overflow: hidden; }
 
 html.intro-armed .intro {
-  --i-bg: #100B1C;
-  --i-bg-lift: #1A1230;
-  --i-card: #1B142B;
+  --i-bg: var(--night);
+  --i-bg-lift: var(--night-lift);
+  --i-card: var(--night-card);
   --i-card-deep: #130E20;
-  --i-violet: #A855F7;
-  --i-lavender: #C4B5FD;
-  --i-text: #F8F5FF;
-  --i-muted: #A79BC4;
-  --i-line: rgba(168, 85, 247, .28);
+  --i-violet: var(--violet);
+  --i-lavender: var(--lavender);
+  --i-text: var(--night-text);
+  --i-muted: var(--night-muted);
+  --i-line: var(--night-line);
 
   position: fixed;
   inset: 0;
@@ -711,7 +746,7 @@ html.intro-armed .intro {
   overflow: hidden;
   padding: max(3.5rem, 8vh) var(--pad) 1.6rem;
   background:
-    radial-gradient(ellipse 62% 52% at 50% 38%, var(--i-bg-lift) 0%, var(--i-bg) 58%, #0B0714 100%);
+    radial-gradient(ellipse 62% 52% at 50% 38%, var(--i-bg-lift) 0%, var(--i-bg) 58%, var(--night-deep) 100%);
   color: var(--i-text);
 }
 .intro.is-leaving { opacity: 0; transition: opacity 760ms var(--ease-out); pointer-events: none; }
@@ -782,8 +817,23 @@ html.intro-armed .intro {
   bottom: -2%;
   z-index: 2;
   width: clamp(8rem, 16vw, 11.5rem);
-  transform: translateX(-72%);
+  /* Home placement, then wherever she has been carried to. Keeping the offset in its
+     own properties lets intro.js move her without knowing which layout is in force --
+     this one, or the phone one further down, which parks her elsewhere entirely. */
+  transform: translateX(-72%) translate3d(var(--drag-x, 0px), var(--drag-y, 0px), 0);
+  cursor: grab;
+  /* Without this a touch drag scrolls the page instead of carrying her. */
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
 }
+.intro-kaia:focus-visible { outline: 2px solid var(--i-lavender); outline-offset: 8px; border-radius: 1rem; }
+.intro-kaia.is-dragging { cursor: grabbing; z-index: 3; }
+/* Held still while she is being carried: a figure that keeps breathing in your hand
+   reads as floating rather than held. */
+.intro-kaia.is-dragging .intro-kaia-figure { animation-play-state: paused; }
+/* Images refuse the browser's own drag ghost, so the gesture stays ours. */
+.intro-pose { -webkit-user-drag: none; }
 .intro-kaia-figure { position: relative; display: block; width: 100%; aspect-ratio: 250 / 360; animation: intro-breathe 5.5s ease-in-out infinite; }
 .intro-pose { position: absolute; inset: 0; display: block; width: 100%; height: 100%; object-fit: contain; opacity: 0; transition: opacity 260ms var(--ease-out); }
 .intro-pose.is-on { opacity: 1; }
@@ -792,10 +842,16 @@ html.intro-armed .intro {
 .intro-pose[hidden], .intro-kaia-figure[hidden] { display: none; }
 @keyframes intro-breathe { 50% { transform: translateY(-.45rem); } }
 /* A violet pool under her, so she stands on the light rather than hovering in it. */
-.intro-kaia-shadow { position: absolute; left: 50%; bottom: 1%; width: 68%; height: 6%; transform: translateX(-50%); border-radius: 50%; background: radial-gradient(ellipse, rgba(88, 28, 135, .75) 0%, rgba(168, 85, 247, .18) 45%, transparent 72%); filter: blur(4px); }
+.intro-kaia-shadow { position: absolute; left: 50%; bottom: 1%; width: 68%; height: 6%; transform: translateX(-50%); border-radius: 50%; background: radial-gradient(ellipse, rgba(88, 28, 135, .75) 0%, rgba(168, 85, 247, .18) 45%, transparent 72%); filter: blur(4px); transition: width 240ms var(--ease-out), opacity 240ms var(--ease-out), filter 240ms var(--ease-out); }
+/* Lifted: the pool under her shrinks and softens, the way a real one would. */
+.intro-kaia.is-dragging .intro-kaia-shadow { width: 52%; opacity: .55; filter: blur(8px); }
 
 .intro-hello { position: absolute; left: 56%; bottom: 92%; width: max-content; max-width: 13rem; margin: 0 0 .5rem; padding: .5rem .75rem; border: 1px solid var(--i-line); border-radius: .8rem .8rem .8rem .2rem; background: rgba(32, 22, 54, .97); color: var(--i-text); font-size: .68rem; line-height: 1.4; box-shadow: 0 14px 34px -16px rgba(10, 4, 24, .95), 0 0 24px -14px rgba(168, 85, 247, .6); }
 .intro-hello[hidden] { display: none; }
+
+/* Announced, never drawn. The cursor says "draggable" to a mouse user and nothing at
+   all to anyone else. */
+.intro-hint { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; border: 0; }
 
 .intro-skip { margin: 0; }
 .intro-skip-button { padding: .5rem .9rem; border: 0; background: transparent; color: #7B6E96; cursor: pointer; font: inherit; font-size: .62rem; font-weight: 700; letter-spacing: .18em; text-transform: uppercase; transition: color 260ms var(--ease-out); }
@@ -940,7 +996,9 @@ html.intro-revealing #main { opacity: 1; transform: none; transition: opacity 76
   .kaia-button:hover { background: rgba(255,255,255,.1); color: #fff; }
   .brand-tab:hover[aria-selected="false"] { color: var(--ink); }
   .listing-card:hover { background: var(--plum-dark); }
-  .contact-links a:hover { border-color: #fff; }
+  .contact-links a:hover { border-color: var(--lavender); color: var(--lavender); }
+  .contact-form .button:hover { border-color: rgba(196, 181, 253, .7); background: rgba(168, 85, 247, .34); color: var(--night-text); box-shadow: 0 0 36px -6px rgba(168, 85, 247, .7); }
+  .footer-replay:hover { border-color: rgba(196, 181, 253, .6); background: rgba(168, 85, 247, .16); color: var(--night-text); }
 }
 
 /* Portrait viewports taller than they are wide (every tablet held upright, Surface,
@@ -1088,7 +1146,7 @@ html.intro-revealing #main { opacity: 1; transform: none; transition: opacity 76
   .intro-scene { width: 100%; }
   .intro-card { padding: 1.5rem 1.2rem 1.4rem; border-radius: 1.2rem; }
   .intro-enter { width: 100%; justify-content: center; margin-top: 1.2rem; }
-  .intro-kaia { width: clamp(6rem, 28vw, 8.5rem); left: auto; right: 0; bottom: auto; top: 0; transform: translate(28%, -58%); }
+  .intro-kaia { width: clamp(6rem, 28vw, 8.5rem); left: auto; right: 0; bottom: auto; top: 0; transform: translate(28%, -58%) translate3d(var(--drag-x, 0px), var(--drag-y, 0px), 0); }
   .intro-kaia-shadow { display: none; }
   .intro-hello { left: auto; right: 0; bottom: auto; top: 100%; margin: .4rem 0 0; border-radius: .8rem .2rem .8rem .8rem; font-size: .64rem; }
   .intro-glow span { filter: blur(52px); }
@@ -1152,7 +1210,9 @@ body.dialog-open .nav { opacity: 0; pointer-events: none; }
   .intro-glow span { animation: none; }
   .intro-kaia-figure { animation: none; }
   .intro-card, .intro-kaia, .intro-skip { opacity: 1 !important; transform: none !important; }
-  .intro-kaia { transform: translateX(-72%) !important; }
+  /* Dragging is the visitor's own motion, so it stays. Only the idle float goes. */
+  .intro-kaia { transform: translateX(-72%) translate3d(var(--drag-x, 0px), var(--drag-y, 0px), 0) !important; }
+  .intro-kaia-shadow { transition: none; }
   .intro.is-live .intro-eyebrow, .intro.is-live .intro-name,
   .intro.is-live .intro-rule, .intro.is-live .intro-disciplines, .intro.is-live .intro-enter { animation: none; }
   .intro-enter { box-shadow: 0 0 26px -6px rgba(168, 85, 247, .45); }

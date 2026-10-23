@@ -13,8 +13,11 @@
  * Kaia is three of her own supplied poses stacked on top of each other, cross-faded by
  * CSS. Nothing here rotates or distorts her to stand in for a pose she does not have.
  * kaia.js is untouched and still drives the packed sprite in Selected work; this file
- * does not import it, because the gate no longer needs an animation engine to show her
- * gesturing at the card.
+ * does not import it, because the gate needs no animation engine to show a still.
+ *
+ * Listeners are attached once, in wire(). The gate can be reopened from the footer, and
+ * an earlier version re-attached everything each time it was -- which quietly stacked a
+ * second set of handlers on every replay.
  */
 
 /* The brief's timeline: background, card at 0.5s, Kaia at 1.0s, card text at 1.8s,
@@ -36,96 +39,120 @@ if (window.__introSafety) {
   window.__introSafety = null;
 }
 
-const inertable = () => [
-  document.querySelector('.nav'),
-  document.getElementById('main'),
-  document.querySelector('.footer'),
-  document.querySelector('[data-to-top]')
-].filter(Boolean);
+const armed = () => html.classList.contains('intro-armed');
 
-function setInert(on) {
-  inertable().forEach(node => {
-    if ('inert' in node) node.inert = on;
-    else if (on) node.setAttribute('aria-hidden', 'true');
-    else node.removeAttribute('aria-hidden');
-  });
+let leaving = false;
+let dragging = false;
+let settleTimer = null;
+
+const scene = intro?.querySelector('[data-intro-scene]');
+const kaiaBox = intro?.querySelector('[data-intro-kaia]');
+const hello = intro?.querySelector('[data-intro-hello]');
+const enters = intro ? [...intro.querySelectorAll('[data-intro-enter]')] : [];
+const pose = poseSwitcher(intro?.querySelector('[data-intro-figure]'));
+const kaiaDrag = draggable(kaiaBox);
+
+if (intro) {
+  wire();
+  if (armed()) open();
 }
 
-if (intro && html.classList.contains('intro-armed')) arm();
-backToIntro();
+/* ------------------------------------------------------------------ the two states */
 
-function arm() {
-  const scene = intro.querySelector('[data-intro-scene]');
-  const kaiaBox = intro.querySelector('[data-intro-kaia]');
-  const hello = intro.querySelector('[data-intro-hello]');
-  const enters = [...intro.querySelectorAll('[data-intro-enter]')];
-  const pose = poseSwitcher(intro.querySelector('[data-intro-figure]'));
-  let leaving = false;
-
+function open() {
+  leaving = false;
+  pose.reset();
+  kaiaDrag.reset();
+  enters.forEach(button => { button.disabled = false; });
   setInert(true);
   /* A reload can restore a scroll position, which would drop the visitor halfway down
      the portfolio the moment the overlay lifts. */
   if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
   window.scrollTo(0, 0);
 
+  intro.classList.remove('is-leaving');
   requestAnimationFrame(() => requestAnimationFrame(() => intro.classList.add('is-live')));
 
-  /* The button works from the first frame rather than when its animation finishes. */
+  clearTimeout(settleTimer);
+  settleTimer = setTimeout(() => {
+    if (armed() && !leaving) enters[0]?.focus({ preventScroll: true });
+  }, reduceMotion ? 0 : SETTLE_MS);
+}
+
+function enter() {
+  if (leaving || !armed()) return;
+  leaving = true;
+  clearTimeout(settleTimer);
+  enters.forEach(button => { button.disabled = true; });
+  /* A parting gesture, in a pose she actually has. */
+  pose.show('cheer');
+  intro.classList.remove('is-live');
+  intro.classList.add('is-leaving');
+
+  setTimeout(() => html.classList.add('intro-revealing'), reduceMotion ? 0 : REVEAL_AT);
+  setTimeout(() => {
+    html.classList.remove('intro-armed', 'intro-revealing');
+    intro.classList.remove('is-leaving');
+    setInert(false);
+    if ('scrollRestoration' in history) history.scrollRestoration = 'auto';
+    document.querySelector('.nav .brand')?.focus({ preventScroll: true });
+    document.dispatchEvent(new CustomEvent('intro:left'));
+  }, reduceMotion ? 60 : LEAVE_MS);
+}
+
+/* ------------------------------------------------------------------ wiring, once */
+
+function wire() {
+  /* The buttons work from the first frame rather than when the animation finishes. */
   enters.forEach(button => button.addEventListener('click', enter));
-  setTimeout(() => enters[0]?.focus({ preventScroll: true }), reduceMotion ? 0 : SETTLE_MS);
 
-  document.addEventListener('keydown', onKey);
-  function onKey(event) {
-    if (leaving) return;
-    if (event.key === 'Escape' || event.key === 'Enter') {
-      if (event.target instanceof HTMLButtonElement) return;   /* buttons handle their own */
-      event.preventDefault();
-      enter();
-    }
-  }
+  document.addEventListener('keydown', event => {
+    if (leaving || !armed()) return;
+    if (event.key !== 'Escape' && event.key !== 'Enter') return;
+    /* Buttons handle their own activation, and Kaia handles her own keys. */
+    if (event.target instanceof HTMLButtonElement) return;
+    event.preventDefault();
+    enter();
+  });
 
-  /* --- the pointer tilt. Card and mascot share one transformed box, so she cannot
-         drift away from the card she is gesturing at. --- */
+  /* The pointer tilt. Card and mascot share one transformed box, so she cannot drift
+     away from the card she is gesturing at. */
   if (scene && finePointer && !reduceMotion) tilt(scene);
 
-  /* --- hover. She changes to her open-palm pose and says hello. --- */
+  /* Hover: she changes to her open-palm pose and says hello. */
   if (kaiaBox && hello) {
     const greet = () => { hello.hidden = false; pose.show('greet'); };
-    const part = () => { hello.hidden = true; pose.show(REST_POSE); };
+    const part = () => {
+      if (dragging) return;              /* she keeps greeting while being carried */
+      hello.hidden = true;
+      pose.show(REST_POSE);
+    };
     kaiaBox.addEventListener('pointerenter', greet);
     kaiaBox.addEventListener('pointerleave', part);
     kaiaBox.addEventListener('focusin', greet);
     kaiaBox.addEventListener('focusout', part);
-    kaiaBox.tabIndex = 0;
     kaiaBox.addEventListener('keydown', event => {
-      if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); greet(); }
+      if (event.key !== 'Enter' && event.key !== ' ') return;
+      event.preventDefault();
+      /* Without this the document handler above sees the same Enter and leaves the
+         gate, so greeting her would have skipped the intro. */
+      event.stopPropagation();
+      greet();
     });
   }
 
-  function enter() {
-    if (leaving) return;
-    leaving = true;
-    enters.forEach(button => { button.disabled = true; });
-    document.removeEventListener('keydown', onKey);
-    /* A parting gesture, in a pose she actually has. */
-    pose.show('cheer');
-    intro.classList.remove('is-live');
-    intro.classList.add('is-leaving');
-
-    const revealAt = reduceMotion ? 0 : REVEAL_AT;
-    const doneAt = reduceMotion ? 60 : LEAVE_MS;
-
-    setTimeout(() => html.classList.add('intro-revealing'), revealAt);
-    setTimeout(() => {
-      html.classList.remove('intro-armed', 'intro-revealing');
-      intro.classList.remove('is-leaving');
-      setInert(false);
-      if ('scrollRestoration' in history) history.scrollRestoration = 'auto';
-      document.querySelector('.nav .brand')?.focus({ preventScroll: true });
-      document.dispatchEvent(new CustomEvent('intro:left'));
-    }, doneAt);
-  }
+  /* The way back. */
+  document.querySelectorAll('[data-intro-replay]').forEach(button => {
+    button.addEventListener('click', () => {
+      if (!intro || armed()) return;
+      window.scrollTo(0, 0);
+      html.classList.add('intro-armed');
+      open();
+    });
+  });
 }
+
+/* ------------------------------------------------------------------ Kaia */
 
 /*
  * One pose visible at a time.
@@ -140,18 +167,131 @@ function poseSwitcher(figure) {
     figure.querySelectorAll('[data-pose]').forEach(img => frames.set(img.dataset.pose, img));
   }
   let current = REST_POSE;
-  return {
-    show(name) {
-      if (!frames.has(name) || name === current) return;
-      frames.get(current)?.classList.remove('is-on');
-      frames.get(name).classList.add('is-on');
-      current = name;
-    }
+  const show = name => {
+    if (!frames.has(name) || name === current) return;
+    frames.get(current)?.classList.remove('is-on');
+    frames.get(name).classList.add('is-on');
+    current = name;
   };
+  return { show, reset: () => show(REST_POSE) };
 }
 
+/*
+ * Kaia can be picked up and put down anywhere.
+ *
+ * The offset goes into two custom properties rather than into `transform`, because her
+ * resting placement is already a transform that the stylesheet owns -- and it differs
+ * between desktop and phone. Composing in CSS means the drag never has to know which
+ * layout is in force, and she returns to the right home on either.
+ *
+ * Her position is measured once when she is picked up, not on every move: reading
+ * layout inside a pointermove is how a drag starts costing more than it should.
+ */
+function draggable(box) {
+  if (!box) return { reset() {} };
+
+  const STEP = 8;          /* arrow key */
+  const BIG = 32;          /* shift + arrow key */
+  const EDGE = 10;         /* keep this much of the viewport around her */
+
+  let x = 0, y = 0;                 /* where she is, relative to home */
+  let fromX = 0, fromY = 0;         /* where she was when picked up */
+  let grabX = 0, grabY = 0;         /* where the pointer was when it picked her up */
+  let base = null;                  /* her untranslated box */
+  let pointer = null;
+
+  const apply = () => {
+    box.style.setProperty('--drag-x', `${x.toFixed(1)}px`);
+    box.style.setProperty('--drag-y', `${y.toFixed(1)}px`);
+  };
+
+  const measure = () => {
+    const r = box.getBoundingClientRect();
+    return { left: r.left - x, top: r.top - y, w: r.width, h: r.height };
+  };
+
+  /* She can go anywhere on the screen, but never off it. */
+  const moveTo = (nx, ny) => {
+    const b = base || measure();
+    x = Math.min(Math.max(nx, EDGE - b.left), window.innerWidth - EDGE - b.w - b.left);
+    y = Math.min(Math.max(ny, EDGE - b.top), window.innerHeight - EDGE - b.h - b.top);
+    apply();
+  };
+
+  box.addEventListener('pointerdown', event => {
+    if (event.pointerType === 'mouse' && event.button !== 0) return;
+    pointer = event.pointerId;
+    dragging = true;
+    base = measure();
+    fromX = x; fromY = y;
+    grabX = event.clientX; grabY = event.clientY;
+    box.setPointerCapture(pointer);
+    box.classList.add('is-dragging');
+    /* Stops the browser's own image-drag ghost. */
+    event.preventDefault();
+  });
+
+  box.addEventListener('pointermove', event => {
+    if (!dragging || event.pointerId !== pointer) return;
+    moveTo(fromX + event.clientX - grabX, fromY + event.clientY - grabY);
+  });
+
+  const drop = event => {
+    if (event.pointerId !== pointer) return;
+    dragging = false;
+    pointer = null;
+    base = null;
+    box.classList.remove('is-dragging');
+  };
+  box.addEventListener('pointerup', drop);
+  box.addEventListener('pointercancel', drop);
+
+  /* Arrow keys for anyone not using a pointer. Escape and Home send her home, which is
+     quicker than walking her back. */
+  box.addEventListener('keydown', event => {
+    const step = event.shiftKey ? BIG : STEP;
+    const by = {
+      ArrowLeft: [-step, 0], ArrowRight: [step, 0],
+      ArrowUp: [0, -step], ArrowDown: [0, step]
+    }[event.key];
+    if (by) {
+      event.preventDefault();
+      event.stopPropagation();
+      base = measure();
+      moveTo(x + by[0], y + by[1]);
+      base = null;
+      return;
+    }
+    if (event.key === 'Home' || (event.key === 'Escape' && (x || y))) {
+      event.preventDefault();
+      event.stopPropagation();
+      reset();
+    }
+  });
+
+  /* Double-click puts her back. */
+  box.addEventListener('dblclick', reset);
+
+  /* A resize must not leave her stranded outside the window. */
+  addEventListener('resize', () => {
+    if (!x && !y) return;
+    base = measure();
+    moveTo(x, y);
+    base = null;
+  }, { passive: true });
+
+  function reset() {
+    x = 0; y = 0;
+    apply();
+  }
+
+  return { reset };
+}
+
+/* ------------------------------------------------------------------ the pointer tilt */
+
 /* Restrained: four degrees, damped, and it stops as soon as it has settled. */
-function tilt(scene) {
+function tilt(target_) {
   const MAX = 4;
   const EASE = 0.1;
   const REST = 0.02;
@@ -166,41 +306,41 @@ function tilt(scene) {
       if (Math.abs(delta) > REST) { current[key] += delta * EASE; moving = true; }
       else current[key] = target[key];
     }
-    scene.style.setProperty('--tilt-x', `${current.x.toFixed(3)}deg`);
-    scene.style.setProperty('--tilt-y', `${current.y.toFixed(3)}deg`);
+    target_.style.setProperty('--tilt-x', `${current.x.toFixed(3)}deg`);
+    target_.style.setProperty('--tilt-y', `${current.y.toFixed(3)}deg`);
     if (!moving) { running = false; return; }
     requestAnimationFrame(frame);
   };
   const wake = () => { if (!running) { running = true; requestAnimationFrame(frame); } };
 
-  const onMove = event => {
+  window.addEventListener('pointermove', event => {
+    /* While she is being carried the tilt stands down. The tilt moves her too, and two
+       things moving her at once makes her feel loose rather than held. */
+    if (!armed() || dragging) return;
     const across = event.clientX / window.innerWidth - 0.5;
     const down = event.clientY / window.innerHeight - 0.5;
     target.y = across * 2 * MAX;
     target.x = -down * 2 * MAX;
     wake();
-  };
-  window.addEventListener('pointermove', onMove, { passive: true });
+  }, { passive: true });
+
   /* Once the gate is gone there is nothing left to tilt. */
   document.addEventListener('intro:left', () => {
-    window.removeEventListener('pointermove', onMove);
     target.x = 0; target.y = 0; wake();
-  }, { once: true });
+  });
 }
 
-/* The way back. */
-function backToIntro() {
-  document.querySelectorAll('[data-intro-replay]').forEach(button => {
-    button.addEventListener('click', () => {
-      if (!intro || html.classList.contains('intro-armed')) return;
-      window.scrollTo(0, 0);
-      intro.classList.remove('is-leaving');
-      /* Whatever pose she left in, she is back to resting when the gate reopens. */
-      intro.querySelectorAll('[data-pose]').forEach(img => {
-        img.classList.toggle('is-on', img.dataset.pose === REST_POSE);
-      });
-      html.classList.add('intro-armed');
-      arm();
-    });
+/* ------------------------------------------------------------------ the page behind */
+
+function setInert(on) {
+  [
+    document.querySelector('.nav'),
+    document.getElementById('main'),
+    document.querySelector('.footer'),
+    document.querySelector('[data-to-top]')
+  ].filter(Boolean).forEach(node => {
+    if ('inert' in node) node.inert = on;
+    else if (on) node.setAttribute('aria-hidden', 'true');
+    else node.removeAttribute('aria-hidden');
   });
 }

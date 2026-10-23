@@ -48,7 +48,7 @@
            supplied sheet onto a shared baseline, so a swap changes her pose without
            moving her. No rotation, no skew, no recolouring: the artwork is hers. The
            two she is not currently in are aria-hidden, so she is announced once. -->
-      <div class="intro-kaia" data-intro-kaia>
+      <div class="intro-kaia" data-intro-kaia tabindex="0" aria-describedby="kaia-hint">
         <span class="intro-kaia-shadow" aria-hidden="true"></span>
         <span class="intro-kaia-figure" data-intro-figure>
           <img class="intro-pose is-on" data-pose="present" width="250" height="360" src="assets/images/kaia-present.webp" alt="Kaia, the mascot who introduces this portfolio, gesturing toward the card">
@@ -56,6 +56,7 @@
           <img class="intro-pose" data-pose="cheer" width="250" height="360" src="assets/images/kaia-cheer.webp" alt="" aria-hidden="true">
         </span>
         <p class="intro-hello" data-intro-hello hidden>Hi! I&rsquo;m Kaia. Welcome to my portfolio!</p>
+        <p class="intro-hint" id="kaia-hint">Kaia can be moved. Drag her, or use the arrow keys; Home puts her back.</p>
       </div>
     </div>
 
