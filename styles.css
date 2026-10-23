@@ -828,6 +828,64 @@ img, video { max-width: 100%; }
 }
 @keyframes dock-drift { 50% { --dock-float: -5px; } }
 
+/* ------------------------------------------------------- case studies
+   The trigger sits in a project intro; the reader is a native <dialog>, which brings
+   the focus trap, the backdrop and Escape with it. */
+.case-open { grid-column: 1 / -1; justify-self: start; display: inline-flex; align-items: center; gap: .55rem; min-height: 2.5rem; margin-top: .4rem; padding: .55rem 1.15rem; border: 1px solid rgba(255,255,255,.26); border-radius: 999px; background: transparent; color: #e4dce6; cursor: pointer; font: inherit; font-size: .71rem; font-weight: 700; letter-spacing: .06em; transition: background-color 220ms var(--ease-out), border-color 220ms var(--ease-out), color 220ms var(--ease-out); }
+.case-open-arrow { transition: transform 260ms var(--ease-out); }
+.case-open:active { transform: scale(.98); }
+/* On the light Print section the dark-panel colours would vanish. */
+.print-sticky .case-open { margin-top: 1.6rem; border-color: var(--line); color: var(--ink); }
+
+.case { width: min(54rem, calc(100vw - 2rem)); max-height: min(88dvh, 60rem); padding: 0; border: 0; border-radius: var(--radius); background: transparent; overflow: visible; }
+.case::backdrop { background: rgba(14, 9, 17, .72); -webkit-backdrop-filter: blur(5px); backdrop-filter: blur(5px); }
+.case-card { display: grid; grid-template-rows: auto minmax(0, 1fr) auto; max-height: inherit; overflow: hidden; border-radius: var(--radius); background: var(--white); color: var(--ink); box-shadow: var(--shadow); }
+
+.case-head { position: relative; padding: 1.8rem 1.9rem 1.3rem; border-bottom: 1px solid var(--soft-line); }
+.case-kind { margin: 0; color: var(--plum); font-size: .6rem; font-weight: 750; letter-spacing: .16em; text-transform: uppercase; }
+.case-head h2 { margin: .5rem 0 .6rem; max-width: 24ch; font-family: var(--display); font-size: clamp(1.9rem, 4vw, 2.9rem); font-weight: 400; letter-spacing: -.035em; line-height: 1; }
+.case-lead { margin: 0; max-width: 56ch; color: var(--muted); font-size: .86rem; line-height: 1.6; }
+.case-facts { display: flex; flex-wrap: wrap; gap: .3rem 1.6rem; margin: 1.1rem 0 0; }
+.case-facts dt { color: var(--muted); font-size: .58rem; font-weight: 750; letter-spacing: .14em; text-transform: uppercase; }
+.case-facts dd { margin: 0 0 0 .5rem; font-size: .74rem; font-weight: 650; }
+.case-close { position: absolute; top: 1.1rem; right: 1.1rem; width: 2.2rem; height: 2.2rem; display: grid; place-items: center; border: 1px solid var(--soft-line); border-radius: 50%; background: var(--white); color: var(--muted); cursor: pointer; font-size: 1.2rem; line-height: 1; }
+
+/* The scroll container is focusable so a keyboard can reach the text itself, not
+   only the controls around it. */
+.case-body { padding: .5rem 1.9rem 1.6rem; overflow-y: auto; overscroll-behavior: contain; }
+.case-body:focus-visible { outline: 2px solid var(--plum); outline-offset: -4px; }
+.case-section { padding: 1.4rem 0; border-bottom: 1px solid var(--soft-line); }
+.case-section:last-child { border-bottom: 0; }
+.case-section h3 { margin: 0; font-size: .95rem; font-weight: 750; letter-spacing: -.01em; }
+.case-section p { margin: .7rem 0 0; max-width: 68ch; color: #3d3542; font-size: .84rem; line-height: 1.72; }
+
+/* What a section is based on, said rather than implied. A reading of a finished piece
+   is a different kind of claim from a fact in the project files, and a draft is not a
+   claim at all -- so they do not get to look the same. */
+.case-basis { display: inline-block; margin: .5rem 0 0 !important; padding: .18rem .55rem; border-radius: 999px; font-size: .58rem !important; font-weight: 750; letter-spacing: .08em; text-transform: uppercase; }
+.case-section[data-basis="verified"] .case-basis { background: rgba(60, 110, 70, .12); color: #35603f; }
+.case-section[data-basis="analysis"] .case-basis { background: rgba(111, 63, 120, .12); color: var(--plum); }
+.case-section[data-basis="draft"] .case-basis { background: rgba(176, 106, 20, .14); color: #8a5310; }
+.case-section[data-basis="draft"] { padding-left: 1rem; border-left: 2px solid rgba(176, 106, 20, .4); }
+.case-section[data-basis="draft"] p { color: #5a4f33; }
+
+.case-foot { padding: .9rem 1.9rem 1.1rem; border-top: 1px solid var(--soft-line); background: var(--paper); }
+.case-foot p { margin: 0; color: var(--muted); font-size: .66rem; line-height: 1.55; }
+
+/* ------------------------------------------------------- creative approach */
+.approach-list { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; margin: 0; padding: 0; counter-reset: approach; list-style: none; border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; background: var(--line); }
+.approach-list li { counter-increment: approach; display: grid; align-content: start; gap: .55rem; padding: 1.7rem 1.5rem; background: var(--paper); }
+.approach-list li::before { color: var(--plum); content: "0" counter(approach); font-size: .64rem; font-weight: 750; letter-spacing: .1em; font-variant-numeric: tabular-nums; }
+.approach-list h3 { margin: 0; font-size: 1rem; font-weight: 700; letter-spacing: -.012em; }
+.approach-list p { margin: 0; color: var(--muted); font-size: .8rem; line-height: 1.68; }
+
+/* ------------------------------------------------------- professional growth */
+.growth-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.6rem 2rem; }
+.growth-item { display: grid; align-content: start; gap: .6rem; padding-top: 1.1rem; border-top: 2px solid var(--ink); }
+.growth-item h3 { margin: 0; font-size: 1rem; font-weight: 700; letter-spacing: -.012em; }
+.growth-item p { margin: 0; color: var(--muted); font-size: .8rem; line-height: 1.68; }
+.growth-from { color: var(--plum) !important; font-size: .62rem !important; font-weight: 750; letter-spacing: .1em; text-transform: uppercase; }
+
 /* ===================================================== scroll choreography
    Every class here is added by scenes.js at runtime, never written into the markup.
    That is deliberate: if the module does not load, nothing is hidden and the page is
@@ -869,6 +927,10 @@ img, video { max-width: 100%; }
   .media-card:hover img { transform: scale(1.035); }
   .showroom-chip:hover, .showroom-pick:hover { border-color: var(--plum); }
   .book-turn:hover:not(:disabled) { background: rgba(255,255,255,.1); border-color: rgba(255,255,255,.5); color: #fff; }
+  .case-open:hover { background: rgba(255,255,255,.1); border-color: rgba(255,255,255,.55); color: #fff; }
+  .case-open:hover .case-open-arrow { transform: translateX(.22rem); }
+  .print-sticky .case-open:hover { background: var(--ink); border-color: var(--ink); color: var(--white); }
+  .case-close:hover { border-color: var(--ink); color: var(--ink); }
   .stage-cta:hover { background: #fff; border-color: #fff; color: var(--ink); }
   /* Tile hover: lighter plum, the icon lifts, the arrow leaves diagonally, the text
      brightens and the border lights. All four at once, all of them small. */
@@ -930,6 +992,7 @@ img, video { max-width: 100%; }
   .print-sticky { position: static; }
   .process { display: grid; grid-template-columns: 1fr 1fr; }
   .showroom-fallback { grid-template-columns: repeat(2, 1fr); }
+  .approach-list, .growth-grid { grid-template-columns: repeat(2, 1fr); }
   /* Below a laptop there is no room beside the product for a side panel, so the detail
      card becomes a sheet across the bottom of the stage. It is capped so the product it
      describes is never more than half covered. */
@@ -1030,6 +1093,15 @@ img, video { max-width: 100%; }
   .showroom-detail { padding: .8rem; gap: .6rem; max-height: 48%; }
   .showroom-detail-head h3 { font-size: 1.5rem; }
   .showroom-fallback { grid-template-columns: 1fr; }
+  .approach-list, .growth-grid { grid-template-columns: 1fr; }
+  .approach-list li { padding: 1.3rem 1.2rem; }
+  /* A reading dialog on a phone is the screen. */
+  .case { width: 100vw; max-width: 100vw; max-height: 100dvh; margin: 0; }
+  .case-card { max-height: 100dvh; border-radius: 0; }
+  .case-head { padding: 1.4rem 1.2rem 1.1rem; }
+  .case-body { padding: .4rem 1.2rem 1.3rem; }
+  .case-foot { padding: .8rem 1.2rem 1rem; }
+  .case-facts { gap: .2rem 1rem; }
   .kaia-details { grid-template-columns: 1fr; }
   .kaia-turnaround { gap: .7rem; }
   .contact-grid { grid-template-columns: 1fr; }
@@ -1086,6 +1158,7 @@ body.dialog-open .nav { opacity: 0; pointer-events: none; }
   .media-card img, .hero-photo img, .photo-pair img { transform: none !important; }
   .stage-ambient span, .stage-scroll-rule::after { animation: none; }
   .book-leaf.is-turning { animation: none; }
+  .case-open-arrow { transition: none; }
   .stage-dock { animation: none; transform: none !important; }
   .dock-sheen { display: none; }
   .dock-icon, .dock-arrow, .dock-tile { transition: none; }
