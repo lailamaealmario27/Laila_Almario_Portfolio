@@ -68,15 +68,63 @@ The form carries a honeypot field that is invisible to a real visitor; anything 
 a bot and the submission is dropped before it is sent. Web3Forms' own `botcheck` is sent
 alongside it.
 
-## The landing
+## The intro gate
 
-The page opens on `#welcome`, a full-screen cinematic section **in the normal flow** --
-not an overlay. There is nothing to dismiss, nothing locks the scroll and no deep link
-has to route around it: you scroll past it the way you scroll past any other section.
-An earlier version of this was a fixed overlay with a dismiss gate; it was replaced
-because a gate is a thing that can trap someone, and a section cannot.
+The site opens on **State A**: a fixed overlay carrying the name card and Kaia, with the
+portfolio below it inert and unscrollable. Entering lifts it away -- it is not a section
+you scroll past, it is a state the page leaves.
+
+Three things keep it from becoming a trap:
+
+* an inline script in `<head>` adds `intro-armed` to `<html>` **before first paint**, so
+  the portfolio never flashes behind the overlay;
+* that same script sets a 5-second safety timer which disarms the gate if `intro.js`
+  never arrives. Cancelling that timer is the first thing the module does. A gate that
+  can jam shut is worse than no gate at all;
+* **a deep link skips it entirely** -- if `location.hash` is set, the gate never arms.
+
+`open()` also pins `history.scrollRestoration` to `manual` and scrolls to the top,
+because a reload that restores a scroll position would otherwise drop the visitor
+halfway down the portfolio the moment the overlay lifted. Entering hands scrolling back,
+moves focus to the masthead brand and fires an `intro:left` event.
+
+Kaia in the gate is **three of her own supplied poses** stacked and cross-faded by CSS:
+`present` at rest, `greet` on hover or focus, `cheer` on the way out. Nothing is rotated
+or distorted to stand in for a pose she does not have. This is separate from `kaia.js`,
+which still drives the packed sprite in Selected work -- the gate needs no animation
+engine to show a still. She can be dragged, and the whole scene tilts up to 4° to
+follow the pointer -- that last only on a fine pointer with motion allowed, so touch
+and reduced motion simply never see it.
+
+Listeners are attached once, in `wire()`. The gate can be reopened from the footer, and
+an earlier version re-attached everything each time it was, quietly stacking a second
+set of handlers on every replay.
+
+Under `prefers-reduced-motion` the timeline collapses to near-zero rather than animating.
 
 ## Scroll choreography
+
+`scenes.js`. Headings wipe up as they arrive, groups of things enter one after another,
+and the two photographed areas drift against the scroll. That is the whole of it: no
+pinning, no scroll hijacking, no snapping. Native scrolling is never touched.
+
+**The one rule that keeps this safe: JavaScript hides, JavaScript reveals.** Nothing on
+the page is hidden by the stylesheet alone, which is why the hiding classes are added by
+the module rather than written into the markup. If `scenes.js` never loads, never runs,
+or throws halfway through, every section stays exactly as visible as it was before it
+existed -- and its `catch` explicitly re-reveals anything already hidden.
+
+Two deliberate exclusions:
+
+* **the hero `h1` gets no animation.** It is Laila's name and the first thing the page is
+  for; it does not get to depend on an observer firing or a class landing. It renders.
+* **reduced motion skips the module entirely**, which leaves the page static and
+  complete. Only `backToTop()` runs either way, because it is a control rather than an
+  animation.
+
+`GROUPS` names a container, the children to stagger, and the gap between them. Selectors
+that match nothing are skipped, so the list can safely name things that only exist on
+some pages.
 
 ## The KOKOLOCK catalogue
 
@@ -123,7 +171,8 @@ Telegram commands and the right-click menu. If the assistant changes, the copy i
 | Path | What it is |
 | --- | --- |
 | `kaia/frames/` | Her 46 source frames, five clips: idle, nod, tilt, hop, dance. |
-| `kaia/poses/` | The four turnaround views. |
+| `kaia/poses/` | `kaia_front`/`side`/`threequarter`/`back.png`, the four turnaround views, plus `pose-01`…`pose-17.png`: her 17 supplied poses, cut out. |
+| `assets/images/kaia-present`, `-greet`, `-cheer.webp` | The three poses the intro gate loads, placed on one 250×360 canvas. |
 | `kaia/build_kaia_sprite.py` | Packs the frames onto one sheet and converts the views to WebP. |
 | `assets/images/kaia-sprite.webp` | The sheet the site loads: one clip per row. |
 | `kaia.js` | Walks a row a column at a time on a canvas. |
@@ -144,7 +193,28 @@ the sheet fails to load, the static turnaround view it replaces stays on screen.
 
 She is a portfolio piece, not a chatbot: she lives in her own tab and nowhere else.
 
-`index.html` is the website entry point. The visual system lives in `styles.css`, interactions live in `app.js`, and images/videos are stored in `assets/`.
+## The files
+
+`index.html` is the entry point and `styles.css` is the whole visual system. The
+JavaScript is deliberately split so that one piece failing cannot take the rest down.
+
+| File | What it does |
+| --- | --- |
+| `app.js` | The core. Fills the Selected work galleries, and runs the lightbox, tabs, navigation and contact form. **The gallery block is first and imports nothing optional:** if it stops running, Selected work renders empty. |
+| `intro.js` | State A, the intro gate. See [The intro gate](#the-intro-gate). |
+| `scenes.js` | Scroll choreography. See [Scroll choreography](#scroll-choreography). |
+| `work-rail.js` | Arrows, dots, drag-to-scroll and keyboard paging for the horizontal rails. Each rail is enhanced independently. |
+| `catalogue.js` | Presents the catalogue rail as a book, forwarding clicks to the rail's own zoom button. Hides the rail only once a working book is on screen. |
+| `showroom.js` | The Print production WebGL scene. Falls back to the supplied photographs on any error. |
+| `kaia.js` | Walks the packed sprite in the Desktop assistant tab. |
+| `logo.js` | The adaptive monogram -- a CSS mask of the original PNG, inked from the tone the section behind the navigation declares. |
+| `case-studies.js` | **The content file.** All case-study copy, every section tagged `verified`, `analysis` or `draft`. This is the one to edit. |
+| `case-study.js` | The reader dialog, built on the platform's own `<dialog>`. Renders each section's basis. |
+| `site-config.js` | The Web3Forms access key, and nothing else. |
+
+Images and video live in `assets/`. The modules layered on top of `app.js` follow one
+rule: they touch only their own hooks and fail quietly, because an earlier integration
+coupled a viewer to the galleries and took the galleries down with it.
 
 The previous single-file version is retained in `archive/index.legacy.html` for reference only and is not loaded by the production site.
 
