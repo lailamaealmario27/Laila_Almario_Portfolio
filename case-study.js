@@ -18,6 +18,22 @@
 import { CASE_STUDIES, BASIS_LABEL } from './case-studies.js';
 
 /*
+ * A section may also carry `items` (feature cards) and `steps` (an ordered workflow).
+ * Both are optional, so every existing study renders exactly as it did.
+ *
+ * Each item carries a `status`, and the label is deliberately blunt. A feature that is
+ * built but not connected to anything is not a feature a reader can rely on, and a
+ * portfolio that blurs the two is making a claim it cannot support. The three states
+ * are the only ones allowed; an unknown value falls back to showing nothing rather
+ * than inventing a reassuring label.
+ */
+const STATUS_LABEL = {
+  live: 'Implemented',
+  building: 'In development',
+  planned: 'Planned'
+};
+
+/*
  * Draft sections are not published.
  *
  * A section marked `draft` is something only Laila can confirm -- her intent, her
@@ -33,7 +49,12 @@ const SHOW_DRAFTS = false;
 
 const panels = [...document.querySelectorAll('.work-panel[id^="panel-"]')];
 const printSection = document.querySelector('#print .print-sticky');
-if (panels.length || printSection) boot();
+/* Anything that is neither a work panel nor the print section names its study with
+   `data-case="<key>"`, and optionally marks where the button goes with
+   `data-case-slot`. That is what lets one screen inside a panel carry its own study
+   without being promoted to a panel of its own. */
+const hosts = [...document.querySelectorAll('[data-case]')];
+if (panels.length || printSection || hosts.length) boot();
 
 function boot() {
   const dialog = build();
@@ -52,6 +73,13 @@ function boot() {
   if (printSection && CASE_STUDIES.print) {
     printSection.append(trigger('print', CASE_STUDIES.print));
   }
+
+  hosts.forEach(host => {
+    const key = host.dataset.case;
+    const study = CASE_STUDIES[key];
+    if (!study) return;
+    (host.querySelector('[data-case-slot]') || host).append(trigger(key, study));
+  });
 
   function trigger(key, study) {
     const button = document.createElement('button');
@@ -146,6 +174,62 @@ function fill(dialog, study) {
       p.textContent = text;
       block.append(p);
     });
+
+    if (section.items?.length) block.append(features(section.items));
+    if (section.steps?.length) block.append(steps(section.steps));
+
     body.append(block);
   });
+}
+
+/* The feature cards. One card per feature, each with its implementation status, so a
+   reader can tell at a glance what the thing does today from what it is going to do.
+   Built with textContent throughout: every string here is author-written, but a
+   portfolio that renders its own data as HTML is one copy-paste away from not being
+   able to say that any more. */
+function features(items) {
+  const list = document.createElement('ul');
+  list.className = 'case-features';
+
+  items.forEach(item => {
+    const card = document.createElement('li');
+    card.className = 'case-feature';
+    card.dataset.status = item.status;
+
+    const head = document.createElement('p');
+    head.className = 'case-feature-name';
+    head.textContent = item.name;
+    card.append(head);
+
+    const label = STATUS_LABEL[item.status];
+    if (label) {
+      const pill = document.createElement('span');
+      pill.className = 'case-status';
+      pill.textContent = label;
+      head.append(' ', pill);
+    }
+
+    const text = document.createElement('p');
+    text.className = 'case-feature-body';
+    text.textContent = item.body;
+    card.append(text);
+
+    list.append(card);
+  });
+
+  return list;
+}
+
+/* The workflow, as an ordered list. It is a sequence and it should look like one --
+   seven paragraphs in a row read as prose and lose the order, which is the only thing
+   the section is for. */
+function steps(entries) {
+  const list = document.createElement('ol');
+  list.className = 'case-steps';
+  entries.forEach(entry => {
+    const item = document.createElement('li');
+    item.textContent = entry;
+    list.append(item);
+  });
+  return list;
 }

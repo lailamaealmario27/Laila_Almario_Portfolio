@@ -309,20 +309,361 @@ export const CASE_STUDIES = {
     ]
   },
 
+  /* ---------------------------------------------------------------- dashboard */
+  /* Keyed off `data-case` on the spotlight figure in the social panel rather than off
+     a panel id, because this is one product inside Content operations rather than a
+     category of its own. The key stays `dashboard` so the existing trigger, the
+     spotlight figure and any link to it keep working.
+
+     🔴 EVERY FEATURE BELOW WAS CHECKED AGAINST THE RUNNING PROJECT, not against the
+     brief for it. The source is `C:\Users\User\LEILA CLAUDE\Hub` (the Flask app, its
+     own READMEs and its test suites), `Bots\` (the two assistants) and `Brain\OPEN.md`
+     (the project's own outstanding list). Each feature carries `status`:
+
+       'live'      the code path exists and is exercised by its own tests or by daily use
+       'building'  built and tested, but blocked on a credential, an approval or an
+                   install that has not happened — so it does NOT work end to end today
+       'planned'   named in the brief, not built, or not possible on this account type
+
+     Nothing is marked 'live' on the strength of a UI control existing. Where a platform
+     connection, an automatic publish or a live analytics read cannot be shown to work,
+     it is 'building' and the card says what is missing. */
+  dashboard: {
+    title: 'K-PICK Marketing & Operations Dashboard',
+    kind: 'Internal product — marketing operations',
+    brands: 'K-PICK Trading Corp.',
+    platform: 'Internal web application, office network',
+    scope: 'Thirteen sections in eight groups',
+    lead: 'The workspace our marketing work runs through: monthly planning, content ' +
+          'production and review, team assignments, ERP-linked product records, and ' +
+          'the reporting that closes the day.',
+    sections: [
+      /* ------------------------------------------------------------ 1. summary */
+      { id: 'summary', title: 'Summary', basis: 'verified', body: [
+        'The K-PICK Marketing & Operations Dashboard is a single internal workspace ' +
+        'for planning marketing activity, managing content production, coordinating ' +
+        'team tasks, monitoring connected business data and preparing reports. It ' +
+        'runs on the office network and is used by our marketing team.',
+        'It began as a multimedia dashboard — a calendar, a task list and a few ' +
+        'counters. It now covers eight areas of the work: Overview, Marketing, ' +
+        'E-commerce, Social Media, Content Creation, SEO Management, ' +
+        'Communities & Leads, and Team. Two desktop assistants, Kaia and Kibo, sit ' +
+        'alongside it and handle the daily reporting.',
+        'Access is granted per section, per action and per record, so each member ' +
+        'sees the part of the workspace they work in and nothing else.'
+      ] },
+
+      /* ----------------------------------------------- 2. problem and purpose */
+      { id: 'objective', title: 'Problem and purpose', basis: 'verified', body: [
+        'Our marketing work was spread across spreadsheets, chat threads, a Notion ' +
+        'calendar and the company ERP. Answering an ordinary question — what is due ' +
+        'today, which products need promotion, what is still waiting for my approval ' +
+        '— meant opening four places and reconciling them by hand.',
+        'I built this to put those answers in one place and to make the review step ' +
+        'explicit. Content now has a state that everyone can see: planned, in ' +
+        'progress, for approval, approved, needs revision, published. Nothing ' +
+        'advances because someone remembered to mention it.',
+        'The second purpose is reporting. The day used to end with writing up what ' +
+        'had happened. The dashboard already holds the records — submissions, ' +
+        'approvals, publications — so the report is assembled from them and I review ' +
+        'and send it rather than compose it.'
+      ] },
+
+      /* ------------------------------------------------------------ 3. my role */
+      { id: 'role', title: 'My role', basis: 'verified', body: [
+        'I specified and directed the dashboard and I operate it day to day. The ' +
+        'project files record this directly: the structure of the navigation, the ' +
+        'six content states, the per-member permission model, the read-only rule on ' +
+        'ERP data and the shape of the daily report are all written down as my ' +
+        'instructions, and the code carries them as comments next to the lines that ' +
+        'implement them.',
+        'The build is AI-assisted. I work in my own project workspace with Claude ' +
+        'Code: I set the requirement and the constraints, review what comes back ' +
+        'against the real data, and decide what ships. The engineering judgement ' +
+        'calls that I made are visible in the result — one sidebar row with internal ' +
+        'tabs instead of thirteen rows, a workflow state stored locally rather than ' +
+        'migrating 330 live Notion rows, and a missing number rendered as “not ' +
+        'available” rather than as zero.',
+        'I also run the operations side: the monthly plan, the assignments, the ' +
+        'reviews and approvals, the product and listing records, and the reporting ' +
+        'that goes out.'
+      ] },
+
+      /* -------------------------------------------------- 4. the feature groups */
+      { id: 'features', title: 'What the sections do', basis: 'verified',
+        body: [
+          'Eight groups, thirteen sections. Each card below says what the section is ' +
+          'for and whether it works today. “In development” means the code is built ' +
+          'and tested but something outside the dashboard — a platform approval, a ' +
+          'credential, an install — has not happened yet, so it does not work end to ' +
+          'end. I would rather say that than imply otherwise.'
+        ],
+        items: [
+          { name: 'Overview', status: 'live', body:
+            'The screen the day opens on: content and task progress, what to do ' +
+            'first, the week at a glance, upcoming posts, open tasks and the ' +
+            'products that need attention. It answers what to pick up next, and ' +
+            'deliberately shows nothing that would not change the next hour.' },
+
+          { name: 'Marketing — products, pricing approvals, script generator',
+            status: 'live', body:
+            'Product records built from the company ERP: details, pictures, stock ' +
+            'and expiry, per-platform listing prices, categories, a margin and ' +
+            'discount calculator, and dated promotion remarks so the team can see ' +
+            'which products need a push. Discount requests go through an approval ' +
+            'queue. Cost and margin figures are a separate permission from viewing ' +
+            'the product.' },
+
+          { name: 'E-commerce — ERP-linked shop data', status: 'live', body:
+            'Ten tabs reading one feed from the company ERP: stock and fulfilment ' +
+            'alerts, sales, listings, campaign ideas and results, platform ad and ' +
+            'promotion records, shop health and creator activity. It is ERP-recorded ' +
+            'data read over the office network, not a live connection to Shopee, ' +
+            'Lazada or TikTok Shop — and it is strictly read-only. There is no ' +
+            'control anywhere in the section that could change a price, a stock ' +
+            'level, a listing or an order, and a test fails the build if one is ever ' +
+            'added.' },
+
+          { name: 'Social media — accounts, publishing queue, post analytics',
+            status: 'building', body:
+            'Account organisation by brand is built: Kokolock on Facebook and ' +
+            'TikTok, K-PICK E-commerce on Facebook and TikTok, K-PICK Medical on ' +
+            'Facebook and Instagram, each with a record of published posts. The ' +
+            'connection, publishing and analytics features are written and tested ' +
+            'but not connected: the Facebook developer registration is still ' +
+            'pending, and TikTok requires a public HTTPS address this dashboard does ' +
+            'not yet have. Until an account authorises a real request the section ' +
+            'reads “Awaiting account setup” and refuses every connect, publish and ' +
+            'sync call. Nothing is ever marked connected on the strength of a token ' +
+            'alone.' },
+
+          { name: 'Content Creation — calendar, Content Studio, analytics',
+            status: 'live', body:
+            'The monthly calendar and the Content Studio are two views of the same ' +
+            'record, so planning and production never drift apart. The workflow is ' +
+            'the part I care most about: assignment, submission deadline, submitted ' +
+            'files, revision comments, who approved it and when, and — per platform ' +
+            '— the live link and the real publication date. Submitted, approved and ' +
+            'published are kept as three separate facts, because they are. Post ' +
+            'metrics are recorded against the content: TikTok counts can be read ' +
+            'from a public post link, while Facebook and Instagram figures are ' +
+            'entered by hand until those accounts are connected, and the page says ' +
+            'which is which.' },
+
+          { name: 'SEO Management', status: 'live', body:
+            'Ten tabs for keeping marketplace listings accurate and consistent: ' +
+            'product-title, category, description and thumbnail checks, keyword and ' +
+            'search-position tracking, an optimiser, a modification log and daily ' +
+            'reports. Every change is logged with what it was before.' },
+
+          { name: 'Communities & Leads', status: 'live', body:
+            'Two lead registers — healthcare professionals met at PhilMed Expo, and ' +
+            'the peptide seller community — with tiers, owners, contact state, ' +
+            'follow-ups and a per-lead order history. A call-script helper drafts a ' +
+            'follow-up from the lead’s own details.' },
+
+          { name: 'Team — assignments, requests, logs and reports', status: 'live',
+            body:
+            'Task assignment, a requests-and-notes board with attachments and ' +
+            'notifications, daily logs, and the monthly summary. Permissions are ' +
+            'per section, per action — view, create, edit, comment, submit, approve, ' +
+            'publish, delete, export, see financial detail — and per record scope, ' +
+            'so a member can be limited to the items assigned to them. Financial ' +
+            'detail and private reports are their own grants and are off by ' +
+            'default.' },
+
+          { name: 'Kaia — my assistant', status: 'live', body:
+            'A desktop assistant on my own machine, also reachable on Telegram. I ' +
+            'talk to it in English or Tagalog: it answers questions about the ' +
+            'dashboard’s own data, keeps reminders, runs service and test checks, ' +
+            'helps with writing, and records what I did so the evening report is ' +
+            'already drafted. It runs a fixed set of named jobs — it cannot be sent ' +
+            'code to execute, and it does not act on the dashboard on my behalf.' },
+
+          { name: 'Kibo — the team assistant', status: 'building', body:
+            'The same assistant under a different name, for our content creator’s ' +
+            'PC: work updates and his half of the reporting. The package is built ' +
+            'and ready to install; until it is running on his machine the report ' +
+            'labels his section “never connected” rather than inventing a quiet ' +
+            'day.' },
+
+          { name: 'Consolidated daily and monthly report', status: 'live', body:
+            'One report, three sections: the content creator’s work, my workflow, ' +
+            'and next actions. Every line comes from a record with a signature and ' +
+            'a time — a submission, an approval, a publication — and there is no ' +
+            'code path that turns a missing update into a claim about a person. ' +
+            'Application usage is shown separately as context and never read as ' +
+            'completed work. It is prepared as a draft on a schedule; I review it ' +
+            'and send it. It never sends itself.' },
+
+          { name: 'Automatic publishing and scheduling', status: 'building', body:
+            'The publishing queue is built: one job per platform, duplicate ' +
+            'prevention built into the store, and an uncertain result reconciled ' +
+            'against the platform rather than retried, because the failure mode of ' +
+            'guessing is posting twice on a brand’s page. Approving content never ' +
+            'publishes it — that is deliberate and enforced in the code. Nothing ' +
+            'can actually be published from here until the platform accounts are ' +
+            'connected, and public posting to TikTok additionally needs an audit ' +
+            'that has not been applied for.' },
+
+          { name: 'Live platform analytics and shop monitoring', status: 'planned',
+            body:
+            'Reading reach, engagement and account health directly from Facebook, ' +
+            'Instagram and TikTok needs those accounts connected and the analytics ' +
+            'scopes granted. Some figures are not available from the platforms at ' +
+            'all — TikTok’s API does not return reach, saves or watch time — and ' +
+            'those are shown as not available rather than estimated. Shopee ' +
+            'affiliate data is not available to an account of our type.' }
+        ] },
+
+      /* ------------------------------------------------------------ 5. workflow */
+      { id: 'workflow', title: 'How it supports the daily workflow', basis: 'verified',
+        body: [
+          'One piece of content moves through the dashboard like this. Every step ' +
+          'leaves a dated record, which is what makes the reporting possible at all.'
+        ],
+        steps: [
+          'I build the monthly plan in the calendar — brand, theme, format, platform ' +
+          'and posting date.',
+          'I assign each item to our content creator with a submission deadline.',
+          'He produces it and submits the files against the calendar item, so the ' +
+          'plan and the work are the same record.',
+          'I review it. I either request a revision with comments, or approve it.',
+          'Approved content is published or scheduled through the configured ' +
+          'integrations where a platform connection exists; otherwise it is posted ' +
+          'manually and the live link and real publication date are recorded against ' +
+          'the item.',
+          'Results are recorded against the same item, so the plan, the production ' +
+          'history and the performance history stay joined.',
+          'At the end of the day the report is assembled from those records. I read ' +
+          'it, correct anything, and send it.'
+        ] },
+
+      /* --------------------------------------------------------- 6. screenshots */
+      { id: 'screens', title: 'Screenshots', basis: 'verified', body: [
+        'Nine screens, all current. The one above is the Overview: eight navigation ' +
+        'groups down the left, the counters that decide what gets touched first, the ' +
+        'week at a glance, the single thing to do first, and the next posts across ' +
+        'three brands.',
+        'In the gallery below it — Products, where ERP records become marketing work, ' +
+        'with per-platform prices and promotion remarks; E-commerce alerts, marked ' +
+        'read-only on the screen itself, showing stock and shipping deadlines per ' +
+        'platform; the content calendar and the Content Studio, which are the same ' +
+        'month seen as a plan and as production work, carrying the planned, published ' +
+        'and for-approval states; content analytics, which reports only what was ' +
+        'actually measured; SEO Management, which says on its own banner how old its ' +
+        'data is; the call-script generator; and the lead register.',
+        'Two of those are worth looking at for what they refuse to do. The analytics ' +
+        'screen says “2 of 12 posts reported it” above every figure and “no group yet ' +
+        'has enough measurable posts to rank” where a ranking would normally go. The ' +
+        'SEO screen leads with a red banner saying the latest report is missing and ' +
+        'that the figures below are the last real data, not an estimate. Both are ' +
+        'deliberate: a dashboard that fills a gap with a plausible number is worse ' +
+        'than one that admits the gap.',
+        'Every screenshot is redacted so that no customer or lead record, private ' +
+        'report, cost, margin, revenue figure, account identifier or team ' +
+        'member’s name is readable. On the lead register that means the names, ' +
+        'companies and contact details are destroyed and only the structure remains ' +
+        '— how many leads, at what tier, in what follow-up state. The dashboard ' +
+        'itself is an internal system on the office network and is not linked from ' +
+        'this site.'
+      ] },
+
+      /* ----------------------------------------------------------- 7. outcomes */
+      { id: 'outcomes', title: 'Verified outcomes', basis: 'verified', body: [
+        'What can be counted, counted from the project itself. No performance, ' +
+        'time-saving or adoption figures are claimed here, because none has been ' +
+        'measured.',
+        'Thirteen sections across eight groups, with permissions defined per ' +
+        'section, per action and per record scope. 490 products in the ERP-linked ' +
+        'catalogue, 489 of them carrying a picture imported from the ERP. Real ' +
+        'marketplace listings readable per product across three platforms. Around ' +
+        '330 rows in the two content calendars, each able to carry the full ' +
+        'production workflow. Ten e-commerce tabs served by a single ERP call per ' +
+        'page load.',
+        'The work is held up by its own test suites rather than by inspection, and ' +
+        'they are run before anything is treated as working. One finding is worth ' +
+        'naming: over 400 passing checks once sat on top of a data shape the ERP ' +
+        'does not actually send, because the test fixture and the code had been ' +
+        'built from the same written handoff. The real feed was compared field by ' +
+        'field, four mismatches were corrected, and every reader now accepts both ' +
+        'shapes. A fixture cannot verify the document it came from.'
+      ] },
+
+      /* -------------------------------------------------------------- 8. stack */
+      { id: 'stack', title: 'Technology', basis: 'verified', body: [
+        'Python and Flask on the server, with Jinja2 templates. The front end is ' +
+        'plain HTML, CSS and JavaScript with no framework and no build step, and the ' +
+        'charts are inline SVG with no charting library — a deliberate choice so any ' +
+        'single change is one targeted edit rather than a rebuild.',
+        'Data comes from the company ERP over the office network (read-only, two ' +
+        'separate keys for two separate feeds), from Notion for the content ' +
+        'calendars, and from Google Sheets for the expo lead list. The workflow ' +
+        'records, permissions and audit trail are local JSON stores. Passwords are ' +
+        'hashed; any stored platform token is encrypted at rest; every credential ' +
+        'file is excluded from version control.',
+        'The two assistants are Python: a desktop application with a Telegram ' +
+        'interface, talking to the dashboard through its API with a device token. ' +
+        'Chart colours were checked against a contrast and colour-vision validator ' +
+        'rather than chosen by eye, and no data series uses the red, green or amber ' +
+        'that mean something else on these screens.'
+      ] },
+
+      /* ------------------------------------------------------------- 9. status */
+      { id: 'status', title: 'Current development status', basis: 'verified', body: [
+        'In daily use: Overview, Marketing (products, pricing approvals, script ' +
+        'generator), E-commerce, Content Creation, SEO Management, Communities & ' +
+        'Leads, Team, Kaia, and the consolidated reporting.',
+        'In development, blocked outside the dashboard: social account connection, ' +
+        'automatic publishing and platform analytics all wait on the Facebook ' +
+        'developer registration clearing, a public HTTPS address, and — for public ' +
+        'TikTok posting — a platform audit. Kibo is built and waiting to be ' +
+        'installed on our content creator’s PC. Backfilling submission deadlines ' +
+        'across the existing calendar items is a one-time run I have not yet made.',
+        'Planned or not available: making the four middle content states visible ' +
+        'inside Notion would need a schema change on 330 live rows and is a separate ' +
+        'decision; a read-only ERP service account would replace the personal login ' +
+        'the product-image importer currently uses; Shopee affiliate data is not ' +
+        'available to an account of our type.'
+      ] },
+
+      /* ----- what only she can confirm. Published nowhere; see the review doc. */
+      { id: 'process', title: 'Role and process', basis: 'draft', body: [
+        'The project files establish that the structure, the workflow states, the ' +
+        'permission model and the reporting spec are your instructions, quoted in ' +
+        'the code beside the lines that implement them, and that the build is ' +
+        'AI-assisted in your own workspace. The published “My role” section states ' +
+        'exactly that and no more.',
+        'What the files cannot settle is how you want the split described to an ' +
+        'employer — specified and directed, built with AI assistance, or ' +
+        'co-developed. Pick the wording you are comfortable defending in an ' +
+        'interview and it goes in verbatim.'
+      ] },
+      { id: 'learnings', title: 'Key learnings', basis: 'draft', body: [
+        'Suggested, for your confirmation: that a daily publishing commitment is ' +
+        'held up by the planning system rather than by effort; that deciding what a ' +
+        'dashboard refuses to show is as much of the design as deciding what it ' +
+        'shows; and that a test suite built from the same document as the code it ' +
+        'tests proves only that you read the document consistently.'
+      ] }
+    ]
+  },
+
   /* ------------------------------------------------------------------- social */
   social: {
     title: 'Content operations',
     kind: 'Planning systems',
     brands: 'K-PICK Trading Corp.',
-    platform: 'K-PICK Hub, internal',
+    platform: 'K-PICK Marketing & Operations Dashboard',
     scope: 'Four working views',
-    lead: 'The planning systems behind the published work: a marketing dashboard, two ' +
-          'content calendars and a content studio.',
+    lead: 'The planning systems behind the published work: two content calendars and ' +
+          'a content studio, inside the K-PICK Marketing & Operations Dashboard — ' +
+          'which has its own case study.',
     sections: [
       { id: 'overview', title: 'Project overview', basis: 'verified', body: [
-        'Four views from the K-PICK Hub: a marketing dashboard, a medical content ' +
-        'calendar, an e-commerce campaign calendar, and a content studio for ideas and ' +
-        'captions.',
+        'Four views from the K-PICK Marketing & Operations Dashboard: the overview ' +
+        'screen, a medical content calendar, an e-commerce campaign calendar, and a ' +
+        'content studio for ideas and captions.',
         'The scope-of-work record places Hub operation at manager level inside the ' +
         'role, covering Products, Pricing Approvals, SEO, Content Studio, Content ' +
         'Calendar, Script Generator, leads, tasks and reporting.'
@@ -335,12 +676,11 @@ export const CASE_STUDIES = {
         'role rather than only the finished artwork.'
       ] },
       { id: 'strategy', title: 'What the screens show', basis: 'analysis', body: [
-        'The dashboard leads with a single count of content due today, which is the ' +
-        'one number that changes what you do next. Task progress and upcoming posts ' +
-        'sit beneath it.',
-        'The two calendars are separated by business line rather than merged, so the ' +
-        'medical schedule with its recurring weekly formats does not have to share a ' +
-        'grid with e-commerce campaign bursts.',
+        'The overview opens the day with the counts that decide what gets touched ' +
+        'first; the whole dashboard is taken apart in its own case study.',
+        'The calendar is filtered by brand rather than merged into one grid, so the ' +
+        'medical schedule with its recurring weekly formats can be read without ' +
+        'e-commerce campaign bursts running through it.',
         'The content studio holds ideas and captions before they become scheduled ' +
         'posts, which keeps a backlog separate from a commitment.'
       ] },
@@ -554,7 +894,7 @@ export const CASE_STUDIES = {
     title: 'Kaia, the desktop assistant',
     kind: 'Software I built',
     brands: 'Personal build, used at K-PICK',
-    platform: 'Windows desktop, Telegram, K-PICK Hub',
+    platform: 'Windows desktop, Telegram, the K-PICK dashboard',
     scope: 'One Python application',
     lead: 'A desktop assistant I designed and built to turn a day of work into a ' +
           'report, without reading anything it should not.',
@@ -562,7 +902,8 @@ export const CASE_STUDIES = {
       { id: 'overview', title: 'Project overview', basis: 'verified', body: [
         'A Python desktop application that watches which window is in front, sorts the ' +
         'day into twelve categories, drafts an end-of-day report and pushes it to the ' +
-        'K-PICK Hub. It runs as an animated character on the corner of the screen.',
+        'K-PICK Marketing & Operations Dashboard. It runs as an animated character on ' +
+        'the corner of the screen.',
         'It is the only item in this portfolio that is my own software rather than ' +
         'client work, and it is in a creative portfolio because the hardest decisions ' +
         'in it were about trust and wording rather than about code.'

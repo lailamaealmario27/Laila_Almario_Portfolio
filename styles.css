@@ -458,6 +458,20 @@ img, video { max-width: 100%; }
 .project-intro { display: grid; grid-template-columns: minmax(0, 1fr) minmax(250px, 28rem); gap: 3rem; align-items: end; margin-bottom: 2.3rem; }
 .project-intro h3 { max-width: 14ch; margin: 0; font-family: var(--display); font-size: clamp(2.6rem, 5vw, 5rem); font-weight: 400; letter-spacing: -.055em; line-height: .93; }
 .project-intro p { margin: 0; color: #b8b0ba; }
+
+/* A single screenshot shown at full width instead of as a rail card. A rail card is a
+   `cover` crop of a fixed-height box, which is fine for artwork and useless for a dense
+   interface -- at rail size the dashboard showed a vertical strip of one panel. Here the
+   image keeps its own ratio (width/height on the <img> reserves the space before it
+   loads) and the caption sits beside it on a desktop, under it below that. */
+.case-spotlight { display: grid; grid-template-columns: minmax(0, 1.55fr) minmax(250px, 1fr); gap: 2.4rem; align-items: center; margin: 0 0 2.3rem; }
+.case-spotlight-frame { position: relative; overflow: hidden; border: 1px solid rgba(255,255,255,.12); border-radius: var(--radius); background: #29252b; }
+.case-spotlight-frame img { display: block; width: 100%; height: auto; }
+.case-spotlight figcaption { display: grid; gap: .7rem; justify-items: start; }
+.case-spotlight h4 { margin: 0; max-width: 24ch; font-family: var(--display); font-size: clamp(1.7rem, 2.4vw, 2.5rem); font-weight: 400; letter-spacing: -.04em; line-height: 1.02; }
+.case-spotlight figcaption p { margin: 0; color: #b8b0ba; }
+.case-spotlight .case-open { margin-top: .3rem; }
+
 /* touch-action is deliberately left at its default: `pan-y` here used to tell the
    browser that only vertical gestures belonged to this box, which disabled swiping the
    rail sideways on every touch device. The browser disambiguates the two directions on
@@ -527,6 +541,11 @@ img, video { max-width: 100%; }
 .media-card img, .media-card video { width: 100%; height: 100%; display: block; object-fit: cover; transition: transform 700ms var(--ease-out); }
 .media-card.portrait { aspect-ratio: 4 / 5; }
 .media-card.square { aspect-ratio: 1; }
+/* Application screens. The ratio matches the screenshots, so `contain` fits them edge
+   to edge with no letterbox, and a whole screen is legible as a shape at rail size. */
+.media-card.wide { min-height: 0; aspect-ratio: 1600 / 812; }
+.media-card.wide img { object-fit: contain; background: #0d1a2e; }
+.media-rail[data-set="social"] { grid-auto-columns: min(78vw, 640px); }
 .media-card video { background: #080708; object-fit: contain; }
 .media-caption { position: absolute; inset: auto .8rem .8rem .8rem; pointer-events: none; display: flex; align-items: end; justify-content: space-between; gap: 1rem; padding: .9rem 1rem; border: 1px solid rgba(255,255,255,.22); border-radius: .9rem; background: rgba(18,15,20,.69); color: #fff; -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); }
 .media-caption strong { font-size: .83rem; }
@@ -990,6 +1009,27 @@ html.intro-revealing #main { opacity: 1; transform: none; transition: opacity 76
 .case-section[data-basis="draft"] { padding-left: 1rem; border-left: 2px solid rgba(176, 106, 20, .4); }
 .case-section[data-basis="draft"] p { color: #5a4f33; }
 
+/* Feature cards. Two columns where there is room, one on a phone. The cards sit on
+   the paper tone rather than inside borders on white, so a list of thirteen reads as
+   a set instead of thirteen boxes. */
+.case-features { display: grid; grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr)); gap: .7rem; margin: 1.1rem 0 0; padding: 0; list-style: none; }
+.case-feature { padding: .85rem .95rem .9rem; border-radius: calc(var(--radius) * .5); background: var(--paper); }
+.case-feature-name { margin: 0 !important; max-width: none !important; font-size: .78rem !important; font-weight: 750; letter-spacing: -.005em; line-height: 1.4 !important; color: var(--ink) !important; }
+.case-feature-body { margin: .45rem 0 0 !important; max-width: none !important; font-size: .78rem !important; line-height: 1.66 !important; }
+
+/* The status pill. "Implemented" and "In development" are different claims and the
+   whole point of the card is that a reader can tell them apart without reading the
+   paragraph, so they do not share a colour. Never red: nothing here has failed. */
+.case-status { display: inline-block; margin-left: .3rem; padding: .14rem .5rem; border-radius: 999px; font-size: .55rem; font-weight: 750; letter-spacing: .08em; text-transform: uppercase; vertical-align: .1em; white-space: nowrap; }
+.case-feature[data-status="live"] .case-status { background: rgba(60, 110, 70, .13); color: #35603f; }
+.case-feature[data-status="building"] .case-status { background: rgba(176, 106, 20, .15); color: #8a5310; }
+.case-feature[data-status="planned"] .case-status { background: rgba(22, 19, 26, .08); color: var(--muted); }
+
+/* The workflow. Numbered, because the order is the content. */
+.case-steps { margin: 1.1rem 0 0; padding-left: 1.4rem; display: grid; gap: .5rem; max-width: 68ch; }
+.case-steps li { color: #3d3542; font-size: .84rem; line-height: 1.66; }
+.case-steps li::marker { color: var(--plum); font-weight: 750; font-size: .78rem; }
+
 .case-foot { padding: .9rem 1.9rem 1.1rem; border-top: 1px solid var(--soft-line); background: var(--paper); }
 .case-foot p { margin: 0; color: var(--muted); font-size: .66rem; line-height: 1.55; }
 
@@ -1096,6 +1136,9 @@ html.intro-revealing #main { opacity: 1; transform: none; transition: opacity 76
   .hero-copy { grid-template-columns: 1fr; gap: 1.6rem; }
   .section-heading { grid-template-columns: 1fr; gap: 1.5rem; }
   .project-intro { grid-template-columns: 1fr; gap: 1.1rem; }
+  /* The screenshot is 3.5:1, so in one column it is already short. The caption goes
+     under it rather than beside it. */
+  .case-spotlight { grid-template-columns: 1fr; gap: 1.3rem; }
   .kaia-layout { grid-template-columns: 1fr; gap: 2rem; }
   .kaia-details { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .about-grid { grid-template-columns: 1fr; gap: 3rem; }
@@ -1119,7 +1162,7 @@ html.intro-revealing #main { opacity: 1; transform: none; transition: opacity 76
      most of its width -- at 766px it was showing a 29% vertical slice of a dashboard.
      Deriving the height from the track keeps the whole frame in view. The .portrait,
      .square and .is-video rules are more specific, so their own ratios still win. */
-  .media-card { min-height: 0; aspect-ratio: 16 / 10; }
+  .media-card:not(.wide) { min-height: 0; aspect-ratio: 16 / 10; }
   /* A centred crop loses the top edge, which is where a dashboard puts its heading. */
   .media-card img { object-position: center top; }
   /* A fixed track rather than minmax(): minmax resolves to its 290px floor as soon as

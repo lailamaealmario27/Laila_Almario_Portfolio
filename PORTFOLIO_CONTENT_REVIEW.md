@@ -78,6 +78,128 @@ properly throughout.
 - [ ] **Process.** Was the page template built once and then populated, or did it
       converge after several pages? The answer is a good process story either way.
 
+### K-PICK Marketing & Operations Dashboard (its own case study)
+
+**Rewritten 2026-10-28.** The entry was "Marketing dashboard" and described one
+screen. It is now the whole product, and every feature in it was checked against the
+running project — the Flask app, its own READMEs, its test suites, the two assistants,
+and the project's own outstanding list — rather than against the brief for it. Each
+feature card carries **Implemented**, **In development** or **Planned**, and the three
+mean different things:
+
+| Label | What it means here |
+|---|---|
+| **Implemented** | the code path exists and is exercised by its own tests or by daily use |
+| **In development** | built and tested, but blocked on a credential, a platform approval or an install, so it does **not** work end to end today |
+| **Planned** | named but not built, or not possible on this account type |
+
+**Marked In development, deliberately** — these are the claims a reader would most
+likely assume work, and they do not:
+
+- **Social account connections.** No Facebook App ID (developer registration still
+  blocked at the device-verification step) and no public HTTPS address, which TikTok
+  requires with no exception. The page reads *Awaiting account setup* and refuses every
+  connect, publish and sync call.
+- **Automatic publishing.** The queue is built and tested; nothing can be published
+  until an account is connected, and public TikTok posting additionally needs an audit
+  that has not been applied for.
+- **Kibo on the content creator's PC.** Built and ready to install; not installed.
+- **Live platform analytics and shop account health** are marked **Planned** for the
+  same reason, with the honest note that some figures (TikTok reach, saves, watch
+  time) are not in the API at all and are shown as *not available*, never estimated.
+
+**ERP data is described as ERP-recorded, never as live marketplace data.** The feed is
+live, read-only and enforced read-only in three places — but it is the company's ERP
+over the office network, not a connection to Shopee, Lazada or TikTok Shop, and the
+copy says so.
+
+**Nothing is claimed that was not measured.** The Verified outcomes section counts only
+things that exist — sections, products, calendar rows, listings. There is no time
+saved, no adoption figure, no performance improvement, because none has been measured.
+
+#### Screenshots — replaced 2026-10-28, and what was redacted
+
+You sent ten current captures. **Nine are in; one is held back.** Every one that ships
+was redacted first, and `catalogue/build_hub_screenshots.py` is the script that does it
+— it lists each region, the file it belongs to, and the rule that put it there. Re-run
+it rather than editing an image by hand, and **never swap in a raw capture.**
+
+Redaction is pixelate-then-blur, not blur alone: a blur of small text can be partly
+recovered, so each region is reduced to 10px blocks before it is blurred. What ships
+cannot be read back.
+
+| Screen | Redacted | Why |
+|---|---|---|
+| Overview | the top-creator handle and its peso figure | an account identifier and money |
+| Overview | the Medium priority task's body text | see the note below — read this one |
+| Products | a filter chip carrying a team member’s first name | colleague name (§3) |
+| SEO Management | the SALES figure | company revenue |
+| Script generator | "Suggested next call: ‹name› (‹company›)" | a real lead |
+| HCP leads | owners tile, the whole direct-leads card, every name and company in the follow-up list, the owner chip on each row | clinician names, a customer's name, email and phone number, a partner's proposal, three colleague names |
+| E-commerce, calendar, Content Studio, analytics | nothing | checked; no personal, financial or colleague data on them |
+
+**🔴 The priority task on the Overview — please read this one.** That task's body
+described a piece of competitor research, in terms that would read badly on a public
+portfolio published under your own name. It is blurred. I am deliberately not quoting it
+here, because this file is tracked in a **public** GitHub repository — restating a
+redacted line in the notes would undo the redaction. Open the original capture if you
+need to see what I mean. I blurred it rather than ask first, because the alternative was
+leaving it live in a preview. My recommendation is that it stays blurred whatever else
+you decide; if you disagree, tell me in chat rather than writing it into this file.
+
+#### 🔴 Held back — the Daily log screen, and what would make it publishable
+
+The tenth capture (**Daily log & reports ▸ Daily log**) is not in the portfolio. Three
+things on it are the exact categories §3 of this document keeps off the public site:
+
+- **A time tracker.** Seven `[auto-tracked]` rows with minute counts per category.
+- **A colleague's name**, twice, in the team-chat line.
+- **Your own private daily report**, in full, plus local file paths and URLs.
+
+Redacting it would leave almost nothing — the screen *is* the private report. If you
+want the reporting half of the system shown, the better capture is **Consolidated
+report** or **Monthly summary** (the tabs beside Daily log), and even then it will need
+the same treatment. Send one and I will process it the same way.
+
+#### One item still needs you
+
+- [ ] **How you want your role described.** The project files establish that the
+      structure, the workflow states, the permission model and the reporting spec are
+      your instructions — they are quoted in the code beside the lines that implement
+      them — and that the build is AI-assisted in your own workspace. The published
+      "My role" section states exactly that and no more. What the files cannot settle is
+      the wording you want in front of an employer: *specified and directed*, *built
+      with AI assistance*, or *co-developed*. Pick the one you would defend in an
+      interview and it goes in verbatim. The old open question about whether you
+      specified the three counters is resolved — the files show you did.
+
+#### Two things worth a second look, neither a privacy issue
+
+- [ ] **The analytics screen publishes small numbers.** It reads *Views 15*, *Reach 7*,
+      *2 of 12 posts reported it*. In context that is the point — the screen refuses to
+      estimate what it could not measure, and the case study says so. But an employer
+      skimming may read "15 views" as the result rather than as the sample size. Keep,
+      or swap for a month with more measured posts, your call.
+- [ ] **The SEO screen leads with a red "latest report is missing" banner.** Same
+      argument: it demonstrates that the dashboard says how old its data is instead of
+      quietly showing stale figures as current. I think it is a strength and the case
+      study points at it. Worth knowing it is there.
+
+#### One judgement call to confirm
+
+- [ ] **Your colleague is described by role, not by name.** Your brief said "assign
+      content to ‹name›" and "Kibo is ‹name›'s assistant". The published copy says
+      *our content creator* instead, because §3 of this document keeps colleague names
+      off the public site and that rule was not written with an exception for prose.
+      Say the word and the name goes in; it is a one-line change in two places.
+
+#### What was dropped
+
+The old "What I would improve" section is gone. It criticised three decisions on the
+old screen — the 499 counter, "Do first" duplicating the first upcoming row, the flat
+week strip — and your brief asked for a different structure that does not include a
+critique section. Nothing was lost that is still accurate; say so if you want it back.
+
 ### Content operations
 
 - [ ] **Your role in the Hub screens.** Your scope record says you operate and
@@ -134,6 +256,26 @@ So you know these are absent on purpose, not forgotten:
   system account, pricing-approver status, the ended supplier relationship, specific
   listing violations, tracked-time percentages and the HR findings are all excluded from
   the public site.
+
+---
+
+## 3b. The dashboard screenshot was cropped, and why
+
+The dashboard image that was live showed more than the planning system. Below the
+counters it carried **your attendance record** ("1 in · 0 off · 2 absent · 1 late"), the
+**cutoff line naming a colleague**, your **time tracker**, your task-progress ring, and
+the **"Signed in as Leila Almario"** footer. The lightbox served it at full resolution,
+so all of that was readable by anyone who opened the image.
+
+Section 3 of this document says colleague names and tracked-time data were deliberately
+kept off the public site. The screenshot contradicted that, so it is now cropped to the
+top row only — branding, the three counters, the week strip, "Do first" and the upcoming
+posts. Nothing below that line is published, and the case study describes only what is
+in the crop.
+
+- [ ] **One thing the crop does not fix.** The uncropped file is still in this repo's
+      git history, and the GitHub repository is public. Removing it there needs either a
+      history rewrite or the repo made private — your call, and I have not done either.
 
 ---
 
@@ -200,10 +342,54 @@ once you say so. Current state:
 - `intro.js` — new, the State A / State B gate
 - `assets/images/kaia-present|greet|cheer.webp` — three of your supplied poses
 - `kaia/poses/` — all 17, cut out (not deployed; `kaia/` is in .vercelignore)
-- `case-studies.js` — new, all case-study content
+- `assets/images/image-03-ebe9d46fa7.webp` — the cropped dashboard; the uncropped
+  `image-03-e67638eeab.webp` is deleted from the working tree (see 3b)
+- `case-studies.js` — new, all case-study content, plus the standalone `dashboard` study
 - `case-study.js` — new, the reader dialog
 - `index.html` — "Read the case study" triggers, plus the Approach and Growth sections
 - `styles.css` — styles for the above
 - `PORTFOLIO_CONTENT_REVIEW.md` — this file
+
+**Added 2026-10-28, the dashboard rewrite** — also unpushed:
+
+- `case-studies.js` — the `dashboard` entry replaced: new title, nine published
+  sections, thirteen feature cards with implementation status, the seven-step
+  workflow. The key is still `dashboard`, so the existing trigger and any link
+  to it are unchanged. The `social` study's two references to it were reworded.
+- `case-study.js` — the reader learned two optional block types, `items`
+  (feature cards with a status pill) and `steps` (the ordered workflow). Both
+  are optional, so every other case study renders exactly as before.
+- `styles.css` — `.case-features`, `.case-feature`, `.case-status`,
+  `.case-steps`; the spotlight heading widened from 18ch to 24ch so the longer
+  title sets on two lines instead of three.
+- `index.html` — the spotlight caption, heading, alt text and zoom caption; the
+  Content operations panel intro; Flask added to the Systems skill list.
+
+**Added 2026-10-28, the screenshot replacement** — also unpushed:
+
+- `assets/images/hub-01-overview.webp` … `hub-09-leads.webp` — nine current screens,
+  each redacted. `hub-01` replaces the old spotlight image.
+- `catalogue/build_hub_screenshots.py` — the redaction script, so the next capture is
+  processed the same way rather than by eye. `catalogue/` is in `.vercelignore`, so it
+  is kept in git for you and never deployed. 🔴 **The raw captures must not be
+  committed** — point `HUB_SHOTS_SRC` at a folder outside this repo.
+- `app.js` — the social rail now lists the eight new screens with captions that say
+  what each one demonstrates, and the set gets its own card shape.
+- `styles.css` — `.media-card.wide`: a card shaped like the screenshots, with the image
+  contained rather than cropped. A tall card showed a zoomed slice of a screen, which
+  told a reader nothing about which screen it was.
+- `index.html` — the spotlight image, its alt text and caption, and the lightbox's
+  placeholder source.
+- `case-studies.js` — the Screenshots section rewritten for the nine current screens;
+  the "captured before the expansion" caveat is gone because it no longer applies.
+
+The previous spotlight and rail images (`image-03` … `image-06`) are no longer
+referenced. They are still on disk — delete them once you are happy with the new set.
+
+Checked in a browser: no console errors, no horizontal page overflow, feature cards
+reflow from two columns to one, the rail scrolls rather than pushing the page wide, all
+74 images resolve, the gallery pages 9/9 through the lightbox, the résumé link and all
+eight in-page anchors resolve, and all nine case studies open with no draft section
+leaking.
 
 Everything that was already in the portfolio is untouched.

@@ -209,7 +209,7 @@ JavaScript is deliberately split so that one piece failing cannot take the rest 
 | `kaia.js` | Walks the packed sprite in the Desktop assistant tab. |
 | `logo.js` | The adaptive monogram -- a CSS mask of the original PNG, inked from the tone the section behind the navigation declares. |
 | `case-studies.js` | **The content file.** All case-study copy, every section tagged `verified`, `analysis` or `draft`. This is the one to edit. |
-| `case-study.js` | The reader dialog, built on the platform's own `<dialog>`. Renders each section's basis. |
+| `case-study.js` | The reader dialog, built on the platform's own `<dialog>`. Renders each section's basis, plus two optional blocks a section may carry: `items` (feature cards, each with an `Implemented` / `In development` / `Planned` status) and `steps` (an ordered workflow). |
 | `site-config.js` | The Web3Forms access key, and nothing else. |
 
 Images and video live in `assets/`. The modules layered on top of `app.js` follow one

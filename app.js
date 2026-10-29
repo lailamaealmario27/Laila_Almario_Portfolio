@@ -6,11 +6,25 @@ const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
 // markup, so keep this block ahead of everything else and free of optional imports:
 // if it stops running, the Selected work section renders empty.
 const portfolioSets = {
+  /* The dashboard's Overview is not in this rail. It is featured on its own above the
+     rail, in the spotlight block that carries the case study, because it is the screen
+     the whole system is read from and a rail slice of it reads as nothing. Its zoom
+     button sits earlier in the DOM than these, so it is still image 1 of the social
+     gallery in the viewer.
+
+     These eight are the rest of the dashboard, in sidebar order. Every one is redacted
+     before it ships -- see catalogue/build_hub_screenshots.py for which region on
+     which screen, and the rule that put it there. Never replace one of these with a raw
+     screenshot. */
   social: [
-    ['image-03-e67638eeab.webp', 'Marketing dashboard', 'Planning system'],
-    ['image-04-370a4cf269.webp', 'Medical content calendar', 'Monthly schedule'],
-    ['image-05-8e715002d3.webp', 'E-commerce calendar', 'Campaign planning'],
-    ['image-06-6ce89ebc27.webp', 'Content studio', 'Ideas and captions']
+    ['hub-02-products.webp', 'Products', 'ERP-linked records, prices and promotion remarks'],
+    ['hub-03-ecommerce.webp', 'E-commerce alerts', 'Read-only ERP stock and shipping deadlines'],
+    ['hub-05-calendar.webp', 'Content calendar', 'A month planned, filtered by brand'],
+    ['hub-06-studio.webp', 'Content Studio', 'The same month as production work'],
+    ['hub-07-analytics.webp', 'Content analytics', 'Measured posts only, never estimated'],
+    ['hub-04-seo.webp', 'SEO Management', 'Listing checks, and how old the data is'],
+    ['hub-08-script.webp', 'Script generator', 'A call script drafted from a lead record'],
+    ['hub-09-leads.webp', 'HCP leads', 'Follow-up states (lead details redacted)']
   ],
   design: [
     ['image-07-e0e49d68f8.webp', 'BER months campaign', 'Social creative'],
@@ -80,8 +94,13 @@ const TWO_SIZE = new Set(['catalogue']);
 $$('.media-rail[data-set]').forEach(rail => {
   const set = rail.dataset.set;
   const items = portfolioSets[set] || [];
+  /* The social set is whole application screens, not photographs. A tall card with
+     object-fit:cover shows a zoomed slice of one, which tells a reader nothing about
+     which screen they are looking at -- so it gets a card shaped like the screenshot
+     and the image is contained rather than cropped. The lightbox is where it is read. */
   const shape = set === 'design' ? ' square'
-    : set === 'events' || set === 'catalogue' ? ' portrait' : '';
+    : set === 'events' || set === 'catalogue' ? ' portrait'
+    : set === 'social' ? ' wide' : '';
   rail.innerHTML = items.map(([file, title, type]) => {
     const full = `assets/images/${file}`;
     const card = TWO_SIZE.has(set) ? full.replace(/\.webp$/, '-sm.webp') : full;
